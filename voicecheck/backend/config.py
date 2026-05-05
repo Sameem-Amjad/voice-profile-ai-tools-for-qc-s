@@ -1,8 +1,8 @@
-from pydantic_settings import BaseSettings, NoDecode
-from pydantic import field_validator
+from pydantic_settings import BaseSettings
 from pathlib import Path
-from typing import Literal, Annotated
+from typing import Literal
 import os
+import json
 
 class Settings(BaseSettings):
     # App
@@ -14,26 +14,25 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
 
-    # CORS - frontend origins. Accepts JSON list or comma-separated string.
-    # Examples (set as a Railway env var):
+    # CORS - frontend origins. Set as a single string to avoid pydantic-settings
+    # JSON-decoding env vars typed as list. The `cors_origins_list` property
+    # parses both JSON-list and comma-separated forms. Examples:
     #   CORS_ORIGINS=https://voicecheck.vercel.app
-    #   CORS_ORIGINS=https://voicecheck.vercel.app,https://staging-voicecheck.vercel.app
+    #   CORS_ORIGINS=https://voicecheck.vercel.app,https://staging.vercel.app
     #   CORS_ORIGINS=["https://voicecheck.vercel.app"]
-    CORS_ORIGINS: Annotated[list[str], NoDecode] = [
-        "http://localhost:5173",
-        "http://localhost:3000",
-    ]
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
 
-    @field_validator("CORS_ORIGINS", mode="before")
-    @classmethod
-    def _split_cors_origins(cls, v):
-        if isinstance(v, str):
-            s = v.strip()
-            if s.startswith("["):
-                import json
+    @property
+    def cors_origins_list(self) -> list[str]:
+        s = (self.CORS_ORIGINS or "").strip()
+        if not s:
+            return []
+        if s.startswith("["):
+            try:
                 return json.loads(s)
-            return [o.strip() for o in s.split(",") if o.strip()]
-        return v
+            except json.JSONDecodeError:
+                pass
+        return [o.strip() for o in s.split(",") if o.strip()]
 
     # Storage - local disk for MVP, swap to S3 later
     STORAGE_BACKEND: Literal["local", "s3"] = "local"
