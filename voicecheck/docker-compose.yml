@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: voicecheck-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app                          # Hot reload in dev
+      - voicecheck-uploads:/app/uploads         # Persist uploads
+      - voicecheck-models:/app/.whisper_models  # Cache Whisper models
+    environment:
+      - TRANSCRIPTION_BACKEND=${TRANSCRIPTION_BACKEND:-openai_api}
+      - WHISPER_MODEL_SIZE=${WHISPER_MODEL_SIZE:-base}
+      - WHISPER_DEVICE=cpu
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - DEBUG=true
+      - LOG_FORMAT=console
+      # Phase 2: persistence + auth + billing
+      - DATABASE_URL=${DATABASE_URL:-sqlite+aiosqlite:///./voicecheck.db}
+      - CLERK_ISSUER=${CLERK_ISSUER:-}
+      - CLERK_JWKS_URL=${CLERK_JWKS_URL:-}
+      - AUTH_REQUIRED=${AUTH_REQUIRED:-false}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
+      - STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER:-}
+      - STRIPE_PRICE_PRO=${STRIPE_PRICE_PRO:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s  # Give time for model loading
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: voicecheck-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+      - VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY:-}
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  voicecheck-uploads:
+  voicecheck-models:

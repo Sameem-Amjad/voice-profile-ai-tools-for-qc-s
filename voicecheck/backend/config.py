@@ -1,0 +1,104 @@
+from pydantic_settings import BaseSettings, NoDecode
+from pydantic import field_validator
+from pathlib import Path
+from typing import Literal, Annotated
+import os
+
+class Settings(BaseSettings):
+    # App
+    APP_NAME: str = "VoiceCheck API"
+    APP_VERSION: str = "1.0.0"
+    DEBUG: bool = False
+
+    # Server
+    HOST: str = "0.0.0.0"
+    PORT: int = 8000
+
+    # CORS - frontend origins. Accepts JSON list or comma-separated string.
+    # Examples (set as a Railway env var):
+    #   CORS_ORIGINS=https://voicecheck.vercel.app
+    #   CORS_ORIGINS=https://voicecheck.vercel.app,https://staging-voicecheck.vercel.app
+    #   CORS_ORIGINS=["https://voicecheck.vercel.app"]
+    CORS_ORIGINS: Annotated[list[str], NoDecode] = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ]
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def _split_cors_origins(cls, v):
+        if isinstance(v, str):
+            s = v.strip()
+            if s.startswith("["):
+                import json
+                return json.loads(s)
+            return [o.strip() for o in s.split(",") if o.strip()]
+        return v
+
+    # Storage - local disk for MVP, swap to S3 later
+    STORAGE_BACKEND: Literal["local", "s3"] = "local"
+    UPLOAD_DIR: Path = Path("./uploads")
+    MAX_FILE_SIZE_MB: int = 500
+    ALLOWED_AUDIO_EXTENSIONS: set[str] = {".mp3", ".wav", ".m4a", ".ogg", ".flac"}
+
+    # Transcription backend selection
+    # Per brief: users must never see/provide an API key — server-side OpenAI
+    # is the production path. faster_whisper remains as a zero-cost local
+    # development/offline fallback (e.g. for tests, demo without API key).
+    # "openai_api"      = cloud, $0.006/min, default for prod
+    # "faster_whisper"  = local, free, CPU-compatible (dev fallback)
+    TRANSCRIPTION_BACKEND: Literal["faster_whisper", "openai_api"] = "openai_api"
+
+    # faster-whisper settings (local, FREE)
+    WHISPER_MODEL_SIZE: Literal["tiny", "base", "small", "medium", "large-v2"] = "base"
+    # tiny=CPU fast, base=good balance, small=better accuracy, medium=best CPU option
+    WHISPER_DEVICE: Literal["cpu", "cuda"] = "cpu"
+    WHISPER_COMPUTE_TYPE: str = "int8"  # int8 = fast on CPU, float16 = GPU
+
+    # OpenAI API (fallback, only if TRANSCRIPTION_BACKEND=openai_api)
+    OPENAI_API_KEY: str = ""
+
+    # Alignment settings
+    ALIGNMENT_MATCH_SCORE: int = 2
+    ALIGNMENT_MISMATCH_SCORE: int = -1
+    ALIGNMENT_GAP_SCORE: int = -2
+    SIMILARITY_THRESHOLD: float = 0.8  # 80% similar = "close enough"
+
+    # Job management (in-memory for MVP, replace with Redis/DB later)
+    JOB_TIMEOUT_SECONDS: int = 600  # 10 minutes for long audio
+
+    # Logging
+    LOG_LEVEL: str = "INFO"
+    LOG_FORMAT: Literal["json", "console"] = "console"
+
+    # ── Phase 2: Database ─────────────────────────────────────────────────
+    # Default: local SQLite for dev. Production: postgresql+asyncpg://...
+    DATABASE_URL: str = "sqlite+aiosqlite:///./voicecheck.db"
+
+    # ── Phase 2: Auth (Clerk JWT verification, server-side only) ──────────
+    # If CLERK_JWKS_URL is empty, it's auto-derived from CLERK_ISSUER as
+    # f"{issuer}/.well-known/jwks.json".
+    CLERK_ISSUER: str = ""
+    CLERK_JWKS_URL: str = ""
+    # When False (dev/MVP demo), upload/transcribe are public so existing
+    # tests keep passing. Flip to True in prod once Clerk creds are wired.
+    AUTH_REQUIRED: bool = False
+
+    # ── Phase 2: Stripe billing ───────────────────────────────────────────
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PRICE_STARTER: str = ""
+    STRIPE_PRICE_PRO: str = ""
+
+    class Config:
+        env_file = ".env"
+        case_sensitive = True
+
+settings = Settings()
+
+# Auto-derive JWKS URL from issuer if not explicitly set
+if not settings.CLERK_JWKS_URL and settings.CLERK_ISSUER:
+    settings.CLERK_JWKS_URL = settings.CLERK_ISSUER.rstrip("/") + "/.well-known/jwks.json"
+
+# Ensure upload directory exists
+settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)

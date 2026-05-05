@@ -1,0 +1,14 @@
+# Railway Nixpacks build plan.
+# Adds ffmpeg (needed by ffprobe in audio_utils.validate_audio_file)
+# on top of the auto-detected Python build.
+
+[phases.setup]
+aptPkgs = ["ffmpeg"]
+
+[phases.install]
+cmds = ["pip install --upgrade pip && pip install -r requirements.txt"]
+
+[start]
+# $PORT is provided by Railway. Single worker is fine for MVP traffic;
+# bump to 2-4 once you outgrow the free OpenAI rate limits.
+cmd = "uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1"
