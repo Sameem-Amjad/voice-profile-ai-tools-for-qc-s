@@ -1,16 +1,12 @@
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
 python-multipart==0.0.6
-faster-whisper==0.10.1
 openai==1.12.0
 pydantic==2.5.3
-pydantic-settings==2.1.0
+pydantic-settings==2.2.1
 python-dotenv==1.0.0
 aiofiles==23.2.1
 numpy==1.26.3
-librosa==0.10.1
-soundfile==0.12.1
-ffmpeg-python==0.2.0
 structlog==24.1.0
 httpx==0.26.0
 pytest==7.4.4
@@ -22,3 +18,12 @@ asyncpg==0.29.0
 python-jose[cryptography]==3.3.0
 stripe==8.0.0
 alembic==1.13.1
+# ── Optional, dev-only (commented out for prod deploy) ──────────────────────
+# Uncomment locally if you want to use TRANSCRIPTION_BACKEND=faster_whisper
+# (free local CPU-only transcription) instead of the OpenAI API. Production
+# on Render uses openai_api which doesn't need any of these — and skipping
+# them lets the build avoid compiling pyav / libsndfile from source.
+# faster-whisper==0.10.1
+# librosa==0.10.1
+# soundfile==0.12.1
+# ffmpeg-python==0.2.0
