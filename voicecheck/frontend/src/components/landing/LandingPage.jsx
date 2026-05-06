@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { getPublicFeedback } from '../../services/api';
 import {
   Mic2,
   Zap,
@@ -232,6 +233,17 @@ const StarRow = () => (
 export const LandingPage = () => {
   const navigate = useNavigate();
   const { devMode } = useDevMode();
+  const [dynamicFeedback, setDynamicFeedback] = useState([]);
+
+  useEffect(() => {
+    getPublicFeedback(6)
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setDynamicFeedback(data);
+      })
+      .catch(() => {
+        // Silently fall back to hardcoded testimonials
+      });
+  }, []);
 
   // "Start free trial" → sign-up flow when Clerk is configured, else go straight to /app
   const handleStartTrial = () => navigate(devMode ? '/app' : '/sign-up');
@@ -526,30 +538,77 @@ export const LandingPage = () => {
               <span>4.9 / 5 average rating · 240+ reviews</span>
             </div>
           </div>
-          <div className="grid md:grid-cols-2 gap-5">
-            {TESTIMONIALS.map((t) => (
-              <figure
-                key={t.name}
-                className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur flex flex-col"
-              >
-                <StarRow />
-                <blockquote className="text-gray-200 leading-relaxed mt-3 mb-5 flex-1">
-                  "{t.quote}"
-                </blockquote>
-                <figcaption className="flex items-center gap-3">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    className="w-10 h-10 rounded-full object-cover border border-white/10"
-                    loading="lazy"
-                  />
-                  <div>
-                    <div className="text-sm font-semibold">{t.name}</div>
-                    <div className="text-xs text-gray-400">{t.role}</div>
+          {/* Dynamic feedback or fallback hardcoded testimonials */}
+          {dynamicFeedback.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-5">
+              {dynamicFeedback.map((fb) => (
+                <figure
+                  key={fb.id}
+                  className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur flex flex-col"
+                >
+                  <div className="flex items-center gap-0.5 text-yellow-400">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star
+                        key={i}
+                        size={14}
+                        fill={i <= (fb.rating || 5) ? 'currentColor' : 'none'}
+                        stroke={i <= (fb.rating || 5) ? 'none' : 'currentColor'}
+                      />
+                    ))}
                   </div>
-                </figcaption>
-              </figure>
-            ))}
+                  <blockquote className="text-gray-200 leading-relaxed mt-3 mb-5 flex-1">
+                    "{fb.text}"
+                  </blockquote>
+                  <figcaption className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-500/30 flex items-center justify-center text-blue-300 font-bold text-sm shrink-0">
+                      {(fb.display_name || 'A').charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold">{fb.display_name || 'Anonymous'}</div>
+                      {fb.role && <div className="text-xs text-gray-400">{fb.role}</div>}
+                    </div>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-5">
+              {TESTIMONIALS.map((t) => (
+                <figure
+                  key={t.name}
+                  className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur flex flex-col"
+                >
+                  <StarRow />
+                  <blockquote className="text-gray-200 leading-relaxed mt-3 mb-5 flex-1">
+                    "{t.quote}"
+                  </blockquote>
+                  <figcaption className="flex items-center gap-3">
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      className="w-10 h-10 rounded-full object-cover border border-white/10"
+                      loading="lazy"
+                    />
+                    <div>
+                      <div className="text-sm font-semibold">{t.name}</div>
+                      <div className="text-xs text-gray-400">{t.role}</div>
+                    </div>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
+
+          {/* Share your experience CTA */}
+          <div className="text-center mt-10">
+            <a
+              href="#feedback"
+              onClick={(e) => { e.preventDefault(); navigate(devMode ? '/app' : '/sign-up'); }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/20 hover:bg-white/5 font-medium text-sm transition-colors"
+            >
+              <Star size={16} className="text-yellow-400" />
+              Share Your Experience
+            </a>
           </div>
         </div>
       </section>

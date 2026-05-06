@@ -90,3 +90,11 @@ async def current_user(
     return await get_or_create_user(
         {"sub": ANONYMOUS_CLERK_ID, "email": ANONYMOUS_EMAIL}, db
     )
+
+
+async def admin_user(user: User = Depends(current_user)) -> User:
+    """Require the current user to be an admin."""
+    admin_emails = [e.strip().lower() for e in (settings.ADMIN_EMAILS or "").split(",") if e.strip()]
+    if not (user.is_admin or (user.email and user.email.lower() in admin_emails)):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return user

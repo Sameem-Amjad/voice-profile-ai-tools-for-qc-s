@@ -7,6 +7,7 @@ import asyncio
 from config import settings
 from utils.logger import setup_logging, get_logger
 from api.routes import upload, transcribe, compare, health, billing
+from api.routes import history, stats, contact, feedback, chatbot, admin as admin_routes
 from services.job_service import job_service
 from db.init import init_db
 
@@ -121,6 +122,12 @@ app.include_router(upload.router, prefix="/api", tags=["Upload"])
 app.include_router(transcribe.router, prefix="/api", tags=["Transcription"])
 app.include_router(compare.router, prefix="/api", tags=["Comparison"])
 app.include_router(billing.router, prefix="/api", tags=["Billing"])
+app.include_router(history.router, prefix="/api", tags=["History"])
+app.include_router(stats.router, prefix="/api", tags=["Stats"])
+app.include_router(contact.router, prefix="/api", tags=["Contact"])
+app.include_router(feedback.router, prefix="/api", tags=["Feedback"])
+app.include_router(chatbot.router, prefix="/api", tags=["Chatbot"])
+app.include_router(admin_routes.router, prefix="/api", tags=["Admin"])
 
 
 if __name__ == "__main__":

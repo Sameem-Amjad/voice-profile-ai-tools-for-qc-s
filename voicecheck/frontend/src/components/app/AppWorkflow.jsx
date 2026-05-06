@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AudioUploader } from '../upload/AudioUploader';
+import { VoiceRecorder } from '../upload/VoiceRecorder';
 import { ScriptInput } from '../upload/ScriptInput';
 import { ResultsView } from '../results/ResultsView';
+import { FeedbackModal } from '../feedback/FeedbackModal';
 import { useUpload } from '../../hooks/useUpload';
 import { useTranscription } from '../../hooks/useTranscription';
 import { useComparison } from '../../hooks/useComparison';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import { useDevMode } from '../../hooks/useDevMode';
-import { Mic2, ChevronRight, RotateCcw, Loader2, CreditCard } from 'lucide-react';
+import { Mic2, ChevronRight, RotateCcw, Loader2, CreditCard, Upload, Mic } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import clsx from 'clsx';
 
@@ -54,6 +56,7 @@ export const AppWorkflow = () => {
   const [step, setStep] = useState('upload');
   const [script, setScript] = useState('');
   const [audioFile, setAudioFile] = useState(null);
+  const [inputMode, setInputMode] = useState('upload');
 
   // Each of the hooks below transparently wires the Clerk session token
   // into the shared axios client (via useAuthedApi). In dev mode it's a no-op.
@@ -94,6 +97,7 @@ export const AppWorkflow = () => {
     setStep('upload');
     setScript('');
     setAudioFile(null);
+    setInputMode('upload');
     upload.reset();
     comparison.reset();
   };
@@ -164,15 +168,51 @@ export const AppWorkflow = () => {
               <div className="bg-white rounded-2xl p-6 shadow-xl">
                 <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <span className="w-6 h-6 bg-blue-100 text-blue-700 rounded-full text-xs font-bold flex items-center justify-center">1</span>
-                  Upload Audio
+                  Audio Source
                 </h2>
-                <AudioUploader
-                  onFileSelect={handleFileSelect}
-                  uploading={upload.uploading}
-                  progress={upload.progress}
-                  fileMeta={upload.fileMeta}
-                  error={upload.error}
-                />
+                {/* Input mode tabs */}
+                <div className="flex gap-2 mb-4 p-1 bg-gray-100 rounded-xl">
+                  <button
+                    onClick={() => setInputMode('upload')}
+                    disabled={step === 'transcribe'}
+                    className={clsx(
+                      'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-sm font-medium transition-all',
+                      inputMode === 'upload'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-500 hover:text-gray-700'
+                    )}
+                  >
+                    <Upload size={14} />
+                    Upload File
+                  </button>
+                  <button
+                    onClick={() => setInputMode('record')}
+                    disabled={step === 'transcribe'}
+                    className={clsx(
+                      'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-sm font-medium transition-all',
+                      inputMode === 'record'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-500 hover:text-gray-700'
+                    )}
+                  >
+                    <Mic size={14} />
+                    Record Voice
+                  </button>
+                </div>
+                {inputMode === 'upload' ? (
+                  <AudioUploader
+                    onFileSelect={handleFileSelect}
+                    uploading={upload.uploading}
+                    progress={upload.progress}
+                    fileMeta={upload.fileMeta}
+                    error={upload.error}
+                  />
+                ) : (
+                  <VoiceRecorder
+                    onFileReady={handleFileSelect}
+                    disabled={upload.uploading || step === 'transcribe'}
+                  />
+                )}
               </div>
 
               {/* Script Input Card */}
@@ -261,6 +301,9 @@ export const AppWorkflow = () => {
           </div>
         )}
       </main>
+
+      {/* Feedback modal — shown after results load */}
+      <FeedbackModal show={step === 'results'} onClose={() => {}} />
 
       {/* Footer */}
       <footer className="text-center py-6 text-gray-600 text-xs">

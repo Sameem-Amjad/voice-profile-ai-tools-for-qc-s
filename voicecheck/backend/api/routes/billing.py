@@ -59,6 +59,7 @@ class BillingMeResponse(BaseModel):
     monthly_minutes_used: float
     plan_cap_minutes: int
     trial_minutes_used: int
+    is_admin: bool = False
 
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
@@ -190,6 +191,7 @@ async def billing_me(
         monthly_minutes_used=round(minutes_used, 2),
         plan_cap_minutes=cap,
         trial_minutes_used=int(user.trial_minutes_used or 0),
+        is_admin=user.is_admin,
     )
 
 

@@ -13,6 +13,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import (
+    Boolean,
     DateTime,
     Float,
     ForeignKey,
@@ -41,6 +42,7 @@ class User(Base):
     # Using a plain str column rather than DB ENUM to keep SQLite/Postgres parity simple.
     plan: Mapped[str] = mapped_column(String(32), nullable=False, default="free_trial")
     trial_minutes_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -55,6 +57,9 @@ class User(Base):
         back_populates="user", cascade="all, delete-orphan"
     )
     usage: Mapped[list["UsageMinute"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    analyses: Mapped[list["AnalysisResult"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
 
@@ -113,3 +118,43 @@ class ProcessedStripeEvent(Base):
     processed_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
+
+class AnalysisResult(Base):
+    __tablename__ = "analysis_results"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid_str)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    job_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    accuracy_percentage: Mapped[float] = mapped_column(Float, nullable=False)
+    total_words: Mapped[int] = mapped_column(Integer, nullable=False)
+    correct_words: Mapped[int] = mapped_column(Integer, nullable=False)
+    script_snippet: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    audio_duration: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    user: Mapped["User"] = relationship(back_populates="analyses")
+
+
+class ContactMessage(Base):
+    __tablename__ = "contact_messages"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid_str)
+    user_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    name: Mapped[str] = mapped_column(String(128), nullable=False)
+    email: Mapped[str] = mapped_column(String(320), nullable=False)
+    subject: Mapped[str] = mapped_column(String(256), nullable=False)
+    message: Mapped[str] = mapped_column(String(5000), nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
+    admin_reply: Mapped[Optional[str]] = mapped_column(String(5000), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    replied_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class Feedback(Base):
+    __tablename__ = "feedback"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid_str)
+    user_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    rating: Mapped[int] = mapped_column(Integer, nullable=False)
+    text: Mapped[str] = mapped_column(String(1000), nullable=False)
+    display_name: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    role: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    is_approved: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)

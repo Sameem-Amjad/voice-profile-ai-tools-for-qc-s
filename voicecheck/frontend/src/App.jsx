@@ -5,6 +5,10 @@ import { AppWorkflow } from './components/app/AppWorkflow';
 import { SignInPage } from './components/auth/SignInPage';
 import { SignUpPage } from './components/auth/SignUpPage';
 import { BillingPage } from './components/account/BillingPage';
+import { UserDashboard } from './components/dashboard/UserDashboard';
+import { ContactPage } from './components/contact/ContactPage';
+import { ChatbotWidget } from './components/chatbot/ChatbotWidget';
+import { AdminLayout } from './components/admin/AdminLayout';
 import { useDevMode } from './hooks/useDevMode';
 import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 
@@ -30,6 +34,7 @@ export default function App() {
   const { devMode } = useDevMode();
 
   return (
+    <>
     <Routes>
       <Route path="/" element={<LandingPage />} />
 
@@ -58,8 +63,32 @@ export default function App() {
         }
       />
 
+      <Route
+        path="/dashboard"
+        element={
+          <RequireAuth>
+            <UserDashboard />
+          </RequireAuth>
+        }
+      />
+
+      <Route path="/contact" element={<ContactPage />} />
+
+      <Route
+        path="/admin/*"
+        element={
+          <RequireAuth>
+            <AdminLayout />
+          </RequireAuth>
+        }
+      />
+
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+
+    {/* Chatbot widget — rendered on all pages */}
+    <ChatbotWidget />
+    </>
   );
 }
