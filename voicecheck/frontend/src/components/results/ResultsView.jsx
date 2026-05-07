@@ -21,6 +21,7 @@ const FILTERS = [
 export const ResultsView = ({
   result,
   audioRef,
+  audioSrc,
   isPlaying,
   currentTime,
   duration,
@@ -71,6 +72,7 @@ export const ResultsView = ({
     <div className="space-y-6">
       <AudioPlayer
         audioRef={audioRef}
+        src={audioSrc}
         isPlaying={isPlaying}
         currentTime={currentTime}
         duration={duration || result.audio_duration}

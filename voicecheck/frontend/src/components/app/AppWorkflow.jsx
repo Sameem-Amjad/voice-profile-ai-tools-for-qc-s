@@ -300,6 +300,7 @@ export const AppWorkflow = () => {
               <ResultsView
                 result={comparison.result}
                 audioRef={player.audioRef}
+                audioSrc={player.audioUrl}
                 isPlaying={player.isPlaying}
                 currentTime={player.currentTime}
                 duration={player.duration}

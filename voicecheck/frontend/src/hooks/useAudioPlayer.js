@@ -10,15 +10,12 @@ export const useAudioPlayer = () => {
     activeWordIndex: null,
   });
 
-  // Load audio file into player
+  // Load audio file into player.
+  // audioRef.current is null here (AudioPlayer hasn't mounted yet — it only
+  // renders in the results step). Store the URL in state; AudioPlayer reads
+  // it via the src prop and the browser loads it when the element mounts.
   const loadAudio = useCallback((file) => {
     const url = URL.createObjectURL(file);
-
-    if (audioRef.current) {
-      audioRef.current.src = url;
-      audioRef.current.load();
-    }
-
     setState(prev => ({ ...prev, audioUrl: url, isPlaying: false, currentTime: 0 }));
   }, []);
 
