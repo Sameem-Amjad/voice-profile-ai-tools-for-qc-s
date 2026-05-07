@@ -52,8 +52,57 @@ def validate_audio_file(file_path: Path) -> dict:
         import json
         probe_data = json.loads(result.stdout)
 
-        # Extract duration
-        duration = float(probe_data.get("format", {}).get("duration", 0))
+        # Extract duration. Browser MediaRecorder webm files often have no
+        # duration in the container header — fall back to stream duration,
+        # then to decoding the file end-to-end with ffprobe.
+        streams = probe_data.get("streams", [])
+        audio_streams = [s for s in streams if s.get("codec_type") == "audio"]
+
+        if not audio_streams:
+            raise ValueError("File contains no audio streams")
+
+        duration = float(probe_data.get("format", {}).get("duration") or 0)
+        if duration <= 0:
+            for s in audio_streams:
+                d = float(s.get("duration") or 0)
+                if d > 0:
+                    duration = d
+                    break
+
+        if duration <= 0:
+            # Last resort: decode the file to figure out its real length.
+            # This handles MediaRecorder webm where neither container nor
+            # stream metadata carries a duration.
+            try:
+                decode = subprocess.run(
+                    ["ffprobe", "-v", "error", "-of",
+                     "default=noprint_wrappers=1:nokey=1",
+                     "-show_entries", "format=duration",
+                     "-f", audio_streams[0].get("codec_name", "matroska"),
+                     str(file_path)],
+                    capture_output=True, text=True, timeout=30,
+                )
+                duration = float(decode.stdout.strip() or 0)
+            except Exception:
+                pass
+
+        if duration <= 0:
+            # Decode-and-count via ffmpeg as the absolute fallback.
+            try:
+                m = subprocess.run(
+                    ["ffmpeg", "-i", str(file_path), "-f", "null", "-"],
+                    capture_output=True, text=True, timeout=60,
+                )
+                # ffmpeg writes "time=HH:MM:SS.xx" lines on stderr
+                import re
+                last = None
+                for match in re.finditer(r"time=(\d+):(\d+):(\d+\.\d+)", m.stderr):
+                    last = match
+                if last:
+                    h, mm, ss = last.groups()
+                    duration = int(h) * 3600 + int(mm) * 60 + float(ss)
+            except Exception:
+                pass
 
         if duration <= 0:
             raise ValueError("Audio file has zero or negative duration")
@@ -63,13 +112,6 @@ def validate_audio_file(file_path: Path) -> dict:
                 f"Audio too long: {duration:.0f}s. "
                 f"Maximum: {MAX_DURATION_SECONDS}s"
             )
-
-        # Check it has audio stream
-        streams = probe_data.get("streams", [])
-        audio_streams = [s for s in streams if s.get("codec_type") == "audio"]
-
-        if not audio_streams:
-            raise ValueError("File contains no audio streams")
 
         file_size = file_path.stat().st_size
 
