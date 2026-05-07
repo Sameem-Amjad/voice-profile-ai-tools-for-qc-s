@@ -88,7 +88,8 @@ class Settings(BaseSettings):
     STRIPE_WEBHOOK_SECRET: str = ""
     STRIPE_PRICE_STARTER: str = ""
     STRIPE_PRICE_PRO: str = ""
-    ADMIN_EMAILS: str = ""  # comma-separated list of admin email addresses
+    ADMIN_EMAILS: str = ""      # comma-separated admin email addresses
+    ADMIN_CLERK_IDS: str = ""  # comma-separated Clerk user IDs (user_xxx) — more reliable than email
 
     class Config:
         env_file = ".env"

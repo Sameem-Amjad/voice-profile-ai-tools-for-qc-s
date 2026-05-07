@@ -18,6 +18,11 @@ class MeOut(BaseModel):
 
 @router.get("/me", response_model=MeOut)
 async def get_me(user: User = Depends(current_user)):
+    clerk_ids = [c.strip() for c in (settings.ADMIN_CLERK_IDS or "").split(",") if c.strip()]
     admin_emails = [e.strip().lower() for e in (settings.ADMIN_EMAILS or "").split(",") if e.strip()]
-    is_admin = user.is_admin or bool(user.email and user.email.lower() in admin_emails)
+    is_admin = (
+        user.is_admin
+        or (clerk_ids and user.clerk_user_id in clerk_ids)
+        or bool(admin_emails and user.email and user.email.lower() in admin_emails)
+    )
     return MeOut(id=user.id, email=user.email, plan=user.plan, is_admin=is_admin)

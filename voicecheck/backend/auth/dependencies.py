@@ -93,8 +93,22 @@ async def current_user(
 
 
 async def admin_user(user: User = Depends(current_user)) -> User:
-    """Require the current user to be an admin."""
+    """Require the current user to be an admin.
+
+    Checks (in order):
+    1. user.is_admin flag in DB
+    2. ADMIN_CLERK_IDS env var — matches clerk_user_id (always present in JWT)
+    3. ADMIN_EMAILS env var — matches email (only works if JWT includes email)
+    """
+    if user.is_admin:
+        return user
+
+    clerk_ids = [c.strip() for c in (settings.ADMIN_CLERK_IDS or "").split(",") if c.strip()]
+    if clerk_ids and user.clerk_user_id in clerk_ids:
+        return user
+
     admin_emails = [e.strip().lower() for e in (settings.ADMIN_EMAILS or "").split(",") if e.strip()]
-    if not (user.is_admin or (user.email and user.email.lower() in admin_emails)):
-        raise HTTPException(status_code=403, detail="Admin access required")
-    return user
+    if admin_emails and user.email and user.email.lower() in admin_emails:
+        return user
+
+    raise HTTPException(status_code=403, detail="Admin access required")
