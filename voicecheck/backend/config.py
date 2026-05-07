@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     STORAGE_BACKEND: Literal["local", "s3"] = "local"
     UPLOAD_DIR: Path = Path("./uploads")
     MAX_FILE_SIZE_MB: int = 500
-    ALLOWED_AUDIO_EXTENSIONS: set[str] = {".mp3", ".wav", ".m4a", ".ogg", ".flac"}
+    ALLOWED_AUDIO_EXTENSIONS: set[str] = {".mp3", ".wav", ".m4a", ".ogg", ".flac", ".webm"}
 
     # Transcription backend selection
     # Per brief: users must never see/provide an API key — server-side OpenAI
