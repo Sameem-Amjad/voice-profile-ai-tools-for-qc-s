@@ -10,7 +10,7 @@ import { useTranscription } from '../../hooks/useTranscription';
 import { useComparison } from '../../hooks/useComparison';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import { useDevMode } from '../../hooks/useDevMode';
-import { Mic2, ChevronRight, RotateCcw, Loader2, CreditCard, Upload, Mic } from 'lucide-react';
+import { Mic2, ChevronRight, RotateCcw, Loader2, CreditCard, Upload, Mic, LayoutDashboard } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import clsx from 'clsx';
 
@@ -136,13 +136,22 @@ export const AppWorkflow = () => {
               </button>
             )}
             {!devMode && (
-              <Link
-                to="/account"
-                className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
-              >
-                <CreditCard size={14} />
-                Billing
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  <LayoutDashboard size={14} />
+                  Dashboard
+                </Link>
+                <Link
+                  to="/account"
+                  className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  <CreditCard size={14} />
+                  Billing
+                </Link>
+              </>
             )}
             <AuthUserButton />
           </div>
