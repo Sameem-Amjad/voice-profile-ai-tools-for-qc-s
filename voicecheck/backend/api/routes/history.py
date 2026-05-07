@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
@@ -19,6 +19,7 @@ class AnalysisResultOut(BaseModel):
     correct_words: int
     script_snippet: Optional[str]
     audio_duration: float
+    result_json: Optional[str] = None
     created_at: datetime
     class Config:
         from_attributes = True
@@ -44,6 +45,21 @@ async def get_history(
         .limit(limit)
     )
     return q.scalars().all()
+
+@router.get("/history/{result_id}", response_model=AnalysisResultOut)
+async def get_history_item(
+    result_id: str,
+    user: User = Depends(current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    q = await db.execute(
+        select(AnalysisResult)
+        .where(AnalysisResult.id == result_id, AnalysisResult.user_id == user.id)
+    )
+    row = q.scalar_one_or_none()
+    if not row:
+        raise HTTPException(status_code=404, detail="Result not found")
+    return row
 
 @router.post("/history", response_model=AnalysisResultOut)
 async def save_analysis(

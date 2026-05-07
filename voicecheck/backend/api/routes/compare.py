@@ -43,6 +43,7 @@ async def _run_comparison(job_id: str, script_text: str, user_id: Optional[str] 
                         correct_words=result.stats.correct_words,
                         script_snippet=snippet,
                         audio_duration=result.audio_duration,
+                        result_json=result.model_dump_json(),
                     )
                     db.add(row)
                     await db.commit()

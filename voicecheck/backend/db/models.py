@@ -20,6 +20,7 @@ from sqlalchemy import (
     Index,
     Integer,
     String,
+    Text,
     func,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -130,6 +131,7 @@ class AnalysisResult(Base):
     correct_words: Mapped[int] = mapped_column(Integer, nullable=False)
     script_snippet: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     audio_duration: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    result_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     user: Mapped["User"] = relationship(back_populates="analyses")
 

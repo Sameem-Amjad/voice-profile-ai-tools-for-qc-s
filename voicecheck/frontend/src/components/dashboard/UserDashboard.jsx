@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft } from 'lucide-react';
+import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import clsx from 'clsx';
 import { getHistory, getStats } from '../../services/api';
 import { useDevMode } from '../../hooks/useDevMode';
+import { ResultDetailModal } from './ResultDetailModal';
 
 const AuthUserButton = () => {
   const { devMode } = useDevMode();
@@ -66,6 +67,7 @@ export const UserDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -174,6 +176,9 @@ export const UserDashboard = () => {
             <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
               <div className="px-6 py-4 border-b border-gray-100">
                 <h2 className="text-lg font-semibold text-gray-900">Recent Analyses</h2>
+                {history.length > 0 && (
+                  <p className="text-xs text-gray-400 mt-0.5">Click any row to see the full word-level breakdown</p>
+                )}
               </div>
               {history.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center px-4">
@@ -200,11 +205,16 @@ export const UserDashboard = () => {
                         <th className="px-6 py-3 font-semibold">Words</th>
                         <th className="px-6 py-3 font-semibold">Duration</th>
                         <th className="px-6 py-3 font-semibold">Script Preview</th>
+                        <th className="px-6 py-3 font-semibold sr-only">View</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {history.map((row) => (
-                        <tr key={row.id || row.job_id} className="hover:bg-gray-50 transition-colors">
+                        <tr
+                          key={row.id || row.job_id}
+                          onClick={() => setSelectedRow(row)}
+                          className="hover:bg-blue-50 cursor-pointer transition-colors group"
+                        >
                           <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
                             {formatDate(row.created_at)}
                           </td>
@@ -219,6 +229,9 @@ export const UserDashboard = () => {
                           </td>
                           <td className="px-6 py-4 text-gray-500 max-w-xs truncate">
                             {row.script_snippet || '—'}
+                          </td>
+                          <td className="px-6 py-4 text-gray-300 group-hover:text-blue-400 transition-colors">
+                            <ChevronRight size={16} />
                           </td>
                         </tr>
                       ))}
@@ -255,6 +268,13 @@ export const UserDashboard = () => {
           </>
         )}
       </main>
+
+      {selectedRow && (
+        <ResultDetailModal
+          row={selectedRow}
+          onClose={() => setSelectedRow(null)}
+        />
+      )}
     </div>
   );
 };
