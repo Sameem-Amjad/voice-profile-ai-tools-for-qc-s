@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight, ShieldCheck } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import clsx from 'clsx';
-import { getHistory, getStats } from '../../services/api';
+import { getHistory, getStats, useClerkAuthBridge } from '../../services/api';
 import { useDevMode } from '../../hooks/useDevMode';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { ResultDetailModal } from './ResultDetailModal';
@@ -64,6 +64,7 @@ const formatDuration = (secs) => {
 };
 
 export const UserDashboard = () => {
+  useClerkAuthBridge();
   const me = useCurrentUser();
   const [history, setHistory] = useState([]);
   const [stats, setStats] = useState(null);

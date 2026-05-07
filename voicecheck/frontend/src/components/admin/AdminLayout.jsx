@@ -6,8 +6,11 @@ import { AdminUsers } from './AdminUsers';
 import { AdminRevenue } from './AdminRevenue';
 import { AdminMessages } from './AdminMessages';
 import { AdminFeedback } from './AdminFeedback';
+import { useClerkAuthBridge } from '../../services/api';
 
 export const AdminLayout = () => {
+  useClerkAuthBridge();
+
   const navItems = [
     { to: '/admin', label: 'Overview', icon: LayoutDashboard, end: true },
     { to: '/admin/users', label: 'Users', icon: Users },
