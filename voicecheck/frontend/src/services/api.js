@@ -134,6 +134,7 @@ export const checkHealth = async () => {
   return api.get('/health');
 };
 
+export const getMe = () => api.get('/me');
 export const getHistory = () => api.get('/history');
 export const getHistoryItem = (id) => api.get(`/history/${id}`);
 export const getStats = () => api.get('/stats');

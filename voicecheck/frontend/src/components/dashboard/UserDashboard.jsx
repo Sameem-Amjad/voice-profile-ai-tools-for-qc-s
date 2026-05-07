@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight } from 'lucide-react';
+import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight, ShieldCheck } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import clsx from 'clsx';
 import { getHistory, getStats } from '../../services/api';
 import { useDevMode } from '../../hooks/useDevMode';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { ResultDetailModal } from './ResultDetailModal';
 
 const AuthUserButton = () => {
@@ -63,6 +64,7 @@ const formatDuration = (secs) => {
 };
 
 export const UserDashboard = () => {
+  const me = useCurrentUser();
   const [history, setHistory] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -100,6 +102,15 @@ export const UserDashboard = () => {
             </span>
           </Link>
           <div className="flex items-center gap-3">
+            {me?.is_admin && (
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors"
+              >
+                <ShieldCheck size={16} />
+                Admin
+              </Link>
+            )}
             <Link
               to="/app"
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"

@@ -10,9 +10,10 @@ import { useTranscription } from '../../hooks/useTranscription';
 import { useComparison } from '../../hooks/useComparison';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import { useDevMode } from '../../hooks/useDevMode';
-import { Mic2, ChevronRight, RotateCcw, Loader2, CreditCard, Upload, Mic, LayoutDashboard } from 'lucide-react';
+import { Mic2, ChevronRight, RotateCcw, Loader2, CreditCard, Upload, Mic, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import clsx from 'clsx';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 // Steps for the workflow UI
 const STEPS = ['upload', 'transcribe', 'results'];
@@ -53,6 +54,7 @@ const AuthUserButton = () => {
 
 export const AppWorkflow = () => {
   const { devMode } = useDevMode();
+  const me = useCurrentUser();
   const [step, setStep] = useState('upload');
   const [script, setScript] = useState('');
   const [audioFile, setAudioFile] = useState(null);
@@ -151,7 +153,25 @@ export const AppWorkflow = () => {
                   <CreditCard size={14} />
                   Billing
                 </Link>
+                {me?.is_admin && (
+                  <Link
+                    to="/admin"
+                    className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors"
+                  >
+                    <ShieldCheck size={14} />
+                    Admin
+                  </Link>
+                )}
               </>
+            )}
+            {devMode && me?.is_admin && (
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors"
+              >
+                <ShieldCheck size={14} />
+                Admin
+              </Link>
             )}
             <AuthUserButton />
           </div>
