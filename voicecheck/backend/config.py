@@ -79,6 +79,7 @@ class Settings(BaseSettings):
     # f"{issuer}/.well-known/jwks.json".
     CLERK_ISSUER: str = ""
     CLERK_JWKS_URL: str = ""
+    CLERK_SECRET_KEY: str = ""  # sk_live_xxx or sk_test_xxx — used to fetch email from Clerk API
     # When False (dev/MVP demo), upload/transcribe are public so existing
     # tests keep passing. Flip to True in prod once Clerk creds are wired.
     AUTH_REQUIRED: bool = False

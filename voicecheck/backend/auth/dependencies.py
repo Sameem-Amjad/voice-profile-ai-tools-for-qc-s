@@ -14,7 +14,7 @@ from fastapi import Depends, Header, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth.clerk import verify_clerk_jwt
+from auth.clerk import verify_clerk_jwt, fetch_clerk_email
 from config import settings
 from db.models import User
 from db.session import get_db
@@ -40,16 +40,29 @@ async def get_or_create_user(claims: dict, db: AsyncSession) -> User:
     if not clerk_user_id:
         raise HTTPException(status_code=401, detail="Token missing subject (sub)")
 
+    # Email from JWT claims (only present if Clerk JWT template includes it)
     email = claims.get("email") or claims.get("email_address")
 
     result = await db.execute(select(User).where(User.clerk_user_id == clerk_user_id))
     user = result.scalar_one_or_none()
+
     if user is None:
+        # New user — fetch email from Clerk API if not in JWT
+        if not email:
+            email = fetch_clerk_email(clerk_user_id)
         user = User(clerk_user_id=clerk_user_id, email=email)
         db.add(user)
         await db.commit()
         await db.refresh(user)
-        logger.info("user_created", clerk_user_id=clerk_user_id)
+        logger.info("user_created", clerk_user_id=clerk_user_id, has_email=bool(email))
+    elif not user.email:
+        # Existing user with no email — backfill from Clerk API
+        email = email or fetch_clerk_email(clerk_user_id)
+        if email:
+            user.email = email
+            await db.commit()
+            await db.refresh(user)
+            logger.info("user_email_backfilled", clerk_user_id=clerk_user_id)
     elif email and user.email != email:
         user.email = email
         await db.commit()

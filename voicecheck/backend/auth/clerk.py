@@ -126,3 +126,38 @@ async def get_current_user_claims(
         raise HTTPException(status_code=401, detail="Empty bearer token")
 
     return verify_clerk_jwt(token)
+
+
+def fetch_clerk_email(clerk_user_id: str) -> Optional[str]:
+    """
+    Fetch the primary email for a Clerk user via the Clerk Backend API.
+
+    Requires CLERK_SECRET_KEY to be set. Returns None silently on any failure
+    so callers can treat email as optional.
+    """
+    secret = settings.CLERK_SECRET_KEY
+    if not secret or not clerk_user_id or clerk_user_id == "anonymous-dev-user":
+        return None
+
+    try:
+        with httpx.Client(timeout=5.0) as client:
+            resp = client.get(
+                f"https://api.clerk.com/v1/users/{clerk_user_id}",
+                headers={"Authorization": f"Bearer {secret}"},
+            )
+            if resp.status_code != 200:
+                return None
+            data = resp.json()
+
+        primary_id = data.get("primary_email_address_id")
+        for addr in data.get("email_addresses", []):
+            if addr.get("id") == primary_id:
+                return addr.get("email_address")
+        # Fallback: first email address
+        addrs = data.get("email_addresses", [])
+        if addrs:
+            return addrs[0].get("email_address")
+    except Exception as e:
+        logger.warning("clerk_email_fetch_failed", clerk_user_id=clerk_user_id, error=str(e))
+
+    return None
