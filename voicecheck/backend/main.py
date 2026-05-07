@@ -110,9 +110,13 @@ async def global_exception_handler(request: Request, exc: Exception):
         error=str(exc),
         error_type=type(exc).__name__
     )
+    # Manually add CORS header so the browser can read the error body.
+    # The CORS middleware doesn't always fire on unhandled exceptions.
+    origin = request.headers.get("origin", "*")
     return JSONResponse(
         status_code=500,
-        content={"error": "Internal server error", "detail": str(exc)}
+        content={"error": "Internal server error", "detail": str(exc)},
+        headers={"Access-Control-Allow-Origin": origin},
     )
 
 # ── Routes ────────────────────────────────────────────────────────────────────

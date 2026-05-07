@@ -23,23 +23,25 @@ class OverviewOut(BaseModel):
     total_messages: int
     pending_messages: int
 
+async def _count(db, stmt) -> int:
+    try:
+        return (await db.execute(stmt)).scalar() or 0
+    except Exception:
+        return 0
+
 @router.get("/admin/overview", response_model=OverviewOut)
 async def admin_overview(
     _: User = Depends(admin_user),
     db: AsyncSession = Depends(get_db),
 ):
-    total_users = (await db.execute(select(func.count(User.id)))).scalar() or 0
-    active_subs = (await db.execute(
-        select(func.count(Subscription.id)).where(Subscription.status == "active")
-    )).scalar() or 0
-    starter = (await db.execute(select(func.count(User.id)).where(User.plan == "starter"))).scalar() or 0
-    pro = (await db.execute(select(func.count(User.id)).where(User.plan == "pro"))).scalar() or 0
-    free = (await db.execute(select(func.count(User.id)).where(User.plan == "free_trial"))).scalar() or 0
-    analyses = (await db.execute(select(func.count(AnalysisResult.id)))).scalar() or 0
-    messages = (await db.execute(select(func.count(ContactMessage.id)))).scalar() or 0
-    pending = (await db.execute(
-        select(func.count(ContactMessage.id)).where(ContactMessage.status == "pending")
-    )).scalar() or 0
+    total_users  = await _count(db, select(func.count(User.id)))
+    active_subs  = await _count(db, select(func.count(Subscription.id)).where(Subscription.status == "active"))
+    starter      = await _count(db, select(func.count(User.id)).where(User.plan == "starter"))
+    pro          = await _count(db, select(func.count(User.id)).where(User.plan == "pro"))
+    free         = await _count(db, select(func.count(User.id)).where(User.plan == "free_trial"))
+    analyses     = await _count(db, select(func.count(AnalysisResult.id)))
+    messages     = await _count(db, select(func.count(ContactMessage.id)))
+    pending      = await _count(db, select(func.count(ContactMessage.id)).where(ContactMessage.status == "pending"))
 
     return OverviewOut(
         total_users=total_users,
