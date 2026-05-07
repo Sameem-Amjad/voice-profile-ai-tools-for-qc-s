@@ -38,12 +38,13 @@ def _make_engine():
             connect_args: dict = {}
             if "ssl=" not in url:
                 connect_args["ssl"] = "require"
-            # Supabase Transaction Pooler (port 6543) is pgbouncer in transaction
-            # mode — it does NOT support prepared statements. Disable asyncpg's
-            # statement cache when we detect that port.
-            if ":6543/" in url or url.endswith(":6543"):
-                connect_args["statement_cache_size"] = 0
-                connect_args["prepared_statement_cache_size"] = 0
+            # Supabase Transaction Pooler (pgbouncer in transaction mode) does
+            # not support prepared statements. Disable asyncpg's statement cache
+            # unconditionally for all PostgreSQL connections — safe to do even
+            # without pgbouncer (minor perf trade-off, avoids the port-check
+            # brittle conditional that was silently not matching on Render).
+            connect_args["statement_cache_size"] = 0
+            connect_args["prepared_statement_cache_size"] = 0
             kwargs["connect_args"] = connect_args
     return create_async_engine(url, **kwargs)
 
