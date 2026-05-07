@@ -26,16 +26,25 @@ class Base(DeclarativeBase):
 def _make_engine():
     """Build the async engine with sensible defaults per backend."""
     url = settings.DATABASE_URL
-    # SQLite has no real connection pooling; use defaults. Postgres benefits
-    # from pool_pre_ping to recover from stale conns.
+    # Auto-upgrade plain "postgresql://" to "postgresql+asyncpg://" so users can
+    # paste a Supabase connection string verbatim.
+    if url.startswith("postgresql://") and "+asyncpg" not in url:
+        url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
     kwargs: dict = {"future": True}
     if not url.startswith("sqlite"):
         kwargs["pool_pre_ping"] = True
-        # Managed Postgres (Supabase, RDS) requires SSL. asyncpg doesn't
-        # accept the libpq-style ?sslmode= URL param, so pass it via
-        # connect_args. Skip when the URL already specifies ssl=.
-        if url.startswith("postgresql+asyncpg") and "ssl=" not in url:
-            kwargs["connect_args"] = {"ssl": "require"}
+        if url.startswith("postgresql+asyncpg"):
+            connect_args: dict = {}
+            if "ssl=" not in url:
+                connect_args["ssl"] = "require"
+            # Supabase Transaction Pooler (port 6543) is pgbouncer in transaction
+            # mode — it does NOT support prepared statements. Disable asyncpg's
+            # statement cache when we detect that port.
+            if ":6543/" in url or url.endswith(":6543"):
+                connect_args["statement_cache_size"] = 0
+                connect_args["prepared_statement_cache_size"] = 0
+            kwargs["connect_args"] = connect_args
     return create_async_engine(url, **kwargs)
 
 
