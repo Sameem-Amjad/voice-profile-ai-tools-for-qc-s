@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Play, Pause, SkipBack } from 'lucide-react';
 
 const formatTime = (seconds) => {
@@ -10,6 +10,27 @@ const formatTime = (seconds) => {
 
 export const AudioPlayer = ({ audioRef, isPlaying, currentTime, duration, onToggle }) => {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  useEffect(() => {
+    const onKey = (e) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (document.activeElement?.isContentEditable) return;
+      if (!audioRef.current || !duration) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        onToggle();
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5);
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [audioRef, duration, onToggle]);
 
   const handleSeek = (e) => {
     if (!audioRef.current || !duration) return;
@@ -79,6 +100,12 @@ export const AudioPlayer = ({ audioRef, isPlaying, currentTime, duration, onTogg
           </span>
         </div>
       </div>
+
+      {duration > 0 && (
+        <p className="text-[10px] text-gray-500 text-right mt-2 select-none">
+          Space: play/pause · ← →: ±5 s
+        </p>
+      )}
     </div>
   );
 };

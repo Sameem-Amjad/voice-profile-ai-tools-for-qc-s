@@ -6,7 +6,7 @@ export const NotFoundPage = () => (
   <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex flex-col items-center justify-center px-4">
     <div className="text-center space-y-6 max-w-sm">
       <Link to="/" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors">
-        <img className="h-16 rounded-xl w-auto" src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="Soundproof" />
+        <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/soundproof.png" alt="Soundproof" className="h-8 w-auto" />
       </Link>
 
       <div>

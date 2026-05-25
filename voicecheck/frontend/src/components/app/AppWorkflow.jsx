@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { getApi } from '../../services/api';
 import { Navbar } from '../ui/Navbar';
+import { SEO } from '../seo/SEO';
 
 export const AppWorkflow = () => {
   const { devMode } = useDevMode();
@@ -85,6 +86,7 @@ export const AppWorkflow = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
+      <SEO title="App" noIndex={true} />
       <Navbar variant="app" step={step} onReset={handleReset} usageInfo={usageInfo} me={me} />
 
       <main className="max-w-5xl mx-auto px-4 py-8">

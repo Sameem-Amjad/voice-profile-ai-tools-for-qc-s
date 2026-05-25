@@ -34,6 +34,24 @@ export const ResultsView = ({
   const { aligned_words, stats } = result;
 
   const handlePrintPdf = () => window.print();
+
+  const handleExportCsv = () => {
+    const rows = [['word', 'status', 'start_s', 'end_s']];
+    aligned_words.forEach((w) => rows.push([
+      `"${(w.word || '').replace(/"/g, '""')}"`,
+      w.status,
+      w.start != null ? w.start.toFixed(3) : '',
+      w.end != null ? w.end.toFixed(3) : '',
+    ]));
+    const csv = rows.map((r) => r.join(',')).join('\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'soundproof-analysis.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const [shareUrl, setShareUrl] = useState(null);
   const [shareCopied, setShareCopied] = useState(false);
 
@@ -104,8 +122,15 @@ export const ResultsView = ({
           </button>
         )}
         <button
-          onClick={handlePrintPdf}
+          onClick={handleExportCsv}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors"
+        >
+          <Download size={14} />
+          Export CSV
+        </button>
+        <button
+          onClick={handlePrintPdf}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors print:hidden"
         >
           <Download size={14} />
           Download PDF

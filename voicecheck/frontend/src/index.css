@@ -12,3 +12,54 @@
     -webkit-font-smoothing: antialiased;
   }
 }
+
+@media print {
+  /* Hide everything except the analysis content */
+  header,
+  nav,
+  .print\:hidden,
+  [class*="AudioPlayer"],
+  [class*="FeedbackModal"],
+  [class*="UpgradeModal"] {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+
+  /* Force light background on result cards */
+  .bg-gray-900,
+  .bg-slate-900,
+  [class*="bg-gray-9"],
+  [class*="bg-slate-9"] {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Word tokens — keep their color coding */
+  .bg-red-100    { background-color: #fee2e2 !important; }
+  .bg-yellow-100 { background-color: #fef9c3 !important; }
+  .bg-orange-100 { background-color: #ffedd5 !important; }
+  .bg-blue-100   { background-color: #dbeafe !important; }
+  .bg-green-50   { background-color: #f0fdf4 !important; }
+
+  /* Page setup */
+  @page {
+    margin: 20mm 15mm;
+    size: A4;
+  }
+
+  /* Print header with URL + date */
+  body::before {
+    content: "SoundProof Analysis — " attr(data-date);
+    display: block;
+    font-size: 9pt;
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4pt;
+    margin-bottom: 12pt;
+  }
+}

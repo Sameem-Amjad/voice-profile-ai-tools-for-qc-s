@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Check, ArrowRight, Zap, Users } from 'lucide-react';
 import { useDevMode } from '../hooks/useDevMode';
+import { SEO } from '../components/seo/SEO';
 import clsx from 'clsx';
 
 const PLANS = [
@@ -86,11 +87,16 @@ export const PricingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-white">
+      <SEO
+        title="Pricing"
+        description="Start free with 3 analyses per month. Upgrade to Starter ($29), Pro ($49), or Team ($99) for more hours, exports, and priority support. No credit card required."
+        canonical="/pricing"
+      />
       {/* Header */}
       <header className="sticky top-0 z-30 backdrop-blur-md bg-slate-950/70 border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img className="h-16 rounded-xl w-auto" src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="Soundproof" className="h-8 w-auto" />
+            <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/soundproof.png" alt="Soundproof" className="h-8 w-auto" />
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>

@@ -28,7 +28,7 @@ export const AdminLayout = () => {
             <ShieldCheck size={20} className="text-blue-400" />
             <span className="font-bold text-lg">Admin Panel</span>
           </div>
-          <img className="h-16 rounded-xl w-auto" src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="Soundproof" className="h-5 w-auto mt-1 opacity-60" />
+          <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/soundproof.png" alt="Soundproof" className="h-5 w-auto mt-1 opacity-60" />
         </div>
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map(({ to, label, icon: Icon, end }) => (

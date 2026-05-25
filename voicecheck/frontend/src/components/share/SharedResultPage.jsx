@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { getApi } from '../../services/api';
+import { SEO } from '../seo/SEO';
 import clsx from 'clsx';
 
 const StatusBadge = ({ status }) => {
@@ -35,10 +36,19 @@ export const SharedResultPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-white">
+      {data ? (
+        <SEO
+          title={`${data.accuracy_percentage.toFixed(1)}% accuracy — Voiceover Analysis`}
+          description={`This voiceover scored ${data.accuracy_percentage.toFixed(1)}% accuracy — ${data.correct_words} of ${data.total_words} words correct. See the word-level breakdown.`}
+          noIndex={false}
+        />
+      ) : (
+        <SEO title="Shared Voiceover Result" noIndex={false} />
+      )}
       <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img className="h-16 rounded-xl w-auto" src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="Soundproof" className="h-8 w-auto" />
+            <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/soundproof.png" alt="Soundproof" className="h-8 w-auto" />
           </Link>
           <Link to="/sign-up" className="text-sm px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 font-semibold transition-colors">
             Try it free →
