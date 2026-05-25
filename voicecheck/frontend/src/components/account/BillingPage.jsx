@@ -10,8 +10,8 @@ const PLAN_META = {
   free_trial: { label: 'Free trial', price: 0 },
   trial: { label: 'Free trial', price: 0 },
   free: { label: 'Free', price: 0 },
-  starter: { label: 'Starter', price: 29 },
-  pro: { label: 'Pro', price: 49 },
+  starter: { label: 'Starter', price: 20 },
+  pro: { label: 'Pro', price: 40 },
   cancelled: { label: 'Cancelled', price: 0 },
 };
 
@@ -268,7 +268,7 @@ export const BillingPage = () => {
                     ) : (
                       <Zap size={16} />
                     )}
-                    Upgrade to Starter — $29
+                    Upgrade to Starter — $20
                   </button>
                   <button
                     onClick={() => startCheckout('pro')}
@@ -280,7 +280,7 @@ export const BillingPage = () => {
                     ) : (
                       <Zap size={16} />
                     )}
-                    Upgrade to Pro — $49
+                    Upgrade to Pro — $40
                   </button>
                 </div>
               )}
