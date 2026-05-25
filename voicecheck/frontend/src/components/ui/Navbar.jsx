@@ -102,8 +102,8 @@ export function Navbar({ variant, step, onReset, usageInfo, me, stats, billing }
 
   const isLanding = variant === 'landing';
   const headerCls = clsx(
-    'border-b border-white/10 backdrop-blur-sm',
-    isLanding ? 'sticky top-0 z-30 backdrop-blur-md bg-slate-950/70' : 'bg-white/5'
+    'border-b border-white/10 backdrop-blur-sm bg-[#050d1a]',
+    isLanding ? 'sticky top-0 z-30 backdrop-blur-md ' : ''
   );
   const logoTo = variant === 'dashboard' ? '/app' : '/';
   const maxW = MAX_WIDTH[variant] ?? 'max-w-6xl';
