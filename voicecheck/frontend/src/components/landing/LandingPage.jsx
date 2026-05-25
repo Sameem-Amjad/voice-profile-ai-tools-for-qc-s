@@ -62,7 +62,7 @@ const PRICING = [
   },
   {
     name: 'Starter',
-    price: 29,
+    price: 20,
     blurb: 'For solo voiceover artists',
     features: [
       '5 hours / month',
@@ -78,7 +78,7 @@ const PRICING = [
   },
   {
     name: 'Pro',
-    price: 49,
+    price: 40,
     blurb: 'For working studios',
     features: [
       '25 hours / month',
