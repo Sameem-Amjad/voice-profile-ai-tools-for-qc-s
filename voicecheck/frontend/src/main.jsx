@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
+import { HelmetProvider } from 'react-helmet-async'
 import App from './App.jsx'
 import './index.css'
 
@@ -31,21 +32,25 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 if (PUBLISHABLE_KEY) {
   root.render(
     <React.StrictMode>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ClerkProvider>
+      <HelmetProvider>
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ClerkProvider>
+      </HelmetProvider>
     </React.StrictMode>,
   );
 } else {
   // No Clerk key — render the app directly so devs can still use it
   root.render(
     <React.StrictMode>
-      <BrowserRouter>
-        <DevModeBanner />
-        <App />
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
+          <DevModeBanner />
+          <App />
+        </BrowserRouter>
+      </HelmetProvider>
     </React.StrictMode>,
   );
 }

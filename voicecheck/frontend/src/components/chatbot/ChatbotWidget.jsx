@@ -27,7 +27,7 @@ const TypingIndicator = () => (
 export const ChatbotWidget = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'bot', text: "Hi! I'm VoiceCheck's assistant. How can I help you today?" },
+    { role: 'bot', text: "Hi! I'm SoundProof's assistant. How can I help you today?" },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -86,7 +86,7 @@ export const ChatbotWidget = () => {
                 <Bot size={16} className="text-white" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm leading-tight">VoiceCheck Assistant</p>
+                <p className="text-white font-semibold text-sm leading-tight">SoundProof Assistant</p>
                 <p className="text-blue-200 text-xs">Online</p>
               </div>
             </div>

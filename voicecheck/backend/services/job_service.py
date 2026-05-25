@@ -23,6 +23,7 @@ class Job:
         self.transcription: Optional[TranscriptionResult] = None
         self.comparison: Optional[ComparisonResult] = None
         self.error: Optional[str] = None
+        self.analysis_id: Optional[str] = None
 
     def set_status(self, status: JobStatus, error: str = None):
         self.status = status

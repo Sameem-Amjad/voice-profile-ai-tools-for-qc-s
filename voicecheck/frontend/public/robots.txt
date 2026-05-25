@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /account
+Disallow: /dashboard
+Disallow: /admin
+
+Sitemap: https://voicecheck.app/sitemap.xml

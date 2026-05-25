@@ -12,7 +12,7 @@ become bugs. You choose boring, reliable technology over hype. You optimize for
 developer experience and maintainability.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 PROJECT: VoiceCheck — AI Voiceover Accuracy Tool
+🎯 PROJECT: SoundProof — AI Voiceover Accuracy Tool
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 BUILD A COMPLETE, RUNNABLE MVP. No placeholders. No "TODO: implement this". 
@@ -183,7 +183,7 @@ import os
 
 class Settings(BaseSettings):
     # App
-    APP_NAME: str = "VoiceCheck API"
+    APP_NAME: str = "SoundProof API"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
     
@@ -2266,7 +2266,7 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="""
-    VoiceCheck API — AI-powered voiceover accuracy tool.
+    SoundProof API — AI-powered voiceover accuracy tool.
     
     ## Workflow
     1. **POST /api/upload** — Upload audio file
@@ -2868,7 +2868,7 @@ import { FileText, X } from 'lucide-react';
 const PLACEHOLDER = `Paste your script here...
 
 Example:
-"Hello and welcome to VoiceCheck. This tool helps voiceover artists 
+"Hello and welcome to SoundProof. This tool helps voiceover artists 
 verify their recordings against the original script with word-level accuracy."`;
 
 export const ScriptInput = ({ value, onChange, disabled }) => {
@@ -3609,7 +3609,7 @@ export default function App() {
       
       {/* Footer */}
       <footer className="text-center py-6 text-gray-600 text-xs">
-        VoiceCheck MVP · Built with faster-whisper + Needleman-Wunsch alignment
+        SoundProof MVP · Built with faster-whisper + Needleman-Wunsch alignment
       </footer>
     </div>
   );
@@ -3800,7 +3800,7 @@ VITE_API_URL=http://localhost:8000/api
 
 ## FILE: README.md
 ```markdown
-# VoiceCheck — AI Voiceover Accuracy Tool
+# SoundProof — AI Voiceover Accuracy Tool
 
 Compare voiceover recordings against scripts with word-level AI accuracy.
 

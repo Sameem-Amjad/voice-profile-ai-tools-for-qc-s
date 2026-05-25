@@ -78,7 +78,7 @@ export const FeedbackModal = ({ show, onClose }) => {
               ))}
             </div>
             <p className="text-xl font-bold text-gray-900 mt-2">Thank you!</p>
-            <p className="text-gray-500 text-sm">Your feedback helps us improve VoiceCheck.</p>
+            <p className="text-gray-500 text-sm">Your feedback helps us improve SoundProof.</p>
           </div>
         ) : (
           <>

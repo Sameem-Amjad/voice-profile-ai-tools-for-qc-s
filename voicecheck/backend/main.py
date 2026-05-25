@@ -2,14 +2,19 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 import asyncio
 
 from config import settings
 from utils.logger import setup_logging, get_logger
 from api.routes import upload, transcribe, compare, health, billing
 from api.routes import history, stats, contact, feedback, chatbot, admin as admin_routes, me
+from api.routes import share as share_routes
+from api.routes import badge as badge_routes
 from services.job_service import job_service
 from db.init import init_db
+from core.limiter import limiter
 
 # Setup logging before anything else
 setup_logging()
@@ -76,7 +81,7 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="""
-    VoiceCheck API — AI-powered voiceover accuracy tool.
+    SoundProof API — AI-powered voiceover accuracy tool.
 
     ## Workflow
     1. **POST /api/upload** — Upload audio file
@@ -99,6 +104,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Attach the rate limiter state and 429 handler
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Global exception handler — never expose stack traces to client
 @app.exception_handler(Exception)
@@ -133,6 +142,8 @@ app.include_router(feedback.router, prefix="/api", tags=["Feedback"])
 app.include_router(chatbot.router, prefix="/api", tags=["Chatbot"])
 app.include_router(admin_routes.router, prefix="/api", tags=["Admin"])
 app.include_router(me.router, prefix="/api", tags=["Me"])
+app.include_router(share_routes.router, prefix="/api", tags=["Share"])
+app.include_router(badge_routes.router, prefix="/api", tags=["Badge"])
 
 
 if __name__ == "__main__":

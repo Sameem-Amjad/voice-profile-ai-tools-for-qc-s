@@ -1,4 +1,4 @@
-# VoiceCheck (Verbatim) — Bid Response
+# SoundProof (Verbatim) — Bid Response
 
 Reply to the developer brief `Verbatim-Developer-Brief-v2 (1).docx`.
 

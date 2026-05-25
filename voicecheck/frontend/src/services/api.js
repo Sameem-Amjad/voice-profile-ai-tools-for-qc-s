@@ -42,11 +42,21 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const message = error.response?.data?.detail
-      || error.response?.data?.error
-      || error.message
-      || 'Unknown error';
-    throw new Error(message);
+    const detail = error.response?.data?.detail;
+
+    // detail can be a string or a dict (e.g. 402 quota errors return an object)
+    let message;
+    if (detail && typeof detail === 'object') {
+      message = detail.message || detail.error || JSON.stringify(detail);
+    } else {
+      message = detail || error.response?.data?.error || error.message || 'Unknown error';
+    }
+
+    const err = new Error(message);
+    err.statusCode = error.response?.status;
+    // Preserve structured detail so callers can branch on quota vs other errors
+    err.detail = detail;
+    throw err;
   }
 );
 
@@ -143,6 +153,9 @@ export const getPublicFeedback = (limit = 12) => api.get(`/feedback?limit=${limi
 export const submitFeedback = (data) => api.post('/feedback', data);
 export const sendChatMessage = (message) => api.post('/chatbot', { message });
 export const getBillingMe = () => api.get('/billing/me');
+export const getSharedResult = (token) => api.get(`/share/${token}`);
+export const compareTakes = (jobIds, scriptText) =>
+  api.post('/compare-takes', { job_ids: jobIds, script_text: scriptText });
 
 // ─── Polling Helper ──────────────────────────────────────────────────────────
 

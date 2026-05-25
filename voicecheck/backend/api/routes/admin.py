@@ -181,7 +181,7 @@ async def admin_revenue(
     active = (await db.execute(
         select(func.count(Subscription.id)).where(Subscription.status == "active")
     )).scalar() or 0
-    mrr = (starter * 20.0) + (pro * 40.0)
+    mrr = (starter * 29.0) + (pro * 49.0)
     return RevenueOut(
         starter_count=starter,
         pro_count=pro,

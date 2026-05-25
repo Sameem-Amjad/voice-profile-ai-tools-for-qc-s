@@ -15,7 +15,10 @@ from typing import Literal, Optional
 import stripe
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+import uuid
+
+from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,6 +27,11 @@ from config import settings
 from db.models import ProcessedStripeEvent, Subscription, User
 from db.session import get_db
 from services.usage_service import PLAN_LIMITS, monthly_minutes_used
+from services.email_service import (
+    send_subscription_confirmed,
+    send_subscription_cancelled,
+    send_payment_failed,
+)
 from utils.logger import get_logger
 
 router = APIRouter()
@@ -55,10 +63,13 @@ class PortalSessionResponse(BaseModel):
 
 class BillingMeResponse(BaseModel):
     plan: str
+    status: Optional[str] = None
     current_period_end: Optional[datetime] = None
     monthly_minutes_used: float
     plan_cap_minutes: int
     trial_minutes_used: int
+    analyses_this_month: int = 0
+    analyses_cap: int = 0
     is_admin: bool = False
 
 
@@ -175,7 +186,9 @@ async def billing_me(
     db: AsyncSession = Depends(get_db),
 ):
     minutes_used = await monthly_minutes_used(user.id, db)
-    cap = PLAN_LIMITS.get(user.plan or "free_trial", PLAN_LIMITS["free_trial"])["limit_minutes"]
+    plan_key = user.plan or "free_trial"
+    plan_cfg = PLAN_LIMITS.get(plan_key, PLAN_LIMITS["free_trial"])
+    cap = plan_cfg.get("limit_minutes", 0)
 
     # Find the most recent active subscription, if any
     sub_q = await db.execute(
@@ -185,12 +198,18 @@ async def billing_me(
     )
     sub = sub_q.scalars().first()
 
+    from services.usage_service import monthly_analyses_count, FREE_TRIAL_ANALYSES_PER_MONTH
+    analyses_count = await monthly_analyses_count(user.id, db) if (user.plan or "free_trial") == "free_trial" else 0
+
     return BillingMeResponse(
         plan=user.plan or "free_trial",
+        status=sub.status if sub else None,
         current_period_end=sub.current_period_end if sub else None,
         monthly_minutes_used=round(minutes_used, 2),
         plan_cap_minutes=cap,
         trial_minutes_used=int(user.trial_minutes_used or 0),
+        analyses_this_month=analyses_count,
+        analyses_cap=FREE_TRIAL_ANALYSES_PER_MONTH if (user.plan or "free_trial") == "free_trial" else 0,
         is_admin=user.is_admin,
     )
 
@@ -249,36 +268,49 @@ async def _handle_subscription_event(event: dict, db: AsyncSession) -> None:
         )
         return
 
-    # Update / insert Subscription row
-    q = await db.execute(
-        select(Subscription).where(Subscription.stripe_subscription_id == sub_id)
-    )
-    sub_row = q.scalar_one_or_none()
-
     if event["type"] == "customer.subscription.deleted":
+        q = await db.execute(
+            select(Subscription).where(Subscription.stripe_subscription_id == sub_id)
+        )
+        sub_row = q.scalar_one_or_none()
         if sub_row is not None:
             sub_row.status = "canceled"
             sub_row.current_period_end = period_end or sub_row.current_period_end
         user.plan = "cancelled"
+        await db.commit()
+        if user.email:
+            send_subscription_cancelled(user.email)
     else:
-        if sub_row is None:
-            sub_row = Subscription(
+        # Upsert avoids a race condition when subscription.created and
+        # subscription.updated arrive concurrently (different event IDs, so
+        # idempotency doesn't deduplicate them, but both see sub_row=None).
+        prev_plan = user.plan
+        await db.execute(
+            pg_insert(Subscription)
+            .values(
+                id=str(uuid.uuid4()),
                 user_id=user.id,
                 stripe_subscription_id=sub_id,
                 status=status,
                 current_period_end=period_end,
             )
-            db.add(sub_row)
-        else:
-            sub_row.status = status
-            sub_row.current_period_end = period_end
-        # Map active/trialing to the resolved plan; otherwise mark cancelled
+            .on_conflict_do_update(
+                index_elements=["stripe_subscription_id"],
+                set_={
+                    "status": status,
+                    "current_period_end": period_end,
+                    "updated_at": func.now(),
+                },
+            )
+        )
         if status in {"active", "trialing", "past_due"}:
             user.plan = plan_name
         elif status in {"canceled", "incomplete_expired", "unpaid"}:
             user.plan = "cancelled"
-
-    await db.commit()
+        await db.commit()
+        # Send confirmation only on first activation (not on every renewal event)
+        if status == "active" and prev_plan != plan_name and user.email:
+            send_subscription_confirmed(user.email, plan_name)
 
 
 async def _handle_invoice_payment_failed(event: dict, db: AsyncSession) -> None:
@@ -294,6 +326,8 @@ async def _handle_invoice_payment_failed(event: dict, db: AsyncSession) -> None:
         user_id=user.id,
         attempt_count=attempt_count,
     )
+    if user.email:
+        send_payment_failed(user.email)
     if attempt_count >= 3:
         user.plan = "cancelled"
         await db.commit()

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 import uuid
 from pathlib import Path
@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.schemas import UploadResponse, ErrorResponse
 from core.storage.local import storage
+from core.limiter import limiter
 from services.job_service import job_service
 from services.usage_service import check_quota_or_raise
 from utils.audio_utils import validate_audio_file
@@ -24,7 +25,9 @@ logger = get_logger(__name__)
     summary="Upload audio file",
     description="Upload an audio file for transcription. Returns a job_id to track processing."
 )
+@limiter.limit("10/minute")
 async def upload_audio(
+    request: Request,
     file: UploadFile = File(...),
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_db),

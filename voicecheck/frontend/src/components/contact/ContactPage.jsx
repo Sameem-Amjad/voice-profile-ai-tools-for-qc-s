@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mic2, CheckCircle, Send, Mail } from 'lucide-react';
+import { CheckCircle, Send, Mail } from 'lucide-react';
 import clsx from 'clsx';
+import { SEO } from '../seo/SEO';
 import { submitContact } from '../../services/api';
+import { Navbar } from '../ui/Navbar';
 
 const SUBJECTS = [
   { value: '', label: 'Select a subject…' },
@@ -46,23 +47,12 @@ export const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <Mic2 className="text-blue-400" size={24} />
-            <span className="text-white font-bold text-lg tracking-tight">
-              Voice<span className="text-blue-400">Check</span>
-            </span>
-          </Link>
-          <Link
-            to="/app"
-            className="text-sm text-gray-400 hover:text-white transition-colors"
-          >
-            Open app →
-          </Link>
-        </div>
-      </header>
+      <SEO
+        title="Contact Us"
+        description="Have a question, billing issue, or feature request? Contact the SoundProof team. We typically reply within 24 hours."
+        canonical="/contact"
+      />
+      <Navbar variant="contact" />
 
       <main className="max-w-2xl mx-auto px-4 py-16">
         {/* Hero */}

@@ -1,9 +1,13 @@
 """
 Per-user usage tracking and quota enforcement.
 
-Plan caps live in PLAN_LIMITS. Free trial uses a *cumulative* cap counted on
-User.trial_minutes_used. Paid plans use a rolling calendar-month sum across
-the UsageMinute table.
+Plan caps:
+  free_trial  – 3 analyses per month (analysis-count based, not minutes)
+                Files capped at 30 min each to protect API costs.
+  starter     – 300 min per calendar month
+  pro         – 1500 min per calendar month
+  team        – 3000 min per calendar month
+  cancelled   – no usage allowed
 """
 
 from __future__ import annotations
@@ -15,22 +19,20 @@ from fastapi import HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.models import UsageMinute, User
+from db.models import AnalysisResult, UsageMinute, User
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+FREE_TRIAL_ANALYSES_PER_MONTH = 3
+FREE_TRIAL_MAX_FILE_MINUTES = 30  # max per-file duration for free users
 
-# ── Plan limits (in minutes) ────────────────────────────────────────────────
-# free_trial: TOTAL minutes ever (lifetime), tracked on User.trial_minutes_used
-# starter:    minutes per calendar month
-# pro:        minutes per calendar month
-# cancelled:  no usage allowed
 PLAN_LIMITS: dict[str, dict] = {
-    "free_trial": {"limit_minutes": 30, "cycle": "lifetime"},
-    "starter":    {"limit_minutes": 5 * 60, "cycle": "month"},   # 5h
-    "pro":        {"limit_minutes": 25 * 60, "cycle": "month"},  # 25h
-    "cancelled":  {"limit_minutes": 0, "cycle": "month"},
+    "free_trial": {"limit_analyses": FREE_TRIAL_ANALYSES_PER_MONTH, "cycle": "month"},
+    "starter":    {"limit_minutes": 300,  "cycle": "month"},
+    "pro":        {"limit_minutes": 1500, "cycle": "month"},
+    "team":       {"limit_minutes": 3000, "cycle": "month"},
+    "cancelled":  {"limit_minutes": 0,    "cycle": "month"},
 }
 
 
@@ -45,34 +47,25 @@ async def record_usage(
     seconds: float,
     db: AsyncSession,
 ) -> UsageMinute:
-    """Insert a UsageMinute row for the user/job."""
     row = UsageMinute(user_id=user_id, job_id=job_id, seconds=float(seconds or 0.0))
     db.add(row)
     await db.commit()
     await db.refresh(row)
-    logger.info(
-        "usage_recorded",
-        user_id=user_id,
-        job_id=job_id,
-        seconds=row.seconds,
-    )
+    logger.info("usage_recorded", user_id=user_id, job_id=job_id, seconds=row.seconds)
     return row
 
 
 async def monthly_minutes_used(user_id: str, db: AsyncSession) -> float:
-    """Sum minutes used by this user in the current calendar month (UTC)."""
     start = _month_start_utc()
     stmt = select(func.coalesce(func.sum(UsageMinute.seconds), 0.0)).where(
         UsageMinute.user_id == user_id,
         UsageMinute.created_at >= start,
     )
     result = await db.execute(stmt)
-    total_seconds = float(result.scalar() or 0.0)
-    return total_seconds / 60.0
+    return float(result.scalar() or 0.0) / 60.0
 
 
 async def total_minutes_used(user_id: str, db: AsyncSession) -> float:
-    """Lifetime usage in minutes."""
     stmt = select(func.coalesce(func.sum(UsageMinute.seconds), 0.0)).where(
         UsageMinute.user_id == user_id,
     )
@@ -80,28 +73,50 @@ async def total_minutes_used(user_id: str, db: AsyncSession) -> float:
     return float(result.scalar() or 0.0) / 60.0
 
 
+async def monthly_analyses_count(user_id: str, db: AsyncSession) -> int:
+    start = _month_start_utc()
+    stmt = select(func.count(AnalysisResult.id)).where(
+        AnalysisResult.user_id == user_id,
+        AnalysisResult.created_at >= start,
+    )
+    result = await db.execute(stmt)
+    return int(result.scalar() or 0)
+
+
 async def check_quota_or_raise(
     user: User,
     db: AsyncSession,
     expected_seconds: float,
 ) -> None:
-    """
-    Verify the user's plan can absorb `expected_seconds` more of audio.
-    Raises HTTPException 402 Payment Required if the cap is exceeded.
-
-    For free_trial: uses User.trial_minutes_used (cumulative ledger).
-    For starter/pro: uses sum(UsageMinute.seconds) for the current month.
-    """
     plan = (user.plan or "free_trial").lower()
-    cfg = PLAN_LIMITS.get(plan, PLAN_LIMITS["free_trial"])
-    cap_minutes = cfg["limit_minutes"]
-    cycle = cfg["cycle"]
     expected_minutes = max(0.0, float(expected_seconds or 0.0) / 60.0)
 
-    if cycle == "lifetime":
-        used = float(user.trial_minutes_used or 0)
-    else:
-        used = await monthly_minutes_used(user.id, db)
+    if plan == "free_trial":
+        # Per-file duration cap to protect API costs
+        if expected_minutes > FREE_TRIAL_MAX_FILE_MINUTES:
+            raise HTTPException(
+                status_code=402,
+                detail={
+                    "error": "quota_exceeded",
+                    "plan": plan,
+                    "message": f"Free plan supports files up to {FREE_TRIAL_MAX_FILE_MINUTES} minutes. Upgrade to Starter or Pro for longer files.",
+                },
+            )
+        return
+
+    if plan == "cancelled":
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "error": "quota_exceeded",
+                "plan": plan,
+                "message": "Your subscription has been cancelled. Resubscribe to continue.",
+            },
+        )
+
+    cfg = PLAN_LIMITS.get(plan, PLAN_LIMITS["starter"])
+    cap_minutes = cfg["limit_minutes"]
+    used = await monthly_minutes_used(user.id, db)
 
     if used + expected_minutes > cap_minutes:
         logger.warning(
@@ -119,10 +134,26 @@ async def check_quota_or_raise(
                 "plan": plan,
                 "used_minutes": round(used, 2),
                 "cap_minutes": cap_minutes,
-                "message": (
-                    "Free trial limit reached. Upgrade to Starter or Pro to continue."
-                    if plan == "free_trial"
-                    else "Monthly usage cap reached. Upgrade your plan or wait for next billing cycle."
-                ),
+                "message": "Monthly usage cap reached. Upgrade your plan or wait for next billing cycle.",
+            },
+        )
+
+
+async def check_analysis_quota_or_raise(user: User, db: AsyncSession) -> None:
+    """Gate for free_trial: max FREE_TRIAL_ANALYSES_PER_MONTH analyses per month."""
+    plan = (user.plan or "free_trial").lower()
+    if plan != "free_trial":
+        return
+
+    count = await monthly_analyses_count(user.id, db)
+    if count >= FREE_TRIAL_ANALYSES_PER_MONTH:
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "error": "quota_exceeded",
+                "plan": plan,
+                "analyses_used": count,
+                "analyses_cap": FREE_TRIAL_ANALYSES_PER_MONTH,
+                "message": f"You've used your {FREE_TRIAL_ANALYSES_PER_MONTH} free analyses this month. Upgrade to continue.",
             },
         )

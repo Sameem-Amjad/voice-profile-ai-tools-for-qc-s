@@ -19,6 +19,7 @@ from config import settings
 from db.models import User
 from db.session import get_db
 from utils.logger import get_logger
+from services.email_service import send_welcome
 
 logger = get_logger(__name__)
 
@@ -55,6 +56,8 @@ async def get_or_create_user(claims: dict, db: AsyncSession) -> User:
         await db.commit()
         await db.refresh(user)
         logger.info("user_created", clerk_user_id=clerk_user_id, has_email=bool(email))
+        if email:
+            send_welcome(email)
     elif not user.email:
         # Existing user with no email — backfill from Clerk API
         email = email or fetch_clerk_email(clerk_user_id)

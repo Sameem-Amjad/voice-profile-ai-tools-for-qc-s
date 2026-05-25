@@ -4,7 +4,7 @@ import { FileText, X } from 'lucide-react';
 const PLACEHOLDER = `Paste your script here...
 
 Example:
-"Hello and welcome to VoiceCheck. This tool helps voiceover artists
+"Hello and welcome to SoundProof. This tool helps voiceover artists
 verify their recordings against the original script with word-level accuracy."`;
 
 export const ScriptInput = ({ value, onChange, disabled }) => {

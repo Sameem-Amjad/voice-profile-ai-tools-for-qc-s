@@ -1,0 +1,16 @@
+{
+  "name": "SoundProof",
+  "short_name": "SoundProof",
+  "description": "AI voiceover QC for audiobook studios and narrators",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#1e40af",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

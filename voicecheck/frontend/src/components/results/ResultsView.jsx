@@ -5,7 +5,7 @@ import { ProgressRing } from './ProgressRing';
 import { Celebration } from './Celebration';
 import { AudioPlayer } from '../player/AudioPlayer';
 import { useResolution, isError } from '../../hooks/useResolution';
-import { CheckCheck } from 'lucide-react';
+import { CheckCheck, Share2, Download } from 'lucide-react';
 import clsx from 'clsx';
 
 const FILTERS = [
@@ -21,17 +21,31 @@ const FILTERS = [
 export const ResultsView = ({
   result,
   audioRef,
-  audioSrc,
   isPlaying,
   currentTime,
   duration,
   onTogglePlay,
   onSeekTo,
+  analysisId,
 }) => {
   const [filter, setFilter] = useState('unresolved');
   const [celebrationDismissed, setCelebrationDismissed] = useState(false);
 
   const { aligned_words, stats } = result;
+
+  const handlePrintPdf = () => window.print();
+  const [shareUrl, setShareUrl] = useState(null);
+  const [shareCopied, setShareCopied] = useState(false);
+
+  const handleShare = () => {
+    if (!analysisId) return;
+    const url = `${window.location.origin}/r/${analysisId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setShareUrl(url);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 3000);
+    });
+  };
 
   const resolution = useResolution(aligned_words);
 
@@ -72,12 +86,31 @@ export const ResultsView = ({
     <div className="space-y-6">
       <AudioPlayer
         audioRef={audioRef}
-        src={audioSrc}
         isPlaying={isPlaying}
         currentTime={currentTime}
         duration={duration || result.audio_duration}
         onToggle={onTogglePlay}
       />
+
+      {/* Action bar */}
+      <div className="flex items-center justify-end gap-2">
+        {analysisId && (
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors"
+          >
+            <Share2 size={14} />
+            {shareCopied ? 'Link copied!' : 'Share result'}
+          </button>
+        )}
+        <button
+          onClick={handlePrintPdf}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors"
+        >
+          <Download size={14} />
+          Download PDF
+        </button>
+      </div>
 
       {showCelebration && (
         <Celebration

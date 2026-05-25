@@ -113,6 +113,7 @@ class CompareResponse(BaseModel):
     status: JobStatus
     result: Optional[ComparisonResult] = None
     error: Optional[str] = None
+    analysis_id: Optional[str] = None
 
 class HealthResponse(BaseModel):
     status: str
@@ -124,3 +125,37 @@ class ErrorResponse(BaseModel):
     error: str
     detail: Optional[str] = None
     job_id: Optional[str] = None
+
+
+# ── Shared result (public, no auth) ─────────────────────────────────────────
+
+class SharedResultResponse(BaseModel):
+    accuracy_percentage: float
+    total_words: int
+    correct_words: int
+    audio_duration: float
+    script_snippet: Optional[str] = None
+    result: Optional[ComparisonResult] = None
+    created_at: str
+
+
+# ── Multiple-takes comparison ────────────────────────────────────────────────
+
+class CompareTakesRequest(BaseModel):
+    job_ids: list[str] = Field(..., min_length=2, max_length=5)
+    script_text: str = Field(..., min_length=1, max_length=50000)
+
+
+class TakeResult(BaseModel):
+    job_id: str
+    rank: int
+    accuracy_percentage: float
+    stats: AccuracyStats
+    aligned_words: list[AlignedWord]
+    audio_duration: float
+    analysis_id: Optional[str] = None
+
+
+class CompareTakesResponse(BaseModel):
+    takes: list[TakeResult]
+    best_job_id: str

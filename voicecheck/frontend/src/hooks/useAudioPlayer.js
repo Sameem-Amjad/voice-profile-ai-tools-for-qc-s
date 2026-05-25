@@ -10,10 +10,6 @@ export const useAudioPlayer = () => {
     activeWordIndex: null,
   });
 
-  // Load audio file into player.
-  // audioRef.current is null here (AudioPlayer hasn't mounted yet — it only
-  // renders in the results step). Store the URL in state; AudioPlayer reads
-  // it via the src prop and the browser loads it when the element mounts.
   const loadAudio = useCallback((file) => {
     const url = URL.createObjectURL(file);
     setState(prev => ({ ...prev, audioUrl: url, isPlaying: false, currentTime: 0 }));
@@ -78,6 +74,14 @@ export const useAudioPlayer = () => {
       });
     };
   }, []);
+
+  // Reload the audio element whenever the source URL changes so that
+  // loadedmetadata fires and duration is available before the results render.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !state.audioUrl) return;
+    audio.load();
+  }, [state.audioUrl]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Track which word is currently playing (for karaoke highlight)
   const getActiveWordIndex = useCallback((alignedWords) => {

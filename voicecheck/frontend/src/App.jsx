@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { LandingPage } from './components/landing/LandingPage';
 import { AppWorkflow } from './components/app/AppWorkflow';
 import { SignInPage } from './components/auth/SignInPage';
@@ -9,6 +10,9 @@ import { UserDashboard } from './components/dashboard/UserDashboard';
 import { ContactPage } from './components/contact/ContactPage';
 import { ChatbotWidget } from './components/chatbot/ChatbotWidget';
 import { AdminLayout } from './components/admin/AdminLayout';
+import { NotFoundPage } from './components/NotFoundPage';
+import { PricingPage } from './pages/PricingPage';
+import { SharedResultPage } from './components/share/SharedResultPage';
 import { useDevMode } from './hooks/useDevMode';
 import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 
@@ -34,7 +38,7 @@ export default function App() {
   const { devMode } = useDevMode();
 
   return (
-    <>
+    <ErrorBoundary>
     <Routes>
       <Route path="/" element={<LandingPage />} />
 
@@ -83,12 +87,15 @@ export default function App() {
         }
       />
 
+      <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/r/:token" element={<SharedResultPage />} />
+
       {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
 
     {/* Chatbot widget — rendered on all pages */}
     <ChatbotWidget />
-    </>
+    </ErrorBoundary>
   );
 }

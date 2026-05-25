@@ -105,6 +105,12 @@ export const WordToken = ({
         </span>
       )}
 
+      {isErrorWord && start != null && (
+        <span className="text-[10px] font-mono opacity-50 ml-0.5 tabular-nums">
+          {start.toFixed(2)}s
+        </span>
+      )}
+
       {showResolveButton && (
         <button
           type="button"

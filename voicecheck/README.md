@@ -1,4 +1,4 @@
-# VoiceCheck — AI Voiceover Accuracy Tool
+# SoundProof — AI Voiceover Accuracy Tool
 
 Compare voiceover recordings against scripts with word-level AI accuracy.
 

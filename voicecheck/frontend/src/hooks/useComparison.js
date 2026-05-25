@@ -8,6 +8,7 @@ export const useComparison = () => {
   const [state, setState] = useState({
     comparing: false,
     result: null,
+    analysisId: null,
     error: null,
   });
 
@@ -26,6 +27,7 @@ export const useComparison = () => {
         ...prev,
         comparing: false,
         result: response.result,
+        analysisId: response.analysis_id || response.result?.analysis_id || null,
       }));
 
       return response.result;
@@ -41,7 +43,7 @@ export const useComparison = () => {
   }, []);
 
   const reset = useCallback(() => {
-    setState({ comparing: false, result: null, error: null });
+    setState({ comparing: false, result: null, analysisId: null, error: null });
   }, []);
 
   return { ...state, compare, reset };

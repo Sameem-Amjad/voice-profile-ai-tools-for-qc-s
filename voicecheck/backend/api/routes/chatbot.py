@@ -6,7 +6,7 @@ from config import settings
 router = APIRouter()
 client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
-SYSTEM_PROMPT = """You are VoiceCheck's helpful support assistant. VoiceCheck is an AI-powered voiceover accuracy tool that helps voice artists check their recordings against scripts.
+SYSTEM_PROMPT = """You are SoundProof's helpful support assistant. SoundProof is an AI-powered voiceover accuracy tool that helps voice artists check their recordings against scripts.
 
 Key features:
 - Upload audio (MP3, WAV, M4A, OGG, FLAC, WebM) or record directly in the browser

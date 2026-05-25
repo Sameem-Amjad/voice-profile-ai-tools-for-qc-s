@@ -6,7 +6,7 @@ import json
 
 class Settings(BaseSettings):
     # App
-    APP_NAME: str = "VoiceCheck API"
+    APP_NAME: str = "SoundProof API"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
 
@@ -91,6 +91,10 @@ class Settings(BaseSettings):
     STRIPE_PRICE_PRO: str = ""
     ADMIN_EMAILS: str = ""      # comma-separated admin email addresses
     ADMIN_CLERK_IDS: str = ""  # comma-separated Clerk user IDs (user_xxx) — more reliable than email
+
+    # ── Email (Resend) ────────────────────────────────────────────────────
+    RESEND_API_KEY: str = ""
+    FROM_EMAIL: str = "SoundProof <noreply@voicecheck.app>"
 
     class Config:
         env_file = ".env"

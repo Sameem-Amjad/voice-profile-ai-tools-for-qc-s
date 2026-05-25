@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useUser, UserButton } from '@clerk/clerk-react';
-import { Mic2, ArrowLeft, Loader2, AlertCircle, Zap, CreditCard } from 'lucide-react';
+import { useUser } from '@clerk/clerk-react';
+import { Loader2, AlertCircle, Zap, CreditCard, XCircle } from 'lucide-react';
 import clsx from 'clsx';
 import { useDevMode } from '../../hooks/useDevMode';
 import { useClerkAuthBridge, getApi } from '../../services/api';
+import { Navbar } from '../ui/Navbar';
 
 const PLAN_META = {
+  free_trial: { label: 'Free trial', price: 0 },
   trial: { label: 'Free trial', price: 0 },
   free: { label: 'Free', price: 0 },
   starter: { label: 'Starter', price: 29 },
   pro: { label: 'Pro', price: 49 },
+  cancelled: { label: 'Cancelled', price: 0 },
 };
 
 const formatDate = (iso) => {
@@ -141,25 +143,11 @@ export const BillingPage = () => {
 
   const planMeta = billing?.plan ? (PLAN_META[billing.plan] || { label: billing.plan, price: 0 }) : null;
   const hasPaidSub = billing && (billing.plan === 'starter' || billing.plan === 'pro');
+  const isCancelled = billing?.plan === 'cancelled';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <Mic2 className="text-blue-400" size={24} />
-            <span className="text-white font-bold text-lg">
-              Voice<span className="text-blue-400">Check</span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link to="/app" className="text-sm text-gray-400 hover:text-white inline-flex items-center gap-1.5">
-              <ArrowLeft size={14} /> Back to app
-            </Link>
-            {!devMode && <UserButton afterSignOutUrl="/" />}
-          </div>
-        </div>
-      </header>
+      <Navbar variant="billing" billing={billing} />
 
       <main className="max-w-4xl mx-auto px-4 py-10 space-y-8">
         <div>
@@ -188,6 +176,23 @@ export const BillingPage = () => {
 
         {!devMode && !loading && billing && (
           <>
+            {/* Cancelled state banner */}
+            {isCancelled && (
+              <div className="bg-red-900/30 border border-red-500/40 rounded-xl p-5 text-red-200">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="text-red-400 mt-0.5 shrink-0" size={20} />
+                  <div className="text-sm leading-relaxed">
+                    <strong className="text-red-100">Subscription cancelled</strong>
+                    {billing.current_period_end && (
+                      <p className="mt-1 text-red-300">
+                        Access ended on {formatDate(billing.current_period_end)}. Re-subscribe below to continue using SoundProof.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Current plan card */}
             <section className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-5">
               <div className="flex items-start justify-between flex-wrap gap-4">
@@ -203,6 +208,8 @@ export const BillingPage = () => {
                     'text-xs font-medium px-2.5 py-1 rounded-full uppercase tracking-wide',
                     billing.status === 'active' || billing.status === 'trialing'
                       ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+                      : billing.status === 'past_due'
+                      ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
                       : 'bg-gray-500/20 text-gray-300 border border-gray-500/30'
                   )}>
                     {billing.status}
@@ -225,9 +232,10 @@ export const BillingPage = () => {
                 <div className="text-xs uppercase tracking-wide text-gray-400 mb-2">
                   Monthly usage
                 </div>
+                {/* Backend sends monthly_minutes_used + plan_cap_minutes */}
                 <UsageBar
-                  used={billing.minutes_used ?? 0}
-                  cap={billing.minutes_cap ?? 0}
+                  used={billing.monthly_minutes_used ?? 0}
+                  cap={billing.plan_cap_minutes ?? 0}
                 />
               </div>
             </section>

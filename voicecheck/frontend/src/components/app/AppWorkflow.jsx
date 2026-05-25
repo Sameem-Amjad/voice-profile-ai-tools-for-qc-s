@@ -1,56 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AudioUploader } from '../upload/AudioUploader';
 import { VoiceRecorder } from '../upload/VoiceRecorder';
 import { ScriptInput } from '../upload/ScriptInput';
 import { ResultsView } from '../results/ResultsView';
 import { FeedbackModal } from '../feedback/FeedbackModal';
+import { UpgradeModal } from '../UpgradeModal';
 import { useUpload } from '../../hooks/useUpload';
 import { useTranscription } from '../../hooks/useTranscription';
 import { useComparison } from '../../hooks/useComparison';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import { useDevMode } from '../../hooks/useDevMode';
-import { Mic2, ChevronRight, RotateCcw, Loader2, CreditCard, Upload, Mic, LayoutDashboard, ShieldCheck } from 'lucide-react';
-import { UserButton } from '@clerk/clerk-react';
+import { Mic2, Loader2, Upload, Mic, Zap } from 'lucide-react';
 import clsx from 'clsx';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
-
-// Steps for the workflow UI
-const STEPS = ['upload', 'transcribe', 'results'];
-
-const StepBadge = ({ step, current, label }) => {
-  const stepIndex = STEPS.indexOf(step);
-  const currentIndex = STEPS.indexOf(current);
-  const done = stepIndex < currentIndex;
-  const active = step === current;
-
-  return (
-    <div className="flex items-center gap-2">
-      <span className={clsx(
-        'w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center',
-        done ? 'bg-green-500 text-white'
-          : active ? 'bg-blue-600 text-white'
-          : 'bg-gray-200 text-gray-500'
-      )}>
-        {done ? '✓' : stepIndex + 1}
-      </span>
-      <span className={clsx(
-        'text-sm font-medium',
-        active ? 'text-gray-900' : 'text-gray-400'
-      )}>
-        {label}
-      </span>
-    </div>
-  );
-};
-
-// Render Clerk's UserButton only when Clerk is configured.
-// In dev mode (no publishable key), no ClerkProvider is mounted, so we skip it.
-const AuthUserButton = () => {
-  const { devMode } = useDevMode();
-  if (devMode) return null;
-  return <UserButton afterSignOutUrl="/" />;
-};
+import { getApi } from '../../services/api';
+import { Navbar } from '../ui/Navbar';
 
 export const AppWorkflow = () => {
   const { devMode } = useDevMode();
@@ -66,6 +31,14 @@ export const AppWorkflow = () => {
   const transcription = useTranscription();
   const comparison = useComparison();
   const player = useAudioPlayer();
+
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  // Fetch usage so we can show a "X min used / Y min cap" counter
+  const [usageInfo, setUsageInfo] = useState(null);
+  useEffect(() => {
+    getApi().get('/billing/me').then(setUsageInfo).catch(() => {});
+  }, []);
 
   // ── File selected handler ─────────────────────────────────────────────
   const handleFileSelect = async (file) => {
@@ -90,7 +63,11 @@ export const AppWorkflow = () => {
       await comparison.compare(upload.jobId, script);
       setStep('results');
     } catch (e) {
-      setStep('upload'); // Reset on error
+      setStep('upload');
+      // Show upgrade modal for quota errors
+      if (e?.statusCode === 402 || /quota|limit|upgrade|cap/i.test(e?.message || '')) {
+        setShowUpgradeModal(true);
+      }
     }
   };
 
@@ -108,75 +85,7 @@ export const AppWorkflow = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <Mic2 className="text-blue-400" size={24} />
-            <span className="text-white font-bold text-lg tracking-tight">
-              Voice<span className="text-blue-400">Check</span>
-            </span>
-          </Link>
-
-          {/* Step indicator */}
-          <div className="hidden sm:flex items-center gap-4">
-            <StepBadge step="upload" current={step} label="Upload" />
-            <ChevronRight size={14} className="text-gray-600" />
-            <StepBadge step="transcribe" current={step} label="Transcribe" />
-            <ChevronRight size={14} className="text-gray-600" />
-            <StepBadge step="results" current={step} label="Results" />
-          </div>
-
-          <div className="flex items-center gap-4">
-            {step !== 'upload' && (
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
-              >
-                <RotateCcw size={14} />
-                Start over
-              </button>
-            )}
-            {!devMode && (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  <LayoutDashboard size={14} />
-                  Dashboard
-                </Link>
-                <Link
-                  to="/account"
-                  className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  <CreditCard size={14} />
-                  Billing
-                </Link>
-                {me?.is_admin && (
-                  <Link
-                    to="/admin"
-                    className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors"
-                  >
-                    <ShieldCheck size={14} />
-                    Admin
-                  </Link>
-                )}
-              </>
-            )}
-            {devMode && me?.is_admin && (
-              <Link
-                to="/admin"
-                className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors"
-              >
-                <ShieldCheck size={14} />
-                Admin
-              </Link>
-            )}
-            <AuthUserButton />
-          </div>
-        </div>
-      </header>
+      <Navbar variant="app" step={step} onReset={handleReset} usageInfo={usageInfo} me={me} />
 
       <main className="max-w-5xl mx-auto px-4 py-8">
 
@@ -191,6 +100,40 @@ export const AppWorkflow = () => {
                 Upload your recording and paste the script to get word-level feedback
               </p>
             </div>
+
+            {/* Usage counter pill — only shown when billing data is available */}
+            {usageInfo && (
+              <div className="flex justify-end">
+                <div className={clsx(
+                  'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border',
+                  usageInfo.plan === 'free_trial'
+                    ? usageInfo.analyses_this_month >= usageInfo.analyses_cap
+                      ? 'bg-red-500/20 border-red-500/40 text-red-300'
+                      : usageInfo.analyses_this_month >= usageInfo.analyses_cap - 1
+                      ? 'bg-yellow-500/20 border-yellow-500/40 text-yellow-300'
+                      : 'bg-white/10 border-white/20 text-gray-300'
+                    : usageInfo.plan_cap_minutes > 0 &&
+                      (usageInfo.monthly_minutes_used / usageInfo.plan_cap_minutes) >= 0.9
+                    ? 'bg-red-500/20 border-red-500/40 text-red-300'
+                    : usageInfo.plan_cap_minutes > 0 &&
+                      (usageInfo.monthly_minutes_used / usageInfo.plan_cap_minutes) >= 0.7
+                    ? 'bg-yellow-500/20 border-yellow-500/40 text-yellow-300'
+                    : 'bg-white/10 border-white/20 text-gray-300'
+                )}>
+                  <span>
+                    {usageInfo.plan === 'free_trial'
+                      ? `Free · ${usageInfo.analyses_this_month}/${usageInfo.analyses_cap} analyses used`
+                      : `${usageInfo.monthly_minutes_used.toFixed(1)} / ${usageInfo.plan_cap_minutes} min this month`}
+                  </span>
+                  <Link
+                    to="/account"
+                    className="underline underline-offset-2 hover:text-white transition-colors"
+                  >
+                    {usageInfo.plan === 'free_trial' ? 'Upgrade' : 'Billing'}
+                  </Link>
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Audio Upload Card */}
@@ -297,7 +240,29 @@ export const AppWorkflow = () => {
               </div>
             )}
 
-            {/* Error display */}
+            {/* Quota-exceeded upgrade prompt (upload returns HTTP 402) */}
+            {upload.error && /quota|limit|upgrade|cap/i.test(upload.error) && (
+              <div className="bg-amber-900/40 border border-amber-500/40 rounded-xl p-5">
+                <p className="text-amber-200 font-semibold mb-1">Usage limit reached</p>
+                <p className="text-amber-300 text-sm mb-3">{upload.error}</p>
+                <Link
+                  to="/account"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-white text-sm font-semibold transition-colors"
+                >
+                  <Zap size={15} />
+                  Upgrade plan
+                </Link>
+              </div>
+            )}
+
+            {/* Generic upload error (non-quota) */}
+            {upload.error && !/quota|limit|upgrade|cap/i.test(upload.error) && (
+              <div className="bg-red-900/40 border border-red-500/30 rounded-xl p-4 text-red-300 text-sm">
+                ❌ {upload.error}
+              </div>
+            )}
+
+            {/* Transcription / comparison errors */}
             {(transcription.error || comparison.error) && (
               <div className="bg-red-900/40 border border-red-500/30 rounded-xl p-4 text-red-300 text-sm">
                 ❌ {transcription.error || comparison.error}
@@ -305,6 +270,15 @@ export const AppWorkflow = () => {
             )}
           </div>
         )}
+
+        {/* Hidden audio element — always in the DOM so useAudioPlayer's
+            useEffect can attach event listeners on first mount */}
+        <audio
+          ref={player.audioRef}
+          src={player.audioUrl || ''}
+          className="hidden"
+          preload="metadata"
+        />
 
         {/* ── Step: Results ─────────────────────────────────────────── */}
         {step === 'results' && comparison.result && (
@@ -320,12 +294,12 @@ export const AppWorkflow = () => {
               <ResultsView
                 result={comparison.result}
                 audioRef={player.audioRef}
-                audioSrc={player.audioUrl}
                 isPlaying={player.isPlaying}
                 currentTime={player.currentTime}
                 duration={player.duration}
                 onTogglePlay={player.togglePlay}
                 onSeekTo={player.seekTo}
+                analysisId={comparison.analysisId}
               />
             </div>
           </div>
@@ -335,9 +309,11 @@ export const AppWorkflow = () => {
       {/* Feedback modal — shown after results load */}
       <FeedbackModal show={step === 'results'} onClose={() => {}} />
 
+      {showUpgradeModal && <UpgradeModal onClose={() => setShowUpgradeModal(false)} />}
+
       {/* Footer */}
       <footer className="text-center py-6 text-gray-600 text-xs">
-        VoiceCheck MVP · Built with faster-whisper + Needleman-Wunsch alignment
+        SoundProof MVP · Built with faster-whisper + Needleman-Wunsch alignment
       </footer>
     </div>
   );

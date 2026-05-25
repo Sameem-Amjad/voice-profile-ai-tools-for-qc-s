@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight, ShieldCheck } from 'lucide-react';
-import { UserButton } from '@clerk/clerk-react';
+import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight, Code } from 'lucide-react';
 import clsx from 'clsx';
 import { getHistory, getStats, useClerkAuthBridge } from '../../services/api';
 import { useDevMode } from '../../hooks/useDevMode';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { ResultDetailModal } from './ResultDetailModal';
-
-const AuthUserButton = () => {
-  const { devMode } = useDevMode();
-  if (devMode) return null;
-  return <UserButton afterSignOutUrl="/" />;
-};
+import { Navbar } from '../ui/Navbar';
 
 const StatCard = ({ icon: Icon, label, value, sub, color = 'blue' }) => {
   const colorMap = {
@@ -93,36 +87,7 @@ export const UserDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/app" className="flex items-center gap-2">
-            <Mic2 className="text-blue-400" size={24} />
-            <span className="text-white font-bold text-lg tracking-tight">
-              Voice<span className="text-blue-400">Check</span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-3">
-            {me?.is_admin && (
-              <Link
-                to="/admin"
-                className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors"
-              >
-                <ShieldCheck size={16} />
-                Admin
-              </Link>
-            )}
-            <Link
-              to="/app"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
-            >
-              <Plus size={16} />
-              New Analysis
-            </Link>
-            <AuthUserButton />
-          </div>
-        </div>
-      </header>
+      <Navbar variant="dashboard" stats={stats} me={me} />
 
       <main className="max-w-6xl mx-auto px-4 py-10">
         {/* Page title */}
@@ -252,6 +217,27 @@ export const UserDashboard = () => {
                 </div>
               )}
             </div>
+
+            {/* Score badge embed */}
+            {me?.id && stats?.total_analyses > 0 && (
+              <div className="bg-white rounded-2xl shadow-xl p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Code size={16} className="text-blue-500" />
+                  <p className="text-sm font-semibold text-gray-700">Portfolio badge</p>
+                </div>
+                <p className="text-xs text-gray-500 mb-3">
+                  Embed your average accuracy score on your portfolio website.
+                </p>
+                <img
+                  src={`${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/badge/${me.id}`}
+                  alt="SoundProof score badge"
+                  className="mb-3 h-7"
+                />
+                <div className="bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-600 select-all break-all border border-gray-200">
+                  {`<a href="https://voicecheck.app"><img src="${import.meta.env.VITE_API_URL || 'https://voicecheck.app/api'}/badge/${me.id}" alt="SoundProof score" height="28"/></a>`}
+                </div>
+              </div>
+            )}
 
             {/* Plan usage bar */}
             {stats && (

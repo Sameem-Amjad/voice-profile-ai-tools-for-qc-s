@@ -8,7 +8,7 @@ const formatTime = (seconds) => {
   return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
-export const AudioPlayer = ({ audioRef, src, isPlaying, currentTime, duration, onToggle }) => {
+export const AudioPlayer = ({ audioRef, isPlaying, currentTime, duration, onToggle }) => {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   const handleSeek = (e) => {
@@ -28,8 +28,6 @@ export const AudioPlayer = ({ audioRef, src, isPlaying, currentTime, duration, o
 
   return (
     <div className="bg-gray-900 rounded-xl p-4 text-white">
-      {/* Hidden audio element — src set here so it loads when this component mounts */}
-      <audio ref={audioRef} src={src} className="hidden" preload="metadata" />
 
       <div className="flex items-center gap-4">
         {/* Restart button */}
