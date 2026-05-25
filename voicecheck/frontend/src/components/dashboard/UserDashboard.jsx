@@ -234,7 +234,7 @@ export const UserDashboard = () => {
                   className="mb-3 h-7"
                 />
                 <div className="bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-600 select-all break-all border border-gray-200">
-                  {`<a href="https://voicecheck.app"><img src="${import.meta.env.VITE_API_URL || 'https://voicecheck.app/api'}/badge/${me.id}" alt="SoundProof score" height="28"/></a>`}
+                  {`<a href="https://voicecheck.app"><img src="${import.meta.env.VITE_API_URL || 'https://voice-profile-two.vercel.app/api'}/badge/${me.id}" alt="SoundProof score" height="28"/></a>`}
                 </div>
               </div>
             )}

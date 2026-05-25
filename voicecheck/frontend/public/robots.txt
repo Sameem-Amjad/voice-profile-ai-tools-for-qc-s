@@ -5,4 +5,4 @@ Disallow: /account
 Disallow: /dashboard
 Disallow: /admin
 
-Sitemap: https://voicecheck.app/sitemap.xml
+Sitemap: https://voice-profile-two.vercel.app/sitemap.xml

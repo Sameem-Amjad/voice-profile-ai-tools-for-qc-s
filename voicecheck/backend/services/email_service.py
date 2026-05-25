@@ -42,7 +42,7 @@ def send_welcome(to: str) -> None:
 <p>Welcome to <strong>SoundProof</strong> — your AI-powered voiceover accuracy tool.</p>
 <p>You're on the <strong>Free Trial</strong> plan with 30 minutes of transcription included.
 When you're ready for more, you can upgrade any time from your
-<a href="https://voicecheck.app/account">Billing page</a>.</p>
+<a href="https://voice-profile-two.vercel.app/account">Billing page</a>.</p>
 <p>Happy recording!</p>
 <p>— The SoundProof team</p>
 """,
@@ -58,7 +58,7 @@ def send_subscription_confirmed(to: str, plan: str) -> None:
 <p>Hi,</p>
 <p>Your <strong>SoundProof {plan_label}</strong> subscription is now active. 🎉</p>
 <p>You can manage your plan or download invoices from the
-<a href="https://voicecheck.app/account">Billing page</a>.</p>
+<a href="https://voice-profile-two.vercel.app/account">Billing page</a>.</p>
 <p>— The SoundProof team</p>
 """,
     )
@@ -73,7 +73,7 @@ def send_subscription_cancelled(to: str) -> None:
 <p>Your SoundProof subscription has been cancelled. You'll keep access until the end of
 the current billing period.</p>
 <p>If this was a mistake or you'd like to resubscribe, visit your
-<a href="https://voicecheck.app/account">Billing page</a>.</p>
+<a href="https://voice-profile-two.vercel.app/account">Billing page</a>.</p>
 <p>— The SoundProof team</p>
 """,
     )
@@ -87,7 +87,7 @@ def send_payment_failed(to: str) -> None:
 <p>Hi,</p>
 <p>We couldn't process your latest SoundProof payment. Please update your payment
 method to avoid losing access.</p>
-<p><a href="https://voicecheck.app/account">Update payment method →</a></p>
+<p><a href="https://voice-profile-two.vercel.app/account">Update payment method →</a></p>
 <p>— The SoundProof team</p>
 """,
     )

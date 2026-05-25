@@ -270,7 +270,7 @@ const LANDING_JSON_LD = [
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer support',
-      url: 'https://voicecheck.app/contact',
+      url: 'https://voice-profile-two.vercel.app/contact',
     },
   },
 ];
