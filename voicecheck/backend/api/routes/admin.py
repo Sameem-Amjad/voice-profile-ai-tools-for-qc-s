@@ -6,6 +6,7 @@ from typing import Optional
 from datetime import datetime, timezone
 
 from auth.dependencies import admin_user
+from services.email_service import send_admin_reply
 from db.models import User, AnalysisResult, ContactMessage, Feedback, UsageMinute, Subscription
 from db.session import get_db
 
@@ -121,6 +122,7 @@ async def reply_to_message(
     msg.status = "replied"
     msg.replied_at = datetime.now(timezone.utc)
     await db.commit()
+    send_admin_reply(msg.email, msg.subject, body.reply_text)
     return {"ok": True}
 
 # ── Feedback ──────────────────────────────────────────────────────────────────

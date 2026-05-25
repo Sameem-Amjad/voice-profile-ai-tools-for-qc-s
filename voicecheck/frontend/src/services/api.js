@@ -149,6 +149,7 @@ export const getHistory = () => api.get('/history');
 export const getHistoryItem = (id) => api.get(`/history/${id}`);
 export const getStats = () => api.get('/stats');
 export const submitContact = (data) => api.post('/contact', data);
+export const getMyMessages = () => api.get('/contact/my-messages');
 export const getPublicFeedback = (limit = 12) => api.get(`/feedback?limit=${limit}`);
 export const submitFeedback = (data) => api.post('/feedback', data);
 export const sendChatMessage = (message) => api.post('/chatbot', { message });

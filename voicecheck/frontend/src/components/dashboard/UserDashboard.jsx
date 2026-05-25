@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight, Code } from 'lucide-react';
+import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight, Code, MessageSquare, CheckCircle2, Clock3 } from 'lucide-react';
 import clsx from 'clsx';
-import { getHistory, getStats, useClerkAuthBridge } from '../../services/api';
+import { getHistory, getStats, getMyMessages, useClerkAuthBridge } from '../../services/api';
 import { useDevMode } from '../../hooks/useDevMode';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { ResultDetailModal } from './ResultDetailModal';
@@ -65,13 +65,19 @@ export const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [h, s] = await Promise.all([getHistory(), getStats()]);
+        const [h, s, msgs] = await Promise.all([
+          getHistory(),
+          getStats(),
+          getMyMessages().catch(() => []),
+        ]);
         setHistory(Array.isArray(h) ? h : []);
         setStats(s);
+        setMessages(Array.isArray(msgs) ? msgs : []);
       } catch (err) {
         setError(err.message || 'Failed to load dashboard data');
       } finally {
@@ -261,6 +267,64 @@ export const UserDashboard = () => {
                     />
                   </div>
                 )}
+              </div>
+            )}
+            {/* Support Messages */}
+            {messages.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                  <MessageSquare size={16} className="text-blue-500" />
+                  <h2 className="text-lg font-semibold text-gray-900">Support Messages</h2>
+                  {messages.some(m => m.status === 'replied') && (
+                    <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                      {messages.filter(m => m.status === 'replied').length} replied
+                    </span>
+                  )}
+                  {messages.some(m => m.status === 'pending') && (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                      {messages.filter(m => m.status === 'pending').length} pending
+                    </span>
+                  )}
+                </div>
+                <div className="divide-y divide-gray-100">
+                  {messages.map((msg) => (
+                    <div key={msg.id} className="px-6 py-4 space-y-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{msg.subject}</p>
+                          <p className="text-xs text-gray-400 mt-0.5">{formatDate(msg.created_at)}</p>
+                        </div>
+                        {msg.status === 'replied' ? (
+                          <span className="flex items-center gap-1 shrink-0 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                            <CheckCircle2 size={11} /> Replied
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1 shrink-0 px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                            <Clock3 size={11} /> Pending
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600 leading-relaxed line-clamp-2">{msg.message}</p>
+                      {msg.admin_reply && (
+                        <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 mt-1">
+                          <p className="text-xs font-semibold text-blue-700 mb-1">Support reply</p>
+                          <p className="text-sm text-blue-900 leading-relaxed">{msg.admin_reply}</p>
+                          {msg.replied_at && (
+                            <p className="text-xs text-blue-400 mt-1">{formatDate(msg.replied_at)}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="px-6 py-3 border-t border-gray-100 bg-gray-50">
+                  <Link
+                    to="/contact"
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    Send a new message →
+                  </Link>
+                </div>
               </div>
             )}
           </>

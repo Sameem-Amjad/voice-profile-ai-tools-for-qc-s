@@ -79,6 +79,26 @@ the current billing period.</p>
     )
 
 
+def send_admin_reply(to: str, subject: str, reply_text: str) -> None:
+    import html as _html
+    safe_reply = _html.escape(reply_text).replace('\n', '<br>')
+    safe_subject = _html.escape(subject or 'your message')
+    _send(
+        to=to,
+        subject=f"Re: {safe_subject} — SoundProof support",
+        html=f"""
+<p>Hi,</p>
+<p>Our team has replied to your message about <strong>{safe_subject}</strong>:</p>
+<blockquote style="border-left:3px solid #3b82f6;padding-left:14px;color:#374151;margin:16px 0;font-style:italic;">
+{safe_reply}
+</blockquote>
+<p>If you have further questions, visit our
+<a href="https://voice-profile-two.vercel.app/contact">contact page</a>.</p>
+<p>— The SoundProof team</p>
+""",
+    )
+
+
 def send_payment_failed(to: str) -> None:
     _send(
         to=to,

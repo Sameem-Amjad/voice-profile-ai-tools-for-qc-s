@@ -6,6 +6,7 @@ file (sqlite+aiosqlite:///./voicecheck.db) for development. Production should
 set DATABASE_URL=postgresql+asyncpg://... (Supabase, RDS, etc.).
 """
 
+import uuid
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
@@ -38,13 +39,14 @@ def _make_engine():
             connect_args: dict = {}
             if "ssl=" not in url:
                 connect_args["ssl"] = "require"
-            # Supabase Transaction Pooler (pgbouncer in transaction mode) does
-            # not support prepared statements. Disable asyncpg's statement cache
-            # unconditionally for all PostgreSQL connections — safe to do even
-            # without pgbouncer (minor perf trade-off, avoids the port-check
-            # brittle conditional that was silently not matching on Render).
+            # Supabase uses pgbouncer in transaction mode, which does not
+            # support prepared statements. Disable the LRU cache and generate
+            # UUID-based statement names so concurrent connections never
+            # collide on the per-connection hex counter (__asyncpg_stmt_1e__).
             connect_args["statement_cache_size"] = 0
-            connect_args["prepared_statement_cache_size"] = 0
+            connect_args["prepared_statement_name_func"] = (
+                lambda: f"__asyncpg_{uuid.uuid4().hex}__"
+            )
             kwargs["connect_args"] = connect_args
     return create_async_engine(url, **kwargs)
 
