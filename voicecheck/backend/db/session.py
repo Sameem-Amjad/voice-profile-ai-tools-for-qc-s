@@ -6,7 +6,6 @@ file (sqlite+aiosqlite:///./voicecheck.db) for development. Production should
 set DATABASE_URL=postgresql+asyncpg://... (Supabase, RDS, etc.).
 """
 
-import uuid
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
@@ -15,6 +14,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.pool import NullPool
 
 from config import settings
 
@@ -34,20 +34,27 @@ def _make_engine():
 
     kwargs: dict = {"future": True}
     if not url.startswith("sqlite"):
-        kwargs["pool_pre_ping"] = True
         if url.startswith("postgresql+asyncpg"):
             connect_args: dict = {}
             if "ssl=" not in url:
                 connect_args["ssl"] = "require"
-            # Supabase uses pgbouncer in transaction mode, which does not
-            # support prepared statements. Disable the LRU cache and generate
-            # UUID-based statement names so concurrent connections never
-            # collide on the per-connection hex counter (__asyncpg_stmt_1e__).
+            # Supabase exposes PostgreSQL via pgbouncer in transaction mode.
+            # pgbouncer transaction mode cannot reliably route PREPARE and
+            # EXECUTE to the same backend — both DuplicatePreparedStatement
+            # and InvalidSQLStatementName errors result.
+            #
+            # Fix: NullPool tells SQLAlchemy not to maintain its own connection
+            # pool on top of pgbouncer (pgbouncer IS the pool). Each request
+            # gets a dedicated pgbouncer connection, so pgbouncer pins it to
+            # one backend for the lifetime of that connection and all protocol
+            # messages (PARSE/BIND/EXECUTE/CLOSE) stay on the same backend.
+            # statement_cache_size=0 disables asyncpg's client-side LRU so no
+            # named statement is reused across connections.
             connect_args["statement_cache_size"] = 0
-            connect_args["prepared_statement_name_func"] = (
-                lambda: f"__asyncpg_{uuid.uuid4().hex}__"
-            )
             kwargs["connect_args"] = connect_args
+            kwargs["poolclass"] = NullPool
+        else:
+            kwargs["pool_pre_ping"] = True
     return create_async_engine(url, **kwargs)
 
 
