@@ -9,4 +9,16 @@ export default defineConfig({
       '/api': 'http://localhost:8000',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-clerk': ['@clerk/clerk-react'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-charts': ['recharts'],
+        },
+      },
+    },
+  },
 })

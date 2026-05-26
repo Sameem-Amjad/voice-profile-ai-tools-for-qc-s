@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
-import { LandingPage } from './components/landing/LandingPage';
-import { AppWorkflow } from './components/app/AppWorkflow';
-import { SignInPage } from './components/auth/SignInPage';
-import { SignUpPage } from './components/auth/SignUpPage';
-import { BillingPage } from './components/account/BillingPage';
-import { UserDashboard } from './components/dashboard/UserDashboard';
-import { ContactPage } from './components/contact/ContactPage';
-import { ChatbotWidget } from './components/chatbot/ChatbotWidget';
-import { AdminLayout } from './components/admin/AdminLayout';
-import { NotFoundPage } from './components/NotFoundPage';
-import { PricingPage } from './pages/PricingPage';
-import { SharedResultPage } from './components/share/SharedResultPage';
+import { LoadingSpinner } from './components/ui/LoadingSpinner';
 import { useDevMode } from './hooks/useDevMode';
 import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+
+const LandingPage = lazy(() => import('./components/landing/LandingPage').then(m => ({ default: m.LandingPage })));
+const AppWorkflow = lazy(() => import('./components/app/AppWorkflow').then(m => ({ default: m.AppWorkflow })));
+const SignInPage = lazy(() => import('./components/auth/SignInPage').then(m => ({ default: m.SignInPage })));
+const SignUpPage = lazy(() => import('./components/auth/SignUpPage').then(m => ({ default: m.SignUpPage })));
+const BillingPage = lazy(() => import('./components/account/BillingPage').then(m => ({ default: m.BillingPage })));
+const UserDashboard = lazy(() => import('./components/dashboard/UserDashboard').then(m => ({ default: m.UserDashboard })));
+const ContactPage = lazy(() => import('./components/contact/ContactPage').then(m => ({ default: m.ContactPage })));
+const ChatbotWidget = lazy(() => import('./components/chatbot/ChatbotWidget').then(m => ({ default: m.ChatbotWidget })));
+const AdminLayout = lazy(() => import('./components/admin/AdminLayout').then(m => ({ default: m.AdminLayout })));
+const NotFoundPage = lazy(() => import('./components/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+const PricingPage = lazy(() => import('./pages/PricingPage').then(m => ({ default: m.PricingPage })));
+const SharedResultPage = lazy(() => import('./components/share/SharedResultPage').then(m => ({ default: m.SharedResultPage })));
 
 /**
  * Gate: requires the user to be signed in. In dev mode (no Clerk key),
@@ -39,6 +41,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+    <Suspense fallback={<LoadingSpinner />}>
     <Routes>
       <Route path="/" element={<LandingPage />} />
 
@@ -93,7 +96,7 @@ export default function App() {
       {/* Fallback */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
-
+    </Suspense>
     {/* Chatbot widget — rendered on all pages */}
     <ChatbotWidget />
     </ErrorBoundary>
