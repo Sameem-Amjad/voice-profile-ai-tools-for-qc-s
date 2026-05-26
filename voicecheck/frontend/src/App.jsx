@@ -17,6 +17,8 @@ const AdminLayout = lazy(() => import('./components/admin/AdminLayout').then(m =
 const NotFoundPage = lazy(() => import('./components/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 const PricingPage = lazy(() => import('./pages/PricingPage').then(m => ({ default: m.PricingPage })));
 const SharedResultPage = lazy(() => import('./components/share/SharedResultPage').then(m => ({ default: m.SharedResultPage })));
+const BlogIndex = lazy(() => import('./components/blog/BlogIndex').then(m => ({ default: m.BlogIndex })));
+const BlogPost = lazy(() => import('./components/blog/BlogPost').then(m => ({ default: m.BlogPost })));
 
 /**
  * Gate: requires the user to be signed in. In dev mode (no Clerk key),
@@ -92,6 +94,8 @@ export default function App() {
 
       <Route path="/pricing" element={<PricingPage />} />
       <Route path="/r/:token" element={<SharedResultPage />} />
+      <Route path="/blog" element={<BlogIndex />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
 
       {/* Fallback */}
       <Route path="*" element={<NotFoundPage />} />
