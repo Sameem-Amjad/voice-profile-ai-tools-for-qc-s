@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_URL = 'https://voicecheck.app';
+const SITE_URL = 'https://soundproof-voice-check.vercel.app';
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
 const SITE_NAME = 'SoundProof';
 

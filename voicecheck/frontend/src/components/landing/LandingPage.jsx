@@ -162,7 +162,7 @@ const SECURITY_ITEMS = [
 ];
 
 const LANDING_JSON_LD = [
-  { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'SoundProof', applicationCategory: 'BusinessApplication', operatingSystem: 'Web', url: 'https://voicecheck.app', description: 'AI-powered voiceover quality control. Detects every dropped word, substitution, and addition with exact timestamps.', aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '240', bestRating: '5' } },
+  { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'SoundProof', applicationCategory: 'BusinessApplication', operatingSystem: 'Web', url: 'https://soundproof-voice-check.vercel.app', description: 'AI-powered voiceover quality control. Detects every dropped word, substitution, and addition with exact timestamps.', aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '240', bestRating: '5' } },
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(i => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } })) },
 ];
 
