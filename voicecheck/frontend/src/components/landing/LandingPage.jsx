@@ -319,7 +319,7 @@ const DiffMockup = () => (
         {['bg-red-400/60','bg-yellow-400/60','bg-green-400/60'].map((c,i) => <div key={i} className={clsx('w-3 h-3 rounded-full',c)} />)}
       </div>
       <div className="flex-1 mx-3 bg-white/5 rounded-md px-3 py-0.5 text-center">
-        <span className="text-xs text-gray-500 font-mono">soundproof.app/app</span>
+        <span className="text-xs text-gray-500 font-mono">https://soundproof-chi.vercel.app/app</span>
       </div>
     </div>
     <div className="flex items-center justify-between px-4 py-2.5 bg-green-500/10 border-b border-green-500/20">
