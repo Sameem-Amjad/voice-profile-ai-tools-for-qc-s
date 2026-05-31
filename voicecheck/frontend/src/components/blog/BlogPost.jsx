@@ -5,6 +5,7 @@ import { Navbar } from '../ui/Navbar';
 import { SEO } from '../seo/SEO';
 import { getPost, BLOG_POSTS } from '../../data/blogPosts';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
+import { AdBanner } from '../ui/AdBanner';
 
 const POST_COMPONENTS = {
   'audiobook-qc': lazy(() => import('./posts/AudiobookQC')),
@@ -83,6 +84,9 @@ export function BlogPost() {
         <Suspense fallback={<LoadingSpinner />}>
           <PostContent />
         </Suspense>
+
+        {/* Ad — shown after article, before back link */}
+        <AdBanner slot="blogBanner" />
 
         {/* Back link */}
         <div className="mt-12 pt-6 border-t border-white/10">

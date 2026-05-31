@@ -91,10 +91,22 @@ class OpenAIWhisperTranscriber(BaseTranscriber):
             file_size_mb = len(audio_data) / 1024 / 1024
             logger.info("openai_sending_file", job_id=job_id, size_mb=round(file_size_mb, 2))
 
+            # OpenAI hard limit is 25MB. Auto-transcode to compressed MP3 rather than failing.
             if file_size_mb > 25:
-                raise ValueError(
-                    f"File too large for OpenAI API ({file_size_mb:.1f}MB). Max is 25MB."
-                )
+                logger.info("file_exceeds_openai_limit_transcoding", job_id=job_id, size_mb=round(file_size_mb, 2))
+                compressed = _transcode_to_mp3(send_path)
+                if transcoded:
+                    transcoded.unlink(missing_ok=True)
+                transcoded = compressed
+                send_path = compressed
+                with open(send_path, "rb") as f:
+                    audio_data = f.read()
+                file_size_mb = len(audio_data) / 1024 / 1024
+                logger.info("transcoded_size", job_id=job_id, size_mb=round(file_size_mb, 2))
+                if file_size_mb > 25:
+                    raise ValueError(
+                        f"Audio too large even after compression ({file_size_mb:.1f}MB). Max is 25MB."
+                    )
 
             mime = self._MIME_MAP.get(send_path.suffix.lower(), "audio/mpeg")
 

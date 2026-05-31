@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     # Storage - local disk for MVP, swap to S3 later
     STORAGE_BACKEND: Literal["local", "s3"] = "local"
     UPLOAD_DIR: Path = Path("./uploads")
-    MAX_FILE_SIZE_MB: int = 500
+    MAX_FILE_SIZE_MB: int = 95  # Render's proxy hard-caps requests at 100MB
     ALLOWED_AUDIO_EXTENSIONS: set[str] = {".mp3", ".wav", ".m4a", ".ogg", ".flac", ".webm"}
 
     # Transcription backend selection

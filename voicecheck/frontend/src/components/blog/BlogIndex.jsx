@@ -4,6 +4,7 @@ import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import { Navbar } from '../ui/Navbar';
 import { SEO } from '../seo/SEO';
 import { BLOG_POSTS } from '../../data/blogPosts';
+import { AdBanner } from '../ui/AdBanner';
 
 const BLOG_JSON_LD = {
   '@context': 'https://schema.org',
@@ -88,6 +89,9 @@ export function BlogIndex() {
             </Link>
           ))}
         </div>
+
+        {/* Ad — between posts list and CTA */}
+        <AdBanner slot="blogBanner" />
 
         <div className="mt-16 bg-blue-500/10 border border-blue-500/20 rounded-2xl p-8 text-center">
           <p className="text-white font-bold text-lg mb-2">Ready to speed up your QC workflow?</p>

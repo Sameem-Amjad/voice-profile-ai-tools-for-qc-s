@@ -26,7 +26,7 @@ logger = get_logger(__name__)
 
 FREE_TRIAL_ANALYSES_PER_MONTH = 3
 FREE_TRIAL_MAX_TRANSCRIPTIONS = 3         # max transcriptions per month for free users
-FREE_TRIAL_MAX_FILE_MINUTES = 1           # max per-file duration for free users (1 min)
+FREE_TRIAL_MAX_FILE_MINUTES = 10          # max per-file duration for free users (10 min)
 
 PLAN_LIMITS: dict[str, dict] = {
     "free_trial": {"limit_analyses": FREE_TRIAL_ANALYSES_PER_MONTH, "cycle": "month"},
@@ -132,7 +132,7 @@ async def check_quota_or_raise(
                     "error": "file_too_long",
                     "plan": plan,
                     "max_minutes": FREE_TRIAL_MAX_FILE_MINUTES,
-                    "message": f"Free plan supports files up to {FREE_TRIAL_MAX_FILE_MINUTES} minute. Upgrade to Starter or Pro for longer files.",
+                    "message": f"Free plan supports files up to {FREE_TRIAL_MAX_FILE_MINUTES} minutes. Upgrade to Starter or Pro for longer files.",
                 },
             )
         return
