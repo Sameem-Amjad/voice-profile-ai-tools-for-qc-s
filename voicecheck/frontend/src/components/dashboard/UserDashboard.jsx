@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart2, Target, Clock, Trophy, Mic2, Plus, ArrowLeft, ChevronRight, Code, MessageSquare, CheckCircle2, Clock3 } from 'lucide-react';
 import clsx from 'clsx';
-import { getHistory, getStats, getMyMessages, useClerkAuthBridge } from '../../services/api';
-import { useDevMode } from '../../hooks/useDevMode';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { getHistory, getStats, getMyMessages, getMe, useClerkAuthBridge } from '../../services/api';
 import { ResultDetailModal } from './ResultDetailModal';
 import { Navbar } from '../ui/Navbar';
 
@@ -59,7 +57,7 @@ const formatDuration = (secs) => {
 
 export const UserDashboard = () => {
   useClerkAuthBridge();
-  const me = useCurrentUser();
+  const [me, setMe] = useState(null);
   const [history, setHistory] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,14 +68,16 @@ export const UserDashboard = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const [h, s, msgs] = await Promise.all([
+        const [h, s, msgs, user] = await Promise.all([
           getHistory(),
           getStats(),
           getMyMessages().catch(() => []),
+          getMe().catch(() => null),
         ]);
         setHistory(Array.isArray(h) ? h : []);
         setStats(s);
         setMessages(Array.isArray(msgs) ? msgs : []);
+        setMe(user);
       } catch (err) {
         setError(err.message || 'Failed to load dashboard data');
       } finally {
@@ -86,6 +86,11 @@ export const UserDashboard = () => {
     };
     load();
   }, []);
+
+  const messageStats = useMemo(() => ({
+    replied: messages.filter(m => m.status === 'replied').length,
+    pending: messages.filter(m => m.status === 'pending').length,
+  }), [messages]);
 
   const minutesUsed = stats ? (stats.this_month_minutes || 0).toFixed(1) : '0.0';
   const minutesCap = stats ? (stats.plan_cap_minutes || 0) : 0;
@@ -240,7 +245,7 @@ export const UserDashboard = () => {
                   className="mb-3 h-7"
                 />
                 <div className="bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-600 select-all break-all border border-gray-200">
-                  {`<a href="https://voicecheck.app"><img src="${import.meta.env.VITE_API_URL || 'https://voice-profile-two.vercel.app/api'}/badge/${me.id}" alt="SoundProof score" height="28"/></a>`}
+                  {`<a href="https://soundproof-chi.vercel.app/"><img src="${import.meta.env.VITE_API_URL}/badge/${me.id}" alt="SoundProof score" height="28"/></a>`}
                 </div>
               </div>
             )}
@@ -275,14 +280,14 @@ export const UserDashboard = () => {
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                   <MessageSquare size={16} className="text-blue-500" />
                   <h2 className="text-lg font-semibold text-gray-900">Support Messages</h2>
-                  {messages.some(m => m.status === 'replied') && (
+                  {messageStats.replied > 0 && (
                     <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                      {messages.filter(m => m.status === 'replied').length} replied
+                      {messageStats.replied} replied
                     </span>
                   )}
-                  {messages.some(m => m.status === 'pending') && (
+                  {messageStats.pending > 0 && (
                     <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
-                      {messages.filter(m => m.status === 'pending').length} pending
+                      {messageStats.pending} pending
                     </span>
                   )}
                 </div>

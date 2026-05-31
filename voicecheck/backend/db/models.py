@@ -38,7 +38,8 @@ class User(Base):
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid_str)
     clerk_user_id: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
     email: Mapped[Optional[str]] = mapped_column(String(320), nullable=True)
-    stripe_customer_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
+    payment_token: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
+    pending_plan: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
     # Plan stored as a string (one of: free_trial, starter, pro, cancelled)
     # Using a plain str column rather than DB ENUM to keep SQLite/Postgres parity simple.
     plan: Mapped[str] = mapped_column(String(32), nullable=False, default="free_trial")
@@ -72,7 +73,7 @@ class Subscription(Base):
     user_id: Mapped[str] = mapped_column(
         String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
     )
-    stripe_subscription_id: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    payment_token: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False)
     current_period_end: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
@@ -110,11 +111,11 @@ class UsageMinute(Base):
     )
 
 
-class ProcessedStripeEvent(Base):
-    """Idempotency ledger for Stripe webhook deliveries."""
-    __tablename__ = "processed_stripe_events"
+class ProcessedITNEvent(Base):
+    """Idempotency ledger for bSecure payment callbacks."""
+    __tablename__ = "processed_itn_events"
 
-    id: Mapped[str] = mapped_column(String(255), primary_key=True)  # event_id
+    id: Mapped[str] = mapped_column(String(255), primary_key=True)  # pf_payment_id
     event_type: Mapped[str] = mapped_column(String(128), nullable=False)
     processed_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

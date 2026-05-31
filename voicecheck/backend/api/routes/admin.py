@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import select, func
+from sqlalchemy import select, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+import uuid
 
 from auth.dependencies import admin_user
-from services.email_service import send_admin_reply
+from services.email_service import send_admin_reply, send_subscription_confirmed, send_payment_link
 from db.models import User, AnalysisResult, ContactMessage, Feedback, UsageMinute, Subscription
 from db.session import get_db
 
@@ -35,24 +36,36 @@ async def admin_overview(
     _: User = Depends(admin_user),
     db: AsyncSession = Depends(get_db),
 ):
-    total_users  = await _count(db, select(func.count(User.id)))
-    active_subs  = await _count(db, select(func.count(Subscription.id)).where(Subscription.status == "active"))
-    starter      = await _count(db, select(func.count(User.id)).where(User.plan == "starter"))
-    pro          = await _count(db, select(func.count(User.id)).where(User.plan == "pro"))
-    free         = await _count(db, select(func.count(User.id)).where(User.plan == "free_trial"))
-    analyses     = await _count(db, select(func.count(AnalysisResult.id)))
-    messages     = await _count(db, select(func.count(ContactMessage.id)))
-    pending      = await _count(db, select(func.count(ContactMessage.id)).where(ContactMessage.status == "pending"))
+    # User plan counts in one query using conditional aggregation
+    user_row = (await db.execute(
+        select(
+            func.count(User.id).label("total"),
+            func.count(case((User.plan == "starter", 1))).label("starter"),
+            func.count(case((User.plan == "pro", 1))).label("pro"),
+            func.count(case((User.plan == "free_trial", 1))).label("free_trial"),
+        )
+    )).one()
+
+    active_subs = await _count(db, select(func.count(Subscription.id)).where(Subscription.status == "active"))
+    analyses    = await _count(db, select(func.count(AnalysisResult.id)))
+
+    # Message counts in one query
+    msg_row = (await db.execute(
+        select(
+            func.count(ContactMessage.id).label("total"),
+            func.count(case((ContactMessage.status == "pending", 1))).label("pending"),
+        )
+    )).one()
 
     return OverviewOut(
-        total_users=total_users,
+        total_users=user_row.total,
         active_subscriptions=active_subs,
-        starter_count=starter,
-        pro_count=pro,
-        free_trial_count=free,
+        starter_count=user_row.starter,
+        pro_count=user_row.pro,
+        free_trial_count=user_row.free_trial,
         total_analyses=analyses,
-        total_messages=messages,
-        pending_messages=pending,
+        total_messages=msg_row.total,
+        pending_messages=msg_row.pending,
     )
 
 # ── Users ─────────────────────────────────────────────────────────────────────
@@ -61,6 +74,7 @@ class UserAdminOut(BaseModel):
     id: str
     email: Optional[str]
     plan: str
+    pending_plan: Optional[str] = None
     trial_minutes_used: int
     is_admin: bool
     created_at: datetime
@@ -75,6 +89,86 @@ async def admin_users(
 ):
     q = await db.execute(select(User).order_by(User.created_at.desc()).limit(limit))
     return q.scalars().all()
+
+
+class SetPlanRequest(BaseModel):
+    plan: str  # "starter" | "pro" | "free_trial" | "cancelled"
+
+
+class SendPaymentLinkRequest(BaseModel):
+    payment_link: str
+    plan: str
+
+
+@router.post("/admin/users/{user_id}/set-plan")
+async def admin_set_plan(
+    user_id: str,
+    body: SetPlanRequest,
+    _: User = Depends(admin_user),
+    db: AsyncSession = Depends(get_db),
+):
+    q = await db.execute(select(User).where(User.id == user_id))
+    user = q.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    valid = ("starter", "pro", "free_trial", "cancelled")
+    if body.plan not in valid:
+        raise HTTPException(status_code=400, detail=f"Plan must be one of {valid}")
+
+    prev_plan = user.plan
+    user.plan = body.plan
+    user.pending_plan = None
+
+    # Create/update subscription record for paid plans
+    if body.plan in ("starter", "pro"):
+        period_end = datetime.now(timezone.utc) + timedelta(days=31)
+        q2 = await db.execute(
+            select(Subscription).where(Subscription.user_id == user.id)
+            .order_by(Subscription.updated_at.desc())
+            .limit(1)
+        )
+        sub = q2.scalars().first()
+        if sub:
+            sub.status = "active"
+            sub.current_period_end = period_end
+        else:
+            db.add(Subscription(
+                id=str(uuid.uuid4()),
+                user_id=user.id,
+                payment_token=f"manual-{uuid.uuid4().hex[:8]}",
+                status="active",
+                current_period_end=period_end,
+            ))
+
+    await db.commit()
+
+    if user.email and body.plan in ("starter", "pro") and prev_plan != body.plan:
+        send_subscription_confirmed(user.email, body.plan)
+
+    return {"ok": True, "plan": body.plan}
+
+
+@router.post("/admin/users/{user_id}/send-payment-link")
+async def admin_send_payment_link(
+    user_id: str,
+    body: SendPaymentLinkRequest,
+    _: User = Depends(admin_user),
+    db: AsyncSession = Depends(get_db),
+):
+    q = await db.execute(select(User).where(User.id == user_id))
+    user = q.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if not user.email:
+        raise HTTPException(status_code=400, detail="User has no email address.")
+
+    send_payment_link(
+        to=user.email,
+        plan=body.plan,
+        payment_link=body.payment_link,
+    )
+    return {"ok": True}
 
 # ── Messages ──────────────────────────────────────────────────────────────────
 
@@ -178,15 +272,19 @@ async def admin_revenue(
     _: User = Depends(admin_user),
     db: AsyncSession = Depends(get_db),
 ):
-    starter = (await db.execute(select(func.count(User.id)).where(User.plan == "starter"))).scalar() or 0
-    pro = (await db.execute(select(func.count(User.id)).where(User.plan == "pro"))).scalar() or 0
+    row = (await db.execute(
+        select(
+            func.count(case((User.plan == "starter", 1))).label("starter"),
+            func.count(case((User.plan == "pro", 1))).label("pro"),
+        )
+    )).one()
     active = (await db.execute(
         select(func.count(Subscription.id)).where(Subscription.status == "active")
     )).scalar() or 0
-    mrr = (starter * 29.0) + (pro * 49.0)
+    mrr = (row.starter * 29.0) + (row.pro * 49.0)
     return RevenueOut(
-        starter_count=starter,
-        pro_count=pro,
+        starter_count=row.starter,
+        pro_count=row.pro,
         estimated_mrr=mrr,
         total_active_subscriptions=active,
     )

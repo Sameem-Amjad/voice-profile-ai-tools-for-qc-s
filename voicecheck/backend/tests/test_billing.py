@@ -1,106 +1,86 @@
 """
-Billing/webhook tests.
+bSecure billing / callback tests.
 
 Covers:
-- /api/billing/webhook rejects bad signatures with 400
-- A `customer.subscription.created` event upserts a User+Subscription row;
-  replaying the same event_id is idempotent (no second handler run)
-- /api/billing/me returns the user's plan and usage
+- POST /api/billing/callback activates a subscription when status == "placed"
+- Replaying the same order_ref is idempotent
+- GET /api/billing/me returns the user's plan and usage
 """
 
 from __future__ import annotations
 
 import asyncio
+import uuid
 
-import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 
-from api.routes import billing as billing_module
-from auth import dependencies as deps_module
 from config import settings
 from db import models
 from db.session import AsyncSessionLocal
 from main import app
 
-
-# Webhook secret needs SOME value so the signature path runs
-settings.STRIPE_WEBHOOK_SECRET = "whsec_test"
-settings.STRIPE_PRICE_STARTER = "price_starter_test"
-settings.STRIPE_PRICE_PRO = "price_pro_test"
+# Use sandbox so no real network calls are needed
+settings.BSECURE_SANDBOX = True
+settings.BSECURE_CLIENT_ID = "test_client_id"
+settings.BSECURE_CLIENT_SECRET = "test_client_secret"
+settings.BSECURE_STORE_SLUG = "test-store"
+settings.BSECURE_STARTER_AMOUNT = "2000"
+settings.BSECURE_PRO_AMOUNT = "4000"
+settings.BSECURE_CALLBACK_URL = "http://localhost:8000/api/billing/callback"
 
 
 def _run(coro):
     return asyncio.get_event_loop().run_until_complete(coro)
 
 
-async def _make_user(clerk_id: str, *, customer_id: str = None, email: str = "u@x.com") -> str:
+async def _make_user(clerk_id: str, *, email: str = "u@x.com") -> str:
     async with AsyncSessionLocal() as db:
-        u = models.User(clerk_user_id=clerk_id, email=email, stripe_customer_id=customer_id)
+        u = models.User(clerk_user_id=clerk_id, email=email)
         db.add(u)
         await db.commit()
         await db.refresh(u)
         return u.id
 
 
-def test_webhook_rejects_bad_signature():
-    """No Stripe-Signature header → 400."""
-    with TestClient(app) as client:
-        resp = client.post("/api/billing/webhook", content=b"{}")
-    assert resp.status_code == 400
+def _seed_pending_checkout(user_id: str, plan: str = "starter") -> str:
+    """Pre-populate the in-memory checkout dict so the callback handler can resolve the order."""
+    import time
+    from api.routes.billing import _pending_checkouts
+    order_id = uuid.uuid4().hex
+    _pending_checkouts[order_id] = {
+        "user_id": user_id,
+        "plan": plan,
+        "created_at": time.time(),
+    }
+    return order_id
 
 
-def test_webhook_creates_subscription_and_is_idempotent(monkeypatch):
+def test_callback_creates_subscription_and_is_idempotent():
     """
-    Posting a customer.subscription.created event:
+    Posting a success callback (status=placed):
+    - sets User.plan to 'starter'
     - upserts a Subscription row
-    - sets the User's plan
-    Replaying the same event_id is a no-op.
+    Replaying the same order_ref is a no-op.
     """
-    customer_id = "cus_test_123"
-    user_id = _run(_make_user("clerk_billing_user", customer_id=customer_id))
+    user_id = _run(_make_user("clerk_bs_user_1"))
+    order_id = _seed_pending_checkout(user_id, plan="starter")
+    order_ref = f"BSC-{uuid.uuid4().hex[:8].upper()}"
 
-    fake_event = {
-        "id": "evt_test_unique_1",
-        "type": "customer.subscription.created",
-        "data": {
-            "object": {
-                "id": "sub_test_1",
-                "customer": customer_id,
-                "status": "active",
-                "current_period_end": 1900000000,
-                "items": {
-                    "data": [
-                        {"price": {"id": settings.STRIPE_PRICE_STARTER}},
-                    ]
-                },
-                "metadata": {},
-            }
-        },
+    payload = {
+        "order_ref": order_ref,
+        "order_id": order_id,
+        "status": "placed",
     }
 
-    def _fake_construct(payload, sig, secret):
-        assert sig == "t=1,v1=fake"
-        return fake_event
-
-    monkeypatch.setattr(billing_module, "_construct_stripe_event", _fake_construct)
-
     with TestClient(app) as client:
-        resp = client.post(
-            "/api/billing/webhook",
-            content=b"{}",
-            headers={"Stripe-Signature": "t=1,v1=fake"},
-        )
+        resp = client.post("/api/billing/callback", data=payload)
         assert resp.status_code == 200, resp.text
         assert resp.json().get("received") is True
         assert resp.json().get("duplicate") is not True
 
-        # Replay → idempotent (duplicate=True)
-        resp2 = client.post(
-            "/api/billing/webhook",
-            content=b"{}",
-            headers={"Stripe-Signature": "t=1,v1=fake"},
-        )
+        # Replay → idempotent
+        resp2 = client.post("/api/billing/callback", data=payload)
         assert resp2.status_code == 200, resp2.text
         assert resp2.json().get("duplicate") is True
 
@@ -108,7 +88,7 @@ def test_webhook_creates_subscription_and_is_idempotent(monkeypatch):
         async with AsyncSessionLocal() as db:
             sub_q = await db.execute(
                 select(models.Subscription).where(
-                    models.Subscription.stripe_subscription_id == "sub_test_1"
+                    models.Subscription.payment_token == order_ref
                 )
             )
             subs = sub_q.scalars().all()
@@ -119,15 +99,37 @@ def test_webhook_creates_subscription_and_is_idempotent(monkeypatch):
             return subs, user
 
     subs, user = _run(_check())
-    # Exactly one subscription row (idempotency held)
     assert len(subs) == 1
     assert subs[0].status == "active"
     assert user.plan == "starter"
 
 
-def test_billing_me_returns_plan_and_usage(monkeypatch):
+def test_callback_failed_payment_does_not_activate():
+    """A failed callback (status != placed) must not activate the plan."""
+    user_id = _run(_make_user("clerk_bs_user_2"))
+    order_id = _seed_pending_checkout(user_id, plan="starter")
+
+    payload = {
+        "order_ref": f"BSC-{uuid.uuid4().hex[:8].upper()}",
+        "order_id": order_id,
+        "status": "failed",
+    }
+
+    with TestClient(app) as client:
+        resp = client.post("/api/billing/callback", data=payload)
+    assert resp.status_code == 200, resp.text
+
+    async def _check():
+        async with AsyncSessionLocal() as db:
+            q = await db.execute(select(models.User).where(models.User.id == user_id))
+            return q.scalar_one()
+
+    user = _run(_check())
+    assert user.plan == "free_trial"  # must remain unchanged
+
+
+def test_billing_me_returns_plan_and_usage():
     """GET /api/billing/me returns plan + usage for the current user."""
-    # Ensure we hit the dev-anonymous user path for this test
     settings.AUTH_REQUIRED = False
 
     with TestClient(app) as client:
@@ -139,6 +141,5 @@ def test_billing_me_returns_plan_and_usage(monkeypatch):
     assert "monthly_minutes_used" in body
     assert "plan_cap_minutes" in body
     assert "trial_minutes_used" in body
-    # Free-trial cap is 30 minutes per the brief
     if body["plan"] == "free_trial":
         assert body["plan_cap_minutes"] == 30

@@ -84,11 +84,13 @@ class Settings(BaseSettings):
     # tests keep passing. Flip to True in prod once Clerk creds are wired.
     AUTH_REQUIRED: bool = False
 
-    # ── Phase 2: Stripe billing ───────────────────────────────────────────
-    STRIPE_SECRET_KEY: str = ""
-    STRIPE_WEBHOOK_SECRET: str = ""
-    STRIPE_PRICE_STARTER: str = ""
-    STRIPE_PRICE_PRO: str = ""
+    # ── Phase 2: bSecure billing (bsecure.pk, Pakistan) ──────────────────
+    BSECURE_CLIENT_ID: str = ""
+    BSECURE_CLIENT_SECRET: str = ""
+    BSECURE_STORE_SLUG: str = ""        # your store slug from bSecure merchant portal
+    BSECURE_CALLBACK_URL: str = ""      # public HTTPS URL for payment callbacks
+    BSECURE_STARTER_AMOUNT: str = "2000"    # amount in PKR for Starter plan
+    BSECURE_PRO_AMOUNT: str = "4000"        # amount in PKR for Pro plan
     ADMIN_EMAILS: str = ""      # comma-separated admin email addresses
     ADMIN_CLERK_IDS: str = ""  # comma-separated Clerk user IDs (user_xxx) — more reliable than email
 

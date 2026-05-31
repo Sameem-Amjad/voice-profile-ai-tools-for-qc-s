@@ -38,19 +38,23 @@ def _make_engine():
             connect_args: dict = {}
             if "ssl=" not in url:
                 connect_args["ssl"] = "require"
-            # Supabase exposes PostgreSQL via pgbouncer in transaction mode.
-            # pgbouncer transaction mode cannot reliably route PREPARE and
-            # EXECUTE to the same backend — both DuplicatePreparedStatement
-            # and InvalidSQLStatementName errors result.
+            # Supabase/pgbouncer in transaction mode cannot handle named server-
+            # side prepared statements — PARSE and EXECUTE may land on different
+            # backends.  Two fixes are required together:
             #
-            # Fix: NullPool tells SQLAlchemy not to maintain its own connection
-            # pool on top of pgbouncer (pgbouncer IS the pool). Each request
-            # gets a dedicated pgbouncer connection, so pgbouncer pins it to
-            # one backend for the lifetime of that connection and all protocol
-            # messages (PARSE/BIND/EXECUTE/CLOSE) stay on the same backend.
-            # statement_cache_size=0 disables asyncpg's client-side LRU so no
-            # named statement is reused across connections.
+            # 1. prepared_statement_name_func=lambda:"" → asyncpg uses the
+            #    PostgreSQL unnamed ("") prepared-statement slot, which is
+            #    allocated and freed within the same extended-query sequence.
+            #    pgbouncer never sees a PREPARE by name.
+            #
+            # 2. statement_cache_size=0 → disables asyncpg's client-side LRU
+            #    so it doesn't try to reuse named statements across connections.
+            #
+            # 3. NullPool → no SQLAlchemy-side connection pool on top of
+            #    pgbouncer's own pool; every request borrows one pgbouncer
+            #    connection and returns it immediately after use.
             connect_args["statement_cache_size"] = 0
+            connect_args["prepared_statement_name_func"] = lambda: ""
             kwargs["connect_args"] = connect_args
             kwargs["poolclass"] = NullPool
         else:

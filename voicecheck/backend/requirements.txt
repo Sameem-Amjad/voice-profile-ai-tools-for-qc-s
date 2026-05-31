@@ -17,9 +17,9 @@ sqlalchemy[asyncio]==2.0.25
 aiosqlite==0.19.0
 asyncpg==0.29.0
 python-jose[cryptography]==3.3.0
-stripe==8.0.0
 alembic==1.13.1
 resend==2.2.0
+bSecure==0.0.0.6.3
 # ── Optional, dev-only (commented out for prod deploy) ──────────────────────
 # Uncomment locally if you want to use TRANSCRIPTION_BACKEND=faster_whisper
 # (free local CPU-only transcription) instead of the OpenAI API. Production

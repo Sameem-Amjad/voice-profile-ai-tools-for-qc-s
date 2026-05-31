@@ -32,10 +32,7 @@ export const SignInPage = () => (
     <header className="border-b border-white/10">
       <div className="max-w-6xl mx-auto px-4 py-4">
         <Link to="/" className="inline-flex items-center gap-2">
-          <Mic2 className="text-blue-400" size={24} />
-          <span className="text-white font-bold text-lg">
-            Voice<span className="text-blue-400">Check</span>
-          </span>
+          <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="SoundProof logo" className="h-8 w-8 rounded-full" />
         </Link>
       </div>
     </header>

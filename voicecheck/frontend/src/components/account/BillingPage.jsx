@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
-import { Loader2, AlertCircle, Zap, CreditCard, XCircle } from 'lucide-react';
+import { Loader2, AlertCircle, Zap, XCircle, Clock, CheckCircle } from 'lucide-react';
 import clsx from 'clsx';
 import { useDevMode } from '../../hooks/useDevMode';
 import { useClerkAuthBridge, getApi } from '../../services/api';
 import { Navbar } from '../ui/Navbar';
 
 const PLAN_META = {
-  free_trial: { label: 'Free trial', price: 0 },
-  trial: { label: 'Free trial', price: 0 },
-  free: { label: 'Free', price: 0 },
-  starter: { label: 'Starter', price: 20 },
-  pro: { label: 'Pro', price: 40 },
-  cancelled: { label: 'Cancelled', price: 0 },
+  free_trial: { label: 'Free Trial',  price: null },
+  trial:      { label: 'Free Trial',  price: null },
+  free:       { label: 'Free',        price: null },
+  starter:    { label: 'Starter',     price: 'PKR 5,571/mo' },
+  pro:        { label: 'Pro',         price: 'PKR 11,142/mo' },
+  cancelled:  { label: 'Cancelled',   price: null },
 };
 
 const formatDate = (iso) => {
@@ -62,7 +62,7 @@ const DevModeBanner = () => (
         <strong className="text-yellow-100">Dev mode</strong>
         <p className="mt-1">
           Set <code className="bg-black/30 px-1.5 py-0.5 rounded text-xs">VITE_CLERK_PUBLISHABLE_KEY</code>{' '}
-          and configure Clerk + Stripe on the backend to enable billing.
+          and configure Clerk on the backend to enable billing.
         </p>
       </div>
     </div>
@@ -73,14 +73,21 @@ export const BillingPage = () => {
   const { devMode } = useDevMode();
   useClerkAuthBridge();
 
-  // useUser is safe to call when Clerk is mounted; in dev mode we don't render the section
   const userHook = devMode ? { user: null, isLoaded: true } : useUser();
   const { user, isLoaded } = userHook;
 
-  const [billing, setBilling] = useState(null);
-  const [loading, setLoading] = useState(!devMode);
-  const [error, setError] = useState(null);
-  const [actioning, setActioning] = useState(null); // 'starter'|'pro'|'portal'|null
+  const [billing, setBilling]           = useState(null);
+  const [loading, setLoading]           = useState(!devMode);
+  const [error, setError]               = useState(null);
+  const [actioning, setActioning]       = useState(null);
+  const [cancelConfirm, setCancelConfirm] = useState(false);
+  const [requested, setRequested]       = useState(false); // local success flash
+
+  const refreshBilling = async () => {
+    const data = await getApi().get('/billing/me');
+    setBilling(data);
+    return data;
+  };
 
   useEffect(() => {
     if (devMode) return;
@@ -89,8 +96,7 @@ export const BillingPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const api = getApi();
-        const data = await api.get('/billing/me');
+        const data = await getApi().get('/billing/me');
         if (!cancelled) setBilling(data);
       } catch (e) {
         if (!cancelled) setError(e.message || 'Failed to load billing info');
@@ -101,49 +107,52 @@ export const BillingPage = () => {
     return () => { cancelled = true; };
   }, [devMode]);
 
-  const startCheckout = async (plan) => {
+  const requestUpgrade = async (plan) => {
     setActioning(plan);
     setError(null);
     try {
-      const api = getApi();
-      const data = await api.post('/billing/checkout-session', {
-        plan,
-        success_url: window.location.href,
-        cancel_url: window.location.href,
-      });
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error('Checkout session did not return a URL');
-      }
+      await getApi().post('/billing/request-subscription', { plan });
+      const fresh = await refreshBilling();
+      if (fresh.pending_plan) setRequested(true);
     } catch (e) {
-      setError(e.message || 'Checkout failed');
+      setError(e.message || 'Request failed');
+    } finally {
       setActioning(null);
     }
   };
 
-  const openPortal = async () => {
-    setActioning('portal');
+  const cancelRequest = async () => {
+    setActioning('cancel-request');
     setError(null);
     try {
-      const api = getApi();
-      const data = await api.post('/billing/portal-session', {
-        return_url: window.location.href,
-      });
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error('Portal session did not return a URL');
-      }
+      await getApi().delete('/billing/request-subscription');
+      await refreshBilling();
+      setRequested(false);
     } catch (e) {
-      setError(e.message || 'Could not open subscription portal');
+      setError(e.message || 'Could not cancel request');
+    } finally {
       setActioning(null);
     }
   };
 
-  const planMeta = billing?.plan ? (PLAN_META[billing.plan] || { label: billing.plan, price: 0 }) : null;
-  const hasPaidSub = billing && (billing.plan === 'starter' || billing.plan === 'pro');
+  const cancelSubscription = async () => {
+    setActioning('cancel');
+    setError(null);
+    try {
+      await getApi().post('/billing/cancel', {});
+      await refreshBilling();
+      setCancelConfirm(false);
+    } catch (e) {
+      setError(e.message || 'Cancellation failed');
+    } finally {
+      setActioning(null);
+    }
+  };
+
+  const planMeta   = billing?.plan ? (PLAN_META[billing.plan] || { label: billing.plan, price: null }) : null;
+  const hasPaidSub = billing?.plan === 'starter' || billing?.plan === 'pro';
   const isCancelled = billing?.plan === 'cancelled';
+  const hasPending  = !!billing?.pending_plan;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
@@ -176,19 +185,56 @@ export const BillingPage = () => {
 
         {!devMode && !loading && billing && (
           <>
-            {/* Cancelled state banner */}
+            {/* Cancelled banner */}
             {isCancelled && (
               <div className="bg-red-900/30 border border-red-500/40 rounded-xl p-5 text-red-200">
                 <div className="flex items-start gap-3">
                   <AlertCircle className="text-red-400 mt-0.5 shrink-0" size={20} />
-                  <div className="text-sm leading-relaxed">
+                  <div className="text-sm">
                     <strong className="text-red-100">Subscription cancelled</strong>
                     {billing.current_period_end && (
                       <p className="mt-1 text-red-300">
-                        Access ended on {formatDate(billing.current_period_end)}. Re-subscribe below to continue using SoundProof.
+                        Access ended {formatDate(billing.current_period_end)}. Re-subscribe below.
                       </p>
                     )}
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* Pending payment banner */}
+            {hasPending && (
+              <div className="bg-yellow-900/30 border border-yellow-500/40 rounded-xl p-5">
+                <div className="flex items-start gap-3">
+                  <Clock className="text-yellow-400 mt-0.5 shrink-0" size={20} />
+                  <div className="flex-1 text-sm">
+                    <strong className="text-yellow-100">
+                      {PLAN_META[billing.pending_plan]?.label || billing.pending_plan} upgrade pending
+                    </strong>
+                    <p className="mt-1 text-yellow-200">
+                      Your request has been received. We'll email you a payment link shortly.
+                      Once you pay, we'll activate your plan within a few hours.
+                    </p>
+                  </div>
+                  <button
+                    onClick={cancelRequest}
+                    disabled={actioning === 'cancel-request'}
+                    className="text-yellow-400 hover:text-yellow-200 text-xs underline shrink-0 disabled:opacity-50"
+                  >
+                    {actioning === 'cancel-request' ? 'Cancelling…' : 'Cancel request'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Request sent flash */}
+            {requested && !hasPending && (
+              <div className="bg-green-900/30 border border-green-500/40 rounded-xl p-5">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="text-green-400 shrink-0" size={20} />
+                  <p className="text-green-200 text-sm">
+                    Request sent! Check your email for a payment link.
+                  </p>
                 </div>
               </div>
             )}
@@ -200,7 +246,7 @@ export const BillingPage = () => {
                   <h2 className="text-xl font-semibold text-white">Current plan</h2>
                   <p className="text-gray-400 text-sm">
                     {planMeta?.label || billing.plan}
-                    {planMeta?.price > 0 && <span> · ${planMeta.price}/mo</span>}
+                    {planMeta?.price && <span> · {planMeta.price}</span>}
                   </p>
                 </div>
                 {billing.status && (
@@ -218,71 +264,84 @@ export const BillingPage = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Stat
-                  label="Period ends"
-                  value={formatDate(billing.current_period_end)}
-                />
-                <Stat
-                  label="Plan"
-                  value={planMeta?.label || billing.plan}
-                />
+                <Stat label="Period ends" value={formatDate(billing.current_period_end)} />
+                <Stat label="Plan" value={planMeta?.label || billing.plan} />
               </div>
 
               <div>
-                <div className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-                  Monthly usage
-                </div>
-                {/* Backend sends monthly_minutes_used + plan_cap_minutes */}
-                <UsageBar
-                  used={billing.monthly_minutes_used ?? 0}
-                  cap={billing.plan_cap_minutes ?? 0}
-                />
+                <div className="text-xs uppercase tracking-wide text-gray-400 mb-2">Monthly usage</div>
+                <UsageBar used={billing.monthly_minutes_used ?? 0} cap={billing.plan_cap_minutes ?? 0} />
               </div>
             </section>
 
             {/* Plan actions */}
             <section className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white">Manage subscription</h2>
+              <h2 className="text-xl font-semibold text-white">
+                {hasPaidSub ? 'Manage subscription' : 'Upgrade plan'}
+              </h2>
 
               {hasPaidSub ? (
-                <button
-                  onClick={openPortal}
-                  disabled={actioning === 'portal'}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 font-semibold text-white transition-colors"
-                >
-                  {actioning === 'portal' ? (
-                    <><Loader2 className="animate-spin" size={16} /> Opening…</>
+                <div className="space-y-3">
+                  {!cancelConfirm ? (
+                    <button
+                      onClick={() => setCancelConfirm(true)}
+                      disabled={!!actioning}
+                      className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-red-600/20 hover:bg-red-600/30 border border-red-500/40 disabled:opacity-60 font-semibold text-red-300 transition-colors"
+                    >
+                      <XCircle size={16} /> Cancel subscription
+                    </button>
                   ) : (
-                    <><CreditCard size={16} /> Manage subscription</>
+                    <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4 space-y-3">
+                      <p className="text-red-200 text-sm">
+                        Are you sure? Your subscription will be cancelled and you'll lose paid features.
+                      </p>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={cancelSubscription}
+                          disabled={actioning === 'cancel'}
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:opacity-60 font-semibold text-white text-sm"
+                        >
+                          {actioning === 'cancel' ? <><Loader2 className="animate-spin" size={14} /> Cancelling…</> : 'Yes, cancel'}
+                        </button>
+                        <button
+                          onClick={() => setCancelConfirm(false)}
+                          disabled={!!actioning}
+                          className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/15 font-semibold text-white text-sm"
+                        >
+                          Keep subscription
+                        </button>
+                      </div>
+                    </div>
                   )}
-                </button>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <button
-                    onClick={() => startCheckout('starter')}
-                    disabled={!!actioning}
-                    className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 disabled:opacity-60 font-semibold text-white transition-colors"
-                  >
-                    {actioning === 'starter' ? (
-                      <Loader2 className="animate-spin" size={16} />
-                    ) : (
-                      <Zap size={16} />
-                    )}
-                    Upgrade to Starter — $20
-                  </button>
-                  <button
-                    onClick={() => startCheckout('pro')}
-                    disabled={!!actioning}
-                    className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 font-semibold text-white transition-colors shadow-lg shadow-blue-500/20"
-                  >
-                    {actioning === 'pro' ? (
-                      <Loader2 className="animate-spin" size={16} />
-                    ) : (
-                      <Zap size={16} />
-                    )}
-                    Upgrade to Pro — $40
-                  </button>
                 </div>
+              ) : hasPending ? (
+                <p className="text-gray-400 text-sm">
+                  Your upgrade request is being processed. You'll receive an email with payment details soon.
+                </p>
+              ) : (
+                <>
+                  <p className="text-gray-400 text-sm">
+                    Click a plan to request an upgrade. We'll email you a Payoneer payment link within a few hours.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button
+                      onClick={() => requestUpgrade('starter')}
+                      disabled={!!actioning}
+                      className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 disabled:opacity-60 font-semibold text-white transition-colors"
+                    >
+                      {actioning === 'starter' ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} />}
+                      Request Starter — PKR 5,571/mo
+                    </button>
+                    <button
+                      onClick={() => requestUpgrade('pro')}
+                      disabled={!!actioning}
+                      className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 font-semibold text-white transition-colors shadow-lg shadow-blue-500/20"
+                    >
+                      {actioning === 'pro' ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} />}
+                      Request Pro — PKR 11,142/mo
+                    </button>
+                  </div>
+                </>
               )}
             </section>
           </>
