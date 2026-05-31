@@ -123,6 +123,7 @@ export function Navbar({ variant, step, onReset, usageInfo, me, stats, billing }
             <a href="#pricing" className="hover:text-white">Pricing</a>
             <a href="#faq" className="hover:text-white">FAQ</a>
             <Link to="/blog" className="hover:text-white">Blog</Link>
+            <Link to="/contact" className="hover:text-white">Contact</Link>
           </nav>
         )}
 
