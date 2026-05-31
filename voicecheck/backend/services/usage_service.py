@@ -25,7 +25,8 @@ from utils.logger import get_logger
 logger = get_logger(__name__)
 
 FREE_TRIAL_ANALYSES_PER_MONTH = 3
-FREE_TRIAL_MAX_FILE_MINUTES = 30  # max per-file duration for free users
+FREE_TRIAL_MAX_TRANSCRIPTIONS = 3         # max transcriptions per month for free users
+FREE_TRIAL_MAX_FILE_MINUTES = 1           # max per-file duration for free users (1 min)
 
 PLAN_LIMITS: dict[str, dict] = {
     "free_trial": {"limit_analyses": FREE_TRIAL_ANALYSES_PER_MONTH, "cycle": "month"},
@@ -83,6 +84,37 @@ async def monthly_analyses_count(user_id: str, db: AsyncSession) -> int:
     return int(result.scalar() or 0)
 
 
+async def monthly_transcription_count(user_id: str, db: AsyncSession) -> int:
+    """Count transcriptions (UsageMinute rows) completed this calendar month."""
+    start = _month_start_utc()
+    stmt = select(func.count(UsageMinute.id)).where(
+        UsageMinute.user_id == user_id,
+        UsageMinute.created_at >= start,
+    )
+    result = await db.execute(stmt)
+    return int(result.scalar() or 0)
+
+
+async def check_transcription_quota_or_raise(user: User, db: AsyncSession) -> None:
+    """Gate for free_trial: max FREE_TRIAL_MAX_TRANSCRIPTIONS per month."""
+    plan = (user.plan or "free_trial").lower()
+    if plan != "free_trial":
+        return
+
+    count = await monthly_transcription_count(user.id, db)
+    if count >= FREE_TRIAL_MAX_TRANSCRIPTIONS:
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "error": "quota_exceeded",
+                "plan": plan,
+                "transcriptions_used": count,
+                "transcriptions_cap": FREE_TRIAL_MAX_TRANSCRIPTIONS,
+                "message": f"You've used all {FREE_TRIAL_MAX_TRANSCRIPTIONS} free analyses this month. Upgrade to continue.",
+            },
+        )
+
+
 async def check_quota_or_raise(
     user: User,
     db: AsyncSession,
@@ -97,9 +129,10 @@ async def check_quota_or_raise(
             raise HTTPException(
                 status_code=402,
                 detail={
-                    "error": "quota_exceeded",
+                    "error": "file_too_long",
                     "plan": plan,
-                    "message": f"Free plan supports files up to {FREE_TRIAL_MAX_FILE_MINUTES} minutes. Upgrade to Starter or Pro for longer files.",
+                    "max_minutes": FREE_TRIAL_MAX_FILE_MINUTES,
+                    "message": f"Free plan supports files up to {FREE_TRIAL_MAX_FILE_MINUTES} minute. Upgrade to Starter or Pro for longer files.",
                 },
             )
         return

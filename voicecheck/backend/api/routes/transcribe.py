@@ -1,14 +1,16 @@
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from models.schemas import TranscribeRequest, TranscribeResponse, JobStatus
 from services.job_service import job_service
-from services.usage_service import record_usage
+from services.usage_service import record_usage, check_transcription_quota_or_raise
 from core.storage.local import storage
 from config import settings
 from utils.logger import get_logger
 from pathlib import Path
-from db.session import AsyncSessionLocal
+from db.session import AsyncSessionLocal, get_db
 from db.models import User
+from auth.dependencies import current_user
 
 router = APIRouter()
 logger = get_logger(__name__)
@@ -106,7 +108,9 @@ async def _run_transcription(job_id: str):
 )
 async def start_transcription(
     request: TranscribeRequest,
-    background_tasks: BackgroundTasks
+    background_tasks: BackgroundTasks,
+    user: User = Depends(current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Start transcription job.
@@ -145,6 +149,9 @@ async def start_transcription(
             job_id=job.job_id,
             status=job.status
         )
+
+    # Enforce free-tier transcription limit before burning API credits
+    await check_transcription_quota_or_raise(user, db)
 
     # Start transcription in background
     background_tasks.add_task(_run_transcription, request.job_id)
