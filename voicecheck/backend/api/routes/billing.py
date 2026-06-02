@@ -50,6 +50,7 @@ class SubscriptionRequestBody(BaseModel):
 class BillingMeResponse(BaseModel):
     plan: str
     pending_plan: Optional[str] = None
+    payoneer_link: Optional[str] = None
     status: Optional[str] = None
     current_period_end: Optional[datetime] = None
     monthly_minutes_used: float
@@ -171,6 +172,7 @@ async def billing_me(
     return BillingMeResponse(
         plan=plan_key,
         pending_plan=user.pending_plan,
+        payoneer_link=user.payoneer_link,
         status=sub.status if sub else None,
         current_period_end=sub.current_period_end if sub else None,
         monthly_minutes_used=round(minutes_used, 2),

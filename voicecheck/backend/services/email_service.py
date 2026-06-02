@@ -133,20 +133,22 @@ def send_payment_link(to: str, plan: str, payment_link: str) -> None:
     safe_link = _html.escape(payment_link)
     _send(
         to=to,
-        subject=f"Your SoundProof {safe_plan} payment link",
+        subject=f"Action required: Complete your SoundProof {safe_plan} payment",
         html=f"""
 <p>Hi,</p>
-<p>Thank you for requesting a <strong>SoundProof {safe_plan}</strong> subscription!</p>
-<p>Please complete your payment using the link below:</p>
+<p>Your billing for the <strong>SoundProof {safe_plan}</strong> plan has been set up.</p>
+<p>Kindly complete your payment using the link below — your plan will be activated
+<strong>within 1–2 days</strong> after the payment is processed:</p>
 <p style="margin:20px 0">
   <a href="{safe_link}"
      style="background:#3b82f6;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">
-    Pay now →
+    Pay via Payoneer →
   </a>
 </p>
 <p style="font-size:13px;color:#6b7280">Or copy this link: <code>{safe_link}</code></p>
-<p>Once your payment is confirmed, your {safe_plan} plan will be activated within a few hours.
-You'll receive a confirmation email when it's live.</p>
+<p>You can also find this payment button on your
+<a href="https://voice-profile-two.vercel.app/account">Billing page</a> at any time.</p>
+<p>Once we confirm your payment, you'll receive another email confirming your {safe_plan} plan is live.</p>
 <p>— The SoundProof team</p>
 """,
     )

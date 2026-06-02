@@ -40,6 +40,7 @@ class User(Base):
     email: Mapped[Optional[str]] = mapped_column(String(320), nullable=True)
     payment_token: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
     pending_plan: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    payoneer_link: Mapped[Optional[str]] = mapped_column(String(1024), nullable=True)
     # Plan stored as a string (one of: free_trial, starter, pro, cancelled)
     # Using a plain str column rather than DB ENUM to keep SQLite/Postgres parity simple.
     plan: Mapped[str] = mapped_column(String(32), nullable=False, default="free_trial")

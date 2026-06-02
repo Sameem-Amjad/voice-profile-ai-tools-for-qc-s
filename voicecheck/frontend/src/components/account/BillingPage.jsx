@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
-import { Loader2, AlertCircle, Zap, XCircle, Clock, CheckCircle } from 'lucide-react';
+import { Loader2, AlertCircle, Zap, XCircle, Clock, CheckCircle, ExternalLink } from 'lucide-react';
 import clsx from 'clsx';
 import { useDevMode } from '../../hooks/useDevMode';
 import { useClerkAuthBridge, getApi } from '../../services/api';
@@ -211,10 +211,28 @@ export const BillingPage = () => {
                     <strong className="text-yellow-100">
                       {PLAN_META[billing.pending_plan]?.label || billing.pending_plan} upgrade pending
                     </strong>
-                    <p className="mt-1 text-yellow-200">
-                      Your request has been received. We'll email you a payment link shortly.
-                      Once you pay, we'll activate your plan within a few hours.
-                    </p>
+                    {billing.payoneer_link ? (
+                      <>
+                        <p className="mt-1 text-yellow-200">
+                          Your payment link is ready. Click the button below to pay via Payoneer.
+                          Your plan will be activated within <strong className="text-yellow-100">1–2 days</strong> after payment is confirmed.
+                        </p>
+                        <a
+                          href={billing.payoneer_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-yellow-950 font-semibold text-sm transition-colors"
+                        >
+                          <ExternalLink size={14} />
+                          Pay via Payoneer
+                        </a>
+                      </>
+                    ) : (
+                      <p className="mt-1 text-yellow-200">
+                        Your request has been received. We'll email you a payment link shortly.
+                        Once you pay, we'll activate your plan within 1–2 days.
+                      </p>
+                    )}
                   </div>
                   <button
                     onClick={cancelRequest}
@@ -316,7 +334,9 @@ export const BillingPage = () => {
                 </div>
               ) : hasPending ? (
                 <p className="text-gray-400 text-sm">
-                  Your upgrade request is being processed. You'll receive an email with payment details soon.
+                  {billing.payoneer_link
+                    ? 'Your payment link is ready — see the banner above to pay via Payoneer.'
+                    : 'Your upgrade request is being processed. You\'ll receive a Payoneer payment link by email shortly.'}
                 </p>
               ) : (
                 <>

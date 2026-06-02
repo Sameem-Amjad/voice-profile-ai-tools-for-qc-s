@@ -119,6 +119,7 @@ async def admin_set_plan(
     prev_plan = user.plan
     user.plan = body.plan
     user.pending_plan = None
+    user.payoneer_link = None
 
     # Create/update subscription record for paid plans
     if body.plan in ("starter", "pro"):
@@ -162,6 +163,9 @@ async def admin_send_payment_link(
         raise HTTPException(status_code=404, detail="User not found")
     if not user.email:
         raise HTTPException(status_code=400, detail="User has no email address.")
+
+    user.payoneer_link = body.payment_link
+    await db.commit()
 
     send_payment_link(
         to=user.email,
