@@ -314,8 +314,10 @@ export const AppWorkflow = () => {
       {showUpgradeModal && <UpgradeModal onClose={() => setShowUpgradeModal(false)} />}
 
       {/* Footer */}
-      <footer className="text-center py-6 text-gray-600 text-xs">
-        SoundProof MVP · Built with faster-whisper + Needleman-Wunsch alignment
+      <footer className="text-center py-6 text-gray-600 text-xs space-x-4">
+        <span>SoundProof · Built with faster-whisper + Needleman-Wunsch alignment</span>
+        <Link to="/privacy" className="hover:text-gray-400 transition-colors">Privacy</Link>
+        <Link to="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
       </footer>
     </div>
   );

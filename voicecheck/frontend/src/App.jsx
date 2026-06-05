@@ -19,6 +19,8 @@ const PricingPage = lazy(() => import('./pages/PricingPage').then(m => ({ defaul
 const SharedResultPage = lazy(() => import('./components/share/SharedResultPage').then(m => ({ default: m.SharedResultPage })));
 const BlogIndex = lazy(() => import('./components/blog/BlogIndex').then(m => ({ default: m.BlogIndex })));
 const BlogPost = lazy(() => import('./components/blog/BlogPost').then(m => ({ default: m.BlogPost })));
+const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
+const TermsOfService = lazy(() => import('./components/legal/TermsOfService').then(m => ({ default: m.TermsOfService })));
 
 /**
  * Gate: requires the user to be signed in. In dev mode (no Clerk key),
@@ -96,6 +98,8 @@ export default function App() {
       <Route path="/r/:token" element={<SharedResultPage />} />
       <Route path="/blog" element={<BlogIndex />} />
       <Route path="/blog/:slug" element={<BlogPost />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
 
       {/* Fallback */}
       <Route path="*" element={<NotFoundPage />} />

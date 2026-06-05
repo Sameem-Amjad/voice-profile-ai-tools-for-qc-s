@@ -1117,6 +1117,8 @@ export const LandingPage = () => {
             <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
             <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
             <FooterAuthLinks />
           </div>
         </div>
