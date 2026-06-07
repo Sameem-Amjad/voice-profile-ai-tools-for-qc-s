@@ -50,10 +50,13 @@ const StepBadge = ({ step, current, label }) => {
   const active = step === current;
   return (
     <div className="flex items-center gap-2">
-      <span className={clsx(
-        'w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center',
-        done ? 'bg-green-500 text-white' : active ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
-      )}>
+      <span
+        aria-hidden="true"
+        className={clsx(
+          'w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center',
+          done ? 'bg-green-500 text-white' : active ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'
+        )}
+      >
         {done ? '✓' : stepIndex + 1}
       </span>
       <span className={clsx('text-sm font-medium', active ? 'text-blue-400 underline' : 'text-gray-400')}>
@@ -129,22 +132,22 @@ export function Navbar({ variant, step, onReset, usageInfo, me, stats, billing }
         </Link>
 
         {variant === 'landing' && (
-          <nav className="hidden md:flex items-center gap-6 text-sm text-gray-400">
-            <a href="#how" className="hover:text-white">How it works</a>
-            <a href="#testimonials" className="hover:text-white">Testimonials</a>
-            <a href="#pricing" className="hover:text-white">Pricing</a>
-            <a href="#faq" className="hover:text-white">FAQ</a>
-            <Link to="/blog" className="hover:text-white">Blog</Link>
-            <Link to="/contact" className="hover:text-white">Contact</Link>
+          <nav aria-label="Main navigation" className="hidden md:flex items-center gap-6 text-sm text-gray-400">
+            <a href="#how" className="hover:text-white transition-colors">How it works</a>
+            <a href="#testimonials" className="hover:text-white transition-colors">Testimonials</a>
+            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+            <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
+            <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
           </nav>
         )}
 
         {variant === 'app' && (
           <div className="hidden sm:flex items-center gap-4">
             <StepBadge step="upload" current={step} label="Upload" />
-            <ChevronRight size={14} className="text-gray-600" />
+            <ChevronRight size={14} className="text-gray-500" aria-hidden="true" />
             <StepBadge step="transcribe" current={step} label="Transcribe" />
-            <ChevronRight size={14} className="text-gray-600" />
+            <ChevronRight size={14} className="text-gray-500" aria-hidden="true" />
             <StepBadge step="results" current={step} label="Results" />
           </div>
         )}

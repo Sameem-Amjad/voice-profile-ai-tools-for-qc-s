@@ -56,8 +56,8 @@ const DiffMockup = () => (
           <div key={i} className={clsx('w-3 h-3 rounded-full', c)} />
         ))}
       </div>
-      <div className="flex-1 mx-3 bg-white/5 rounded-md px-3 py-0.5 text-center">
-        <span className="text-xs text-gray-500 font-mono">https://soundproof-chi.vercel.app/app</span>
+      <div className="flex-1 mx-3 bg-white/5 rounded-md px-3 py-0.5 text-center" aria-hidden="true">
+        <span className="text-xs text-gray-400 font-mono">https://soundproof-chi.vercel.app/app</span>
       </div>
     </div>
     <div className="flex items-center justify-between px-4 py-2.5 bg-green-500/10 border-b border-green-500/20">
@@ -67,7 +67,7 @@ const DiffMockup = () => (
       </div>
       <div className="flex items-center gap-3 text-xs">
         <span className="text-blue-400 font-bold">94.2% accuracy</span>
-        <span className="text-gray-500">12 errors</span>
+        <span className="text-gray-400">12 errors</span>
       </div>
     </div>
     <div className="px-5 py-4 font-mono text-sm leading-[2.2] text-gray-300 border-b border-white/10">
@@ -93,9 +93,9 @@ const DiffMockup = () => (
           style={{ animation: `slide-in-left 0.4s ease-out ${0.4 + i * 0.15}s both` }}
         >
           <span className={clsx('w-2 h-2 rounded-full shrink-0', e.dot)} />
-          <span className="text-gray-500 font-mono w-14 shrink-0">{e.ts}</span>
+          <span className="text-gray-400 font-mono w-14 shrink-0">{e.ts}</span>
           <span className="text-gray-300 flex-1">{e.msg}</span>
-          <span className="text-gray-600 group-hover:text-blue-400 transition-colors">{e.type}</span>
+          <span className="text-gray-400 group-hover:text-blue-400 transition-colors">{e.type}</span>
         </div>
       ))}
     </div>
@@ -124,6 +124,8 @@ const LiveNotification = () => {
 
   return (
     <div
+      aria-live="polite"
+      aria-atomic="true"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0) scale(1)' : 'translateY(8px) scale(0.95)',
@@ -131,9 +133,9 @@ const LiveNotification = () => {
       }}
       className="inline-flex items-center gap-2.5 bg-white/[0.06] border border-white/10 rounded-full px-4 py-2 text-sm text-gray-300 backdrop-blur"
     >
-      <span className="text-base">{LIVE_NOTIFICATIONS[idx].emoji}</span>
+      <span className="text-base" aria-hidden="true">{LIVE_NOTIFICATIONS[idx].emoji}</span>
       <span>{LIVE_NOTIFICATIONS[idx].text}</span>
-      <span className="w-1.5 h-1.5 rounded-full bg-green-400 shrink-0 animate-pulse" />
+      <span className="w-1.5 h-1.5 rounded-full bg-green-400 shrink-0 animate-pulse" aria-hidden="true" />
     </div>
   );
 };
@@ -186,7 +188,7 @@ export const LandingPage = () => {
           HERO — pure HTML + CSS animations, zero JS animation dependency.
           Renders immediately without waiting for framer-motion evaluation.
       ══════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
+      <section id="main-content" className="relative min-h-screen flex items-center overflow-hidden pt-20">
         {/* Dot grid */}
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -269,7 +271,7 @@ export const LandingPage = () => {
 
               {/* Trust badges */}
               <div
-                className="flex flex-wrap items-center lg:justify-start justify-center gap-5 text-sm text-gray-500 mb-6"
+                className="flex flex-wrap items-center lg:justify-start justify-center gap-5 text-sm text-gray-400 mb-6"
                 style={{ animation: 'fade-in-up 0.65s cubic-bezier(0.22,1,0.36,1) 0.4s both' }}
               >
                 {[
@@ -301,10 +303,10 @@ export const LandingPage = () => {
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        {/* Scroll indicator — purely decorative */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
           <div
-            className="flex flex-col items-center gap-1 text-gray-600"
+            className="flex flex-col items-center gap-1"
             style={{ animation: 'scroll-bounce 2s ease-in-out infinite' }}
           >
             <div className="w-5 h-8 border border-white/10 rounded-full flex items-start justify-center pt-1.5">
@@ -321,7 +323,7 @@ export const LandingPage = () => {
 
       {/* ══ FOOTER ══════════════════════════════════════════════════ */}
       <footer className="border-t border-white/[0.07]">
-        <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600">
+        <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
           <p>© {new Date().getFullYear()} SoundProof. Built with Whisper + Needleman-Wunsch alignment.</p>
           <div className="flex flex-wrap justify-center gap-5">
             <a href="#how"      className="hover:text-white transition-colors">How it works</a>

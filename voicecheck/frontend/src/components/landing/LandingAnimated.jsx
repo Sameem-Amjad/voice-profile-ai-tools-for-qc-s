@@ -211,8 +211,8 @@ const FeatureCard = ({ icon: Icon, color, title, body }) => {
 
 const TestimonialCard = ({ quote, name, role, avatar, rating }) => (
   <div className="flex-shrink-0 w-80 bg-white/[0.04] border border-white/10 rounded-2xl p-6 mx-3">
-    <div className="flex gap-0.5 mb-3">
-      {[...Array(rating)].map((_, i) => <Star key={i} size={13} className="text-yellow-400" fill="currentColor" strokeWidth={0} />)}
+    <div className="flex gap-0.5 mb-3" aria-label={`${rating} out of 5 stars`} role="img">
+      {[...Array(rating)].map((_, i) => <Star key={i} size={13} className="text-yellow-400" fill="currentColor" strokeWidth={0} aria-hidden="true" />)}
     </div>
     <p className="text-sm text-gray-300 leading-relaxed mb-5">"{quote}"</p>
     <div className="flex items-center gap-3">
@@ -222,7 +222,7 @@ const TestimonialCard = ({ quote, name, role, avatar, rating }) => (
       }
       <div>
         <p className="text-sm font-semibold text-white">{name}</p>
-        <p className="text-xs text-gray-500">{role}</p>
+        <p className="text-xs text-gray-400">{role}</p>
       </div>
     </div>
   </div>
@@ -230,17 +230,24 @@ const TestimonialCard = ({ quote, name, role, avatar, rating }) => (
 
 const FAQItem = ({ q, a }) => {
   const [open, setOpen] = useState(false);
+  const id = React.useId();
+  const answerId = `faq-answer-${id}`;
   return (
     <div className={clsx('border border-white/10 rounded-xl overflow-hidden transition-colors', open ? 'bg-white/[0.05]' : 'bg-white/[0.02]')}>
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-6 py-4 text-left">
+      <button
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-controls={answerId}
+        className="w-full flex items-center justify-between px-6 py-4 text-left"
+      >
         <span className="font-medium text-gray-100 pr-4">{q}</span>
-        <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.22 }}>
+        <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.22 }} aria-hidden="true">
           <Plus size={18} className="text-gray-400 shrink-0" />
         </motion.div>
       </button>
       <AnimatePresence initial={false}>
         {open && (
-          <motion.div key="body" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden">
+          <motion.div id={answerId} key="body" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden">
             <p className="px-6 pb-5 pt-1 text-sm text-gray-400 leading-relaxed border-t border-white/[0.07]">{a}</p>
           </motion.div>
         )}
@@ -297,7 +304,7 @@ const InteractiveDemo = () => {
       <div className="flex border-b border-white/10">
         {DEMO_STAGES.map((s, i) => (
           <div key={s.id} className={clsx('flex-1 px-3 py-2.5 text-center text-xs font-medium border-r border-white/10 last:border-r-0 transition-all duration-500',
-            stage > i ? 'bg-green-500/10 text-green-400' : stage === i ? 'bg-blue-500/10 text-blue-400' : 'text-gray-600'
+            stage > i ? 'bg-green-500/10 text-green-400' : stage === i ? 'bg-blue-500/10 text-blue-400' : 'text-gray-400'
           )}>
             <div className="flex items-center justify-center gap-1.5">
               {stage > i
@@ -373,11 +380,11 @@ const InteractiveDemo = () => {
                   className="flex items-center gap-3 text-xs bg-white/[0.03] border border-white/[0.07] rounded-lg px-3 py-2"
                 >
                   <span className={clsx('w-2 h-2 rounded-full shrink-0', w.status === 'missing' ? 'bg-yellow-400' : 'bg-red-400')} />
-                  <span className="text-gray-500 font-mono">{w.ts}</span>
+                  <span className="text-gray-400 font-mono">{w.ts}</span>
                   <span className="text-gray-300 flex-1">
                     {w.status === 'missing' ? `"${w.word}" missing` : `${w.word} → ${w.replacement}`}
                   </span>
-                  <span className="text-gray-600 capitalize">{w.status === 'sub' ? 'substitution' : w.status}</span>
+                  <span className="text-gray-400 capitalize">{w.status === 'sub' ? 'substitution' : w.status}</span>
                 </motion.div>
               ))}
             </div>
@@ -425,14 +432,14 @@ export default function LandingAnimated({ testimonials }) {
                 className={clsx('rounded-2xl border p-8 text-center', s.bg, s.border)}>
                 <div className={clsx('text-5xl font-black mb-2', s.color)}>{s.value}</div>
                 <div className="text-white font-semibold mb-1">{s.label}</div>
-                <div className="text-sm text-gray-500">{s.sub}</div>
+                <div className="text-sm text-gray-400">{s.sub}</div>
               </motion.div>
             ))}
           </div>
 
           <motion.div variants={stagger(0.05)} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}>
             <motion.div variants={fadeUp} className="text-center mb-8">
-              <span className="inline-block text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold">The comparison</span>
+              <span className="inline-block text-xs uppercase tracking-[0.2em] text-gray-400 font-semibold">The comparison</span>
               <h3 className="text-2xl md:text-3xl font-bold mt-2">There is a better way</h3>
             </motion.div>
             <div className="grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
@@ -475,7 +482,7 @@ export default function LandingAnimated({ testimonials }) {
       {/* ══ STATS ═══════════════════════════════════════════════════ */}
       <section className="border-t border-white/[0.07] bg-white/[0.015]">
         <div className="max-w-6xl mx-auto px-4 py-14">
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center text-xs uppercase tracking-[0.2em] text-gray-600 mb-10">
+          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center text-xs uppercase tracking-[0.2em] text-gray-400 mb-10">
             Trusted by audiobook studios and indie narrators worldwide
           </motion.p>
           <motion.div variants={stagger(0.12)} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }} className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -484,7 +491,7 @@ export default function LandingAnimated({ testimonials }) {
                 <div className="text-4xl md:text-5xl font-black bg-gradient-to-br from-blue-300 to-cyan-300 bg-clip-text text-transparent mb-1">
                   <CountUp to={s.value} suffix={s.suffix} prefix={s.prefix || ''} />
                 </div>
-                <div className="text-sm text-gray-500">{s.label}</div>
+                <div className="text-sm text-gray-400">{s.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -579,15 +586,17 @@ export default function LandingAnimated({ testimonials }) {
             </motion.p>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="flex justify-center gap-2 mb-8 flex-wrap">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="flex justify-center gap-2 mb-8 flex-wrap" role="tablist" aria-label="Filter content by user type">
             {PERSONAS.map((p, i) => {
               const c = COLOR_MAP[p.color];
               return (
                 <button key={p.label} onClick={() => setActivePersona(i)}
+                  role="tab"
+                  aria-selected={activePersona === i}
                   className={clsx('flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-200',
                     activePersona === i ? clsx('border-transparent shadow-lg', c.bg, c.text) : 'border-white/10 text-gray-400 hover:border-white/20 hover:text-white bg-white/[0.03]'
                   )}>
-                  <p.icon size={15} />{p.label}
+                  <p.icon size={15} aria-hidden="true" />{p.label}
                 </button>
               );
             })}
@@ -669,7 +678,7 @@ export default function LandingAnimated({ testimonials }) {
                     <card.icon size={18} className={c.text} />
                   </div>
                   <div className="text-2xl font-bold text-white mb-1">{card.value}</div>
-                  <div className="text-xs text-gray-500">{card.label}</div>
+                  <div className="text-xs text-gray-400">{card.label}</div>
                 </motion.div>
               );
             })}
@@ -722,7 +731,7 @@ export default function LandingAnimated({ testimonials }) {
                   <item.icon size={18} className="text-green-400" />
                 </div>
                 <h4 className="font-semibold text-white text-sm mb-1.5">{item.title}</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">{item.body}</p>
+                <p className="text-xs text-gray-400 leading-relaxed">{item.body}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -738,7 +747,7 @@ export default function LandingAnimated({ testimonials }) {
               Loved by narrators and producers
             </motion.h2>
             <motion.div variants={fadeUp} className="flex items-center justify-center gap-2 text-sm text-gray-400">
-              <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <Star key={i} size={14} className="text-yellow-400" fill="currentColor" strokeWidth={0} />)}</div>
+              <div className="flex gap-0.5" aria-hidden="true">{[...Array(5)].map((_, i) => <Star key={i} size={14} className="text-yellow-400" fill="currentColor" strokeWidth={0} />)}</div>
               <span>4.9 / 5 average · 240+ reviews</span>
             </motion.div>
           </motion.div>
@@ -775,11 +784,11 @@ export default function LandingAnimated({ testimonials }) {
                   </div>
                 )}
                 <h3 className="text-xl font-bold text-white mb-0.5">{plan.name}</h3>
-                <p className="text-sm text-gray-500 mb-5">{plan.blurb}</p>
+                <p className="text-sm text-gray-400 mb-5">{plan.blurb}</p>
                 <div className="mb-5 pb-5 border-b border-white/10">
                   {plan.priceLabel
                     ? <span className="text-4xl font-black text-white">{plan.priceLabel}</span>
-                    : <><span className="text-4xl font-black text-white">${plan.price}</span><span className="text-gray-500 text-sm"> / mo</span></>
+                    : <><span className="text-4xl font-black text-white">${plan.price}</span><span className="text-gray-400 text-sm"> / mo</span></>
                   }
                 </div>
                 <ul className="space-y-2.5 flex-1 mb-6">
@@ -847,7 +856,7 @@ export default function LandingAnimated({ testimonials }) {
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </div>
-            <p className="text-xs text-gray-600 mt-5">No credit card · Cancel anytime · Audio never stored</p>
+            <p className="text-xs text-gray-400 mt-5">No credit card · Cancel anytime · Audio never stored</p>
           </div>
         </motion.div>
       </section>

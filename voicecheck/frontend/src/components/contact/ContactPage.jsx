@@ -85,10 +85,11 @@ export const ContactPage = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-1.5">
                     Full Name
                   </label>
                   <input
+                    id="contact-name"
                     type="text"
                     name="name"
                     value={form.name}
@@ -96,13 +97,15 @@ export const ContactPage = () => {
                     placeholder="Jane Smith"
                     className={inputClass}
                     required
+                    autoComplete="name"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 mb-1.5">
                     Email Address
                   </label>
                   <input
+                    id="contact-email"
                     type="email"
                     name="email"
                     value={form.email}
@@ -110,15 +113,17 @@ export const ContactPage = () => {
                     placeholder="jane@studio.com"
                     className={inputClass}
                     required
+                    autoComplete="email"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label htmlFor="contact-subject" className="block text-sm font-medium text-gray-700 mb-1.5">
                   Subject
                 </label>
                 <select
+                  id="contact-subject"
                   name="subject"
                   value={form.subject}
                   onChange={handleChange}
@@ -134,10 +139,11 @@ export const ContactPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-1.5">
                   Message
                 </label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   value={form.message}
                   onChange={handleChange}
