@@ -42,6 +42,15 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    // Axios timeout — give a human-friendly message instead of "timeout of 300000ms exceeded"
+    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+      const err = new Error(
+        'Request timed out. The server may still be waking up — please try again in a moment.'
+      );
+      err.statusCode = 408;
+      throw err;
+    }
+
     const detail = error.response?.data?.detail;
 
     // detail can be a string or a dict (e.g. 402 quota errors return an object)

@@ -11,10 +11,10 @@ import { useTranscription } from '../../hooks/useTranscription';
 import { useComparison } from '../../hooks/useComparison';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import { useDevMode } from '../../hooks/useDevMode';
-import { Mic2, Loader2, Upload, Mic, Zap } from 'lucide-react';
+import { Mic2, Loader2, Upload, Mic, Zap, ServerCrash } from 'lucide-react';
 import clsx from 'clsx';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
-import { getApi } from '../../services/api';
+import { getApi, checkHealth } from '../../services/api';
 import { Navbar } from '../ui/Navbar';
 import { SEO } from '../seo/SEO';
 
@@ -34,6 +34,15 @@ export const AppWorkflow = () => {
   const player = useAudioPlayer();
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  // Pre-warm the backend (free Render has ~50s cold start).
+  // serverWarming stays true until health responds, triggering a notice in the UI.
+  const [serverWarming, setServerWarming] = useState(true);
+  useEffect(() => {
+    checkHealth()
+      .then(() => setServerWarming(false))
+      .catch(() => setServerWarming(false));
+  }, []);
 
   // Fetch usage so we can show a "X min used / Y min cap" counter
   const [usageInfo, setUsageInfo] = useState(null);
@@ -173,6 +182,14 @@ export const AppWorkflow = () => {
                     Record Voice
                   </button>
                 </div>
+                {/* Cold-start warning — shown while health ping is in-flight and no file yet */}
+                {serverWarming && !upload.fileMeta && (
+                  <div className="mb-3 flex items-center gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                    <Loader2 size={12} className="animate-spin shrink-0 text-amber-500" />
+                    Server is waking up — first request may take ~60s on free hosting
+                  </div>
+                )}
+
                 {inputMode === 'upload' ? (
                   <AudioUploader
                     onFileSelect={handleFileSelect}
