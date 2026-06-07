@@ -5,8 +5,8 @@ import { UserButton, SignedIn, SignedOut } from '@clerk/clerk-react';
 import clsx from 'clsx';
 import { useDevMode } from '../../hooks/useDevMode';
 
-const LOGO_URL =
-  'https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png';
+const LOGO_URL = '/logo.webp';
+const LOGO_URL_FALLBACK = '/logo.png';
 
 const STEPS = ['upload', 'transcribe', 'results'];
 
@@ -113,7 +113,19 @@ export function Navbar({ variant, step, onReset, usageInfo, me, stats, billing }
       <div className={clsx(maxW, 'mx-auto px-4 py-4 flex items-center justify-between')}>
 
         <Link to={logoTo} className="flex items-center gap-2">
-          <img src={LOGO_URL} alt="Soundproof" className="h-9 rounded-lg w-auto" />
+          <picture>
+            <source srcSet={LOGO_URL} type="image/webp" />
+            <img
+              src={LOGO_URL_FALLBACK}
+              alt="Soundproof"
+              className="h-9 rounded-lg w-auto"
+              width="319"
+              height="74"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
         </Link>
 
         {variant === 'landing' && (

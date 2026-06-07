@@ -105,8 +105,10 @@ export default function App() {
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
     </Suspense>
-    {/* Chatbot widget — rendered on all pages */}
-    <ChatbotWidget />
+    {/* Chatbot widget — own Suspense boundary so it never blocks route rendering */}
+    <Suspense fallback={null}>
+      <ChatbotWidget />
+    </Suspense>
     </ErrorBoundary>
   );
 }

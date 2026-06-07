@@ -35,20 +35,8 @@
     <meta name="twitter:description" content="Spell-check, but for audio. Find every dropped word, substitution, and error in your voiceover recording — with exact timestamps." />
     <meta name="twitter:image" content="https://soundproof-voice-check.vercel.app/og-image.png" />
 
-    <!-- Performance: preconnect to external origins -->
-    <link rel="preconnect" href="https://images.unsplash.com" />
-
-    <!--
-      Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID.
-      This script is async and won't block page load.
-      Leave it here even while AD_NETWORK='none' in adConfig.js — it's harmless
-      and will be ready the moment you flip the switch.
-    -->
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-      crossorigin="anonymous"
-    ></script>
+    <!-- Preconnect: logo CDN (above-fold) -->
+    <link rel="preconnect" href="https://okxviupvfymeqaoikhrc.supabase.co" crossorigin />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -59,5 +47,23 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <!-- AdSense: deferred after page is interactive so it never blocks FCP/LCP.
+         Replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID. -->
+    <script>
+      (function () {
+        function loadAdSense() {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX';
+          s.crossOrigin = 'anonymous';
+          document.head.appendChild(s);
+        }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadAdSense, { timeout: 5000 });
+        } else {
+          window.addEventListener('load', function () { setTimeout(loadAdSense, 3000); });
+        }
+      })();
+    </script>
   </body>
 </html>

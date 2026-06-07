@@ -48,7 +48,7 @@ export const SharedResultPage = () => {
       <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="Soundproof" className="h-8 w-auto" />
+            <img src="/logo.webp" alt="Soundproof" className="h-8 w-auto" />
           </Link>
           <Link to="/sign-up" className="text-sm px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 font-semibold transition-colors">
             Try it free →

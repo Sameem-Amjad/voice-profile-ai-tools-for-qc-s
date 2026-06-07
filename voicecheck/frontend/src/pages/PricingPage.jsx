@@ -96,7 +96,7 @@ export const PricingPage = () => {
       <header className="sticky top-0 z-30 backdrop-blur-md bg-slate-950/70 border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="Soundproof" className="h-8 w-auto" />
+            <img src="/logo.webp" alt="Soundproof" className="h-8 w-auto" />
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>

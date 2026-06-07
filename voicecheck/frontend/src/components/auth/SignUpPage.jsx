@@ -31,7 +31,7 @@ export const SignUpPage = () => (
     <header className="border-b border-white/10">
       <div className="max-w-6xl mx-auto px-4 py-4">
         <Link to="/" className="inline-flex items-center gap-2">
-          <img src="https://okxviupvfymeqaoikhrc.supabase.co/storage/v1/object/public/soundproof/logo/logo.png" alt="SoundProof logo" className="h-8 w-8 rounded-full" />
+          <img src="/logo.webp" alt="SoundProof logo" className="h-8 w-8 rounded-full" />
         </Link>
       </div>
     </header>
