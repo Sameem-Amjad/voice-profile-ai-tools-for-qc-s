@@ -13,6 +13,7 @@ from api.routes import history, stats, contact, feedback, chatbot, admin as admi
 from api.routes import share as share_routes
 from api.routes import badge as badge_routes
 from services.job_service import job_service
+from services.background_jobs import start_background_jobs
 from db.init import init_db
 from core.limiter import limiter
 
@@ -57,22 +58,17 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.warning("whisper_prewarm_failed", error=str(e))
 
-    # Start background cleanup task
-    async def cleanup_task():
-        while True:
-            await asyncio.sleep(300)  # Every 5 minutes
-            cleaned = await job_service.cleanup_expired()
-            if cleaned > 0:
-                logger.info("jobs_cleaned", count=cleaned)
-
-    cleanup_task_handle = asyncio.create_task(cleanup_task())
+    # Start all background jobs (cleanup, quota warnings, S3 orphan GC)
+    bg_tasks = start_background_jobs()
 
     logger.info("app_ready", host=settings.HOST, port=settings.PORT)
 
     yield  # App is running
 
-    # Shutdown
-    cleanup_task_handle.cancel()
+    # Shutdown — cancel all background tasks cleanly
+    for task in bg_tasks:
+        task.cancel()
+    await asyncio.gather(*bg_tasks, return_exceptions=True)
     logger.info("app_shutdown")
 
 

@@ -34,11 +34,19 @@ class Settings(BaseSettings):
                 pass
         return [o.strip() for o in s.split(",") if o.strip()]
 
-    # Storage - local disk for MVP, swap to S3 later
+    # Storage — "local" for dev, "s3" for production
     STORAGE_BACKEND: Literal["local", "s3"] = "local"
     UPLOAD_DIR: Path = Path("./uploads")
-    MAX_FILE_SIZE_MB: int = 95  # Render's proxy hard-caps requests at 100MB
+    MAX_FILE_SIZE_MB: int = 500          # S3 handles large files; keep a sane server-side cap
     ALLOWED_AUDIO_EXTENSIONS: set[str] = {".mp3", ".wav", ".m4a", ".ogg", ".flac", ".webm"}
+
+    # ── AWS / S3 ──────────────────────────────────────────────────────────────
+    AWS_REGION: str = "us-east-1"
+    AWS_ACCESS_KEY_ID: str = ""
+    AWS_SECRET_ACCESS_KEY: str = ""
+    S3_BUCKET: str = ""                  # e.g. voicecheck-uploads
+    S3_PRESIGN_EXPIRY: int = 3600        # seconds the presigned PUT URL stays valid
+    S3_OBJECT_TTL_HOURS: int = 24        # background job deletes objects older than this
 
     # Transcription backend selection
     # Per brief: users must never see/provide an API key — server-side OpenAI

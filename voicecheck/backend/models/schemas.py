@@ -95,6 +95,24 @@ class UploadResponse(BaseModel):
     duration_seconds: Optional[float] = None
     message: str = "File uploaded successfully"
 
+
+# ── S3 presigned upload flow ─────────────────────────────────────────────────
+
+class PresignRequest(BaseModel):
+    filename: str                        # original filename, used to derive content-type
+    file_size_bytes: int = Field(..., gt=0)
+
+class PresignResponse(BaseModel):
+    job_id: str
+    upload_url: str                      # PUT this URL with the raw file bytes
+    s3_key: str
+    content_type: str
+    expires_in: int                      # seconds until URL expires
+
+class ConfirmUploadRequest(BaseModel):
+    job_id: str
+    s3_key: str
+
 class TranscribeRequest(BaseModel):
     job_id: str
 

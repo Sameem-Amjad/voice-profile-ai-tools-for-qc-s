@@ -83,11 +83,16 @@ class JobService:
             raise ValueError(f"Job not found: {job_id}")
         return job
 
+    async def get_expired_job_ids(self) -> list[str]:
+        """Return IDs of all expired jobs without removing them yet."""
+        async with self._lock:
+            return [
+                job_id for job_id, job in self._jobs.items()
+                if job.is_expired()
+            ]
+
     async def cleanup_expired(self):
-        """
-        Remove expired jobs from memory.
-        Call this periodically (e.g., every 5 minutes).
-        """
+        """Remove expired jobs from memory. Returns count removed."""
         async with self._lock:
             expired = [
                 job_id for job_id, job in self._jobs.items()
