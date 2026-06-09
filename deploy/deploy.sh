@@ -22,10 +22,9 @@ fi
 echo "==> Building Docker image"
 docker build \
   --file voicecheck/backend/Dockerfile \
-  --context voicecheck/backend \
   --tag "${IMAGE_NAME}:latest" \
   --tag "${IMAGE_NAME}:$(git rev-parse --short HEAD 2>/dev/null || echo 'local')" \
-  .
+  voicecheck/backend
 
 echo "==> Stopping old container (if running)"
 docker compose -f "$COMPOSE_FILE" down --timeout 30 || true
