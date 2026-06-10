@@ -16,6 +16,7 @@ const PLANS = [
       'Files up to 5 minutes',
       'Word-level error detection',
       'Click-to-seek audio review',
+      'CSV export',
     ],
     cta: 'Start free',
     ctaAction: 'signup',
@@ -24,7 +25,7 @@ const PLANS = [
   },
   {
     name: 'Starter',
-    price: 29,
+    price: 19.99,
     blurb: 'For solo voiceover artists',
     badge: null,
     features: [
@@ -32,8 +33,10 @@ const PLANS = [
       'Files up to 10 minutes',
       'Unlimited analyses',
       'Full analysis history',
-      'Word-level error detection',
-      'Click-to-seek audio review',
+      'Pickup list export',
+      'Long pause detection',
+      'Scan occurrences',
+      'CSV export',
       'Email support',
     ],
     cta: 'Start free trial',
@@ -43,7 +46,7 @@ const PLANS = [
   },
   {
     name: 'Pro',
-    price: 49,
+    price: 29.99,
     blurb: 'For working studios',
     badge: 'Most popular',
     features: [
@@ -51,8 +54,8 @@ const PLANS = [
       'Files up to 15 minutes',
       'Everything in Starter',
       'Multiple takes comparison',
-      'PDF / CSV export',
-      'Priority transcription queue',
+      'PDF & CSV export',
+      'Priority email support',
     ],
     cta: 'Start free trial',
     ctaAction: 'signup',
@@ -61,15 +64,14 @@ const PLANS = [
   },
   {
     name: 'Team',
-    price: 99,
+    price: 79.99,
     blurb: 'For agencies & e-learning studios',
     badge: null,
     features: [
       '40 hours / month',
       'Everything in Pro',
-      'Up to 5 team seats',
-      'Shared analysis history',
-      'Priority support',
+      'Priority support & onboarding',
+      'Custom invoicing available',
     ],
     cta: 'Contact us',
     ctaAction: 'contact',
@@ -91,7 +93,7 @@ export const PricingPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-white">
       <SEO
         title="Pricing"
-        description="Start free with 3 analyses per month. Upgrade to Starter ($29), Pro ($49), or Team ($99) for more hours, longer files, exports, and priority support. No credit card required."
+        description="Start free with 3 analyses per month. Upgrade to Starter ($19.99), Pro ($29.99), or Team ($79.99) for more hours, longer files, exports, and priority support. No credit card required."
         canonical="/pricing"
       />
       {/* Header */}

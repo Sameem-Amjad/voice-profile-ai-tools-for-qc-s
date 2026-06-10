@@ -51,6 +51,7 @@ export const WordToken = ({
   confidence,
   similarityScore,
   isActive,          // Currently playing in audio
+  isScanned,         // Highlighted by scan occurrences search
   onClick,           // Called when word is clicked (seek)
   resolved = false,  // User has marked this error as fixed
   onToggleResolve,   // Called when resolve button is clicked
@@ -87,6 +88,7 @@ export const WordToken = ({
         config.border,
         isClickable && 'cursor-pointer',
         isActive && 'ring-2 ring-blue-500 ring-offset-1 scale-110',
+        isScanned && !isActive && 'ring-2 ring-yellow-400 ring-offset-1 scale-105',
         status === 'missing' && 'opacity-60 border-dashed',
         resolved && 'opacity-50 line-through',
       )}

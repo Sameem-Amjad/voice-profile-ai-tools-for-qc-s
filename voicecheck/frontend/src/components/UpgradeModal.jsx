@@ -29,7 +29,7 @@ export const UpgradeModal = ({ onClose }) => (
       <div className="grid grid-cols-2 gap-3 text-left text-sm">
         <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
           <p className="font-bold text-gray-900 text-base">Starter</p>
-          <p className="text-blue-600 font-bold text-lg">$29<span className="text-gray-400 text-xs font-normal">/mo</span></p>
+          <p className="text-blue-600 font-bold text-lg">$19.99<span className="text-gray-400 text-xs font-normal">/mo</span></p>
           <ul className="mt-2 space-y-1 text-gray-600 text-xs">
             <li>✓ 3 hours / month</li>
             <li>✓ Files up to 10 min</li>
@@ -38,7 +38,7 @@ export const UpgradeModal = ({ onClose }) => (
         </div>
         <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
           <p className="font-bold text-gray-900 text-base">Pro</p>
-          <p className="text-blue-600 font-bold text-lg">$49<span className="text-gray-400 text-xs font-normal">/mo</span></p>
+          <p className="text-blue-600 font-bold text-lg">$29.99<span className="text-gray-400 text-xs font-normal">/mo</span></p>
           <ul className="mt-2 space-y-1 text-gray-600 text-xs">
             <li>✓ 10 hours / month</li>
             <li>✓ Files up to 15 min</li>

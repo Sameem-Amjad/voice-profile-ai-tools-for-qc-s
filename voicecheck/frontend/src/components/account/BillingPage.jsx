@@ -10,9 +10,9 @@ const PLAN_META = {
   free_trial: { label: 'Free Trial',  price: null },
   trial:      { label: 'Free Trial',  price: null },
   free:       { label: 'Free',        price: null },
-  starter:    { label: 'Starter',     price: '$29/mo' },
-  pro:        { label: 'Pro',         price: '$49/mo' },
-  team:       { label: 'Team',        price: '$99/mo' },
+  starter:    { label: 'Starter',     price: '$19.99/mo' },
+  pro:        { label: 'Pro',         price: '$29.99/mo' },
+  team:       { label: 'Team',        price: '$79.99/mo' },
   cancelled:  { label: 'Cancelled',   price: null },
 };
 
@@ -351,7 +351,7 @@ export const BillingPage = () => {
                       className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 disabled:opacity-60 font-semibold text-white transition-colors"
                     >
                       {actioning === 'starter' ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} />}
-                      Request Starter — $29/mo
+                      Request Starter — $19.99/mo
                     </button>
                     <button
                       onClick={() => requestUpgrade('pro')}
@@ -359,7 +359,7 @@ export const BillingPage = () => {
                       className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 font-semibold text-white transition-colors shadow-lg shadow-blue-500/20"
                     >
                       {actioning === 'pro' ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} />}
-                      Request Pro — $49/mo
+                      Request Pro — $29.99/mo
                     </button>
                   </div>
                 </>

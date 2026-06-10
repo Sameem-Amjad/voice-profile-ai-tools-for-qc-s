@@ -103,9 +103,9 @@ const SECURITY_ITEMS = [
 
 const PRICING = [
   { name: 'Free',    price: null, priceLabel: 'Free', blurb: 'Try it out — no card needed', cta: 'Start free',       highlighted: false, features: ['3 analyses / month', 'Files up to 5 minutes', 'Word-level error detection', 'Click-to-seek playback'] },
-  { name: 'Starter', price: 29,  priceLabel: null,    blurb: 'For solo voiceover artists',  cta: 'Start free trial', highlighted: false, features: ['3 hours / month', 'Files up to 10 minutes', 'Unlimited analyses', 'Full analysis history', 'Email support'] },
-  { name: 'Pro',     price: 49,  priceLabel: null,    blurb: 'For working studios',          cta: 'Start free trial', highlighted: true,  badge: 'Most popular', features: ['10 hours / month', 'Files up to 15 minutes', 'Everything in Starter', 'Multiple-takes comparison', 'PDF / CSV export', 'Priority queue'] },
-  { name: 'Team',    price: 99,  priceLabel: null,    blurb: 'For agencies & e-learning',   cta: 'Contact us',       highlighted: false, features: ['40 hours / month', 'Everything in Pro', 'Up to 5 seats', 'Shared history', 'Dedicated support'] },
+  { name: 'Starter', price: 19.99, priceLabel: null, blurb: 'For solo voiceover artists',  cta: 'Start free trial', highlighted: false, features: ['3 hours / month', 'Files up to 10 minutes', 'Unlimited analyses', 'Full analysis history', 'Email support'] },
+  { name: 'Pro',     price: 29.99, priceLabel: null, blurb: 'For working studios',          cta: 'Start free trial', highlighted: true,  badge: 'Most popular', features: ['10 hours / month', 'Files up to 15 minutes', 'Everything in Starter', 'Multiple-takes comparison', 'PDF / CSV export', 'Priority queue'] },
+  { name: 'Team',    price: 79.99, priceLabel: null, blurb: 'For agencies & e-learning',   cta: 'Contact us',       highlighted: false, features: ['40 hours / month', 'Everything in Pro', 'Up to 5 seats', 'Shared history', 'Dedicated support'] },
 ];
 
 const FAQ = [

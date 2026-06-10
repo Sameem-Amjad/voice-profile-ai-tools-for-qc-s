@@ -3,9 +3,10 @@ import { WordToken } from './WordToken';
 import { StatsPanel } from './StatsPanel';
 import { ProgressRing } from './ProgressRing';
 import { Celebration } from './Celebration';
+import { PickupList } from './PickupList';
 import { AudioPlayer } from '../player/AudioPlayer';
 import { useResolution, isError } from '../../hooks/useResolution';
-import { CheckCheck, Share2, Download } from 'lucide-react';
+import { CheckCheck, Share2, Download, Search, X, ClipboardList, ChevronDown, ChevronUp } from 'lucide-react';
 import clsx from 'clsx';
 
 const FILTERS = [
@@ -27,9 +28,12 @@ export const ResultsView = ({
   onTogglePlay,
   onSeekTo,
   analysisId,
+  script,
 }) => {
   const [filter, setFilter] = useState('unresolved');
   const [celebrationDismissed, setCelebrationDismissed] = useState(false);
+  const [scanQuery, setScanQuery] = useState('');
+  const [showPickupList, setShowPickupList] = useState(false);
 
   const { aligned_words, stats } = result;
 
@@ -86,15 +90,37 @@ export const ResultsView = ({
     [aligned_words]
   );
 
+  // When scan is active, override filter to show all words
+  const effectiveFilter = scanQuery.trim() ? 'all' : filter;
+
   const filteredWords = useMemo(() => {
-    if (filter === 'all') return indexedWords;
-    if (filter === 'unresolved') {
+    if (effectiveFilter === 'all') return indexedWords;
+    if (effectiveFilter === 'unresolved') {
       return indexedWords.filter(
         (w) => isError(w) && !resolution.isResolved(w.originalIndex)
       );
     }
-    return indexedWords.filter((w) => w.status === filter);
-  }, [indexedWords, filter, resolution]);
+    return indexedWords.filter((w) => w.status === effectiveFilter);
+  }, [indexedWords, effectiveFilter, resolution]);
+
+  const scanMatchCount = useMemo(() => {
+    if (!scanQuery.trim()) return 0;
+    const q = scanQuery.toLowerCase();
+    return aligned_words.filter(
+      (w) =>
+        (w.word || '').toLowerCase().includes(q) ||
+        (w.expected || '').toLowerCase().includes(q)
+    ).length;
+  }, [scanQuery, aligned_words]);
+
+  const isScanMatch = (w) => {
+    if (!scanQuery.trim()) return false;
+    const q = scanQuery.toLowerCase();
+    return (
+      (w.word || '').toLowerCase().includes(q) ||
+      (w.expected || '').toLowerCase().includes(q)
+    );
+  };
 
   const showCelebration =
     !celebrationDismissed &&
@@ -177,14 +203,44 @@ export const ResultsView = ({
             </div>
           </div>
 
+          {/* Scan occurrences search */}
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1 max-w-xs">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <input
+                type="text"
+                value={scanQuery}
+                onChange={(e) => setScanQuery(e.target.value)}
+                placeholder="Scan occurrences…"
+                className="w-full pl-8 pr-8 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
+              />
+              {scanQuery && (
+                <button
+                  onClick={() => setScanQuery('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+            {scanQuery.trim() && (
+              <span className="text-xs font-medium text-yellow-700 bg-yellow-100 border border-yellow-300 px-2 py-1 rounded-lg whitespace-nowrap">
+                {scanMatchCount} found
+              </span>
+            )}
+          </div>
+
           <div className="flex flex-wrap gap-2">
             {FILTERS.map((f) => (
               <button
                 key={f.id}
-                onClick={() => setFilter(f.id)}
+                onClick={() => { setFilter(f.id); setScanQuery(''); }}
+                disabled={!!scanQuery.trim()}
                 className={clsx(
                   'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border',
-                  filter === f.id
+                  scanQuery.trim()
+                    ? 'opacity-40 cursor-not-allowed bg-white text-gray-400 border-gray-200'
+                    : filter === f.id
                     ? 'bg-blue-600 text-white border-blue-600'
                     : 'bg-white text-gray-600 border-gray-300 hover:border-blue-400'
                 )}
@@ -207,6 +263,7 @@ export const ResultsView = ({
                   key={word.originalIndex}
                   {...word}
                   isActive={activeWordIndex === word.originalIndex}
+                  isScanned={isScanMatch(word)}
                   onClick={word.start != null ? onSeekTo : null}
                   resolved={resolution.isResolved(word.originalIndex)}
                   onToggleResolve={
@@ -225,8 +282,37 @@ export const ResultsView = ({
         </div>
 
         <div>
-          <StatsPanel stats={stats} duration={result.audio_duration} />
+          <StatsPanel
+            stats={stats}
+            duration={result.audio_duration}
+            aligned_words={aligned_words}
+          />
         </div>
+      </div>
+
+      {/* Pickup List section */}
+      <div className="border border-gray-200 rounded-xl overflow-hidden">
+        <button
+          onClick={() => setShowPickupList((v) => !v)}
+          className="w-full flex items-center justify-between px-5 py-3.5 bg-gray-50 hover:bg-gray-100 transition-colors text-sm font-semibold text-gray-800"
+        >
+          <span className="flex items-center gap-2">
+            <ClipboardList size={15} className="text-red-500" />
+            Pickup List
+            <span className="text-xs font-normal text-gray-500">— lines that need re-recording</span>
+          </span>
+          {showPickupList ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </button>
+
+        {showPickupList && (
+          <div className="p-5 bg-white">
+            <PickupList
+              script={script}
+              aligned_words={aligned_words}
+              onSeekTo={onSeekTo}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

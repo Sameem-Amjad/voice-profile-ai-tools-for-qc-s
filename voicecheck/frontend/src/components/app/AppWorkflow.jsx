@@ -319,6 +319,7 @@ export const AppWorkflow = () => {
                 onTogglePlay={player.togglePlay}
                 onSeekTo={player.seekTo}
                 analysisId={comparison.analysisId}
+                script={script}
               />
             </div>
           </div>

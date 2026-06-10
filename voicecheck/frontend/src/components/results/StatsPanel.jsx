@@ -1,6 +1,15 @@
-import React from 'react';
-import { CheckCircle2, XCircle, AlertCircle, Plus, Activity } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { CheckCircle2, XCircle, AlertCircle, Plus, Activity, Timer } from 'lucide-react';
 import clsx from 'clsx';
+
+const PAUSE_THRESHOLD_SECONDS = 2.0;
+
+function formatTime(s) {
+  if (s == null) return '--:--';
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2, '0')}`;
+}
 
 const StatCard = ({ icon: Icon, label, value, color, subtitle }) => (
   <div className={clsx('rounded-xl p-4 border', color.bg, color.border)}>
@@ -13,7 +22,29 @@ const StatCard = ({ icon: Icon, label, value, color, subtitle }) => (
   </div>
 );
 
-export const StatsPanel = ({ stats, duration }) => {
+export const StatsPanel = ({ stats, duration, aligned_words }) => {
+  const longPauses = useMemo(() => {
+    if (!aligned_words?.length) return [];
+    const pauses = [];
+    for (let i = 0; i < aligned_words.length - 1; i++) {
+      const cur = aligned_words[i];
+      const nxt = aligned_words[i + 1];
+      if (cur.end != null && nxt.start != null) {
+        const gap = nxt.start - cur.end;
+        if (gap >= PAUSE_THRESHOLD_SECONDS) {
+          pauses.push({
+            start: cur.end,
+            end: nxt.start,
+            duration: gap,
+            afterWord: cur.word,
+            beforeWord: nxt.word || nxt.expected || '',
+          });
+        }
+      }
+    }
+    return pauses;
+  }, [aligned_words]);
+
   const {
     accuracy_percentage,
     correct_words,
@@ -97,6 +128,38 @@ export const StatsPanel = ({ stats, duration }) => {
       {extra_words > 0 && (
         <div className="rounded-lg bg-orange-50 border border-orange-200 px-4 py-2 text-sm text-orange-700">
           <span className="font-medium">{extra_words}</span> extra words spoken (not in script)
+        </div>
+      )}
+
+      {/* Long pause detection */}
+      {longPauses.length > 0 && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 space-y-2">
+          <div className="flex items-center gap-2">
+            <Timer size={15} className="text-amber-500 shrink-0" />
+            <span className="text-xs font-semibold text-amber-800">
+              {longPauses.length} long pause{longPauses.length !== 1 ? 's' : ''} detected
+            </span>
+          </div>
+          <ul className="space-y-1">
+            {longPauses.map((p, i) => (
+              <li key={i} className="text-xs text-amber-700 flex justify-between gap-2">
+                <span className="truncate">
+                  …{p.afterWord} <span className="opacity-50">|</span> {p.beforeWord}…
+                </span>
+                <span className="shrink-0 font-mono tabular-nums">
+                  {formatTime(p.start)} · {p.duration.toFixed(1)}s
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[10px] text-amber-500">Pauses ≥ {PAUSE_THRESHOLD_SECONDS}s flagged</p>
+        </div>
+      )}
+
+      {longPauses.length === 0 && aligned_words?.length > 0 && (
+        <div className="rounded-lg bg-green-50 border border-green-200 px-3 py-2 flex items-center gap-2 text-xs text-green-700">
+          <Timer size={13} />
+          No long pauses detected
         </div>
       )}
 
