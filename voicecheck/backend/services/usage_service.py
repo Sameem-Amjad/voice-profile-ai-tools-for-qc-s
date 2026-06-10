@@ -3,10 +3,10 @@ Per-user usage tracking and quota enforcement.
 
 Plan caps:
   free_trial  – 3 analyses per month (analysis-count based, not minutes)
-                Files capped at 30 min each to protect API costs.
-  starter     – 300 min per calendar month
-  pro         – 1500 min per calendar month
-  team        – 3000 min per calendar month
+                Files capped at 5 min each to protect API costs.
+  starter     – 180 min per calendar month, files up to 10 min each
+  pro         – 600 min per calendar month, files up to 15 min each
+  team        – 2400 min per calendar month
   cancelled   – no usage allowed
 """
 
@@ -26,13 +26,13 @@ logger = get_logger(__name__)
 
 FREE_TRIAL_ANALYSES_PER_MONTH = 3
 FREE_TRIAL_MAX_TRANSCRIPTIONS = 3         # max transcriptions per month for free users
-FREE_TRIAL_MAX_FILE_MINUTES = 10          # max per-file duration for free users (10 min)
+FREE_TRIAL_MAX_FILE_MINUTES = 5           # max per-file duration for free users (5 min)
 
 PLAN_LIMITS: dict[str, dict] = {
     "free_trial": {"limit_analyses": FREE_TRIAL_ANALYSES_PER_MONTH, "cycle": "month"},
-    "starter":    {"limit_minutes": 300,  "cycle": "month"},
-    "pro":        {"limit_minutes": 1500, "cycle": "month"},
-    "team":       {"limit_minutes": 3000, "cycle": "month"},
+    "starter":    {"limit_minutes": 180,  "cycle": "month", "max_file_minutes": 10},
+    "pro":        {"limit_minutes": 600,  "cycle": "month", "max_file_minutes": 15},
+    "team":       {"limit_minutes": 2400, "cycle": "month"},
     "cancelled":  {"limit_minutes": 0,    "cycle": "month"},
 }
 
@@ -148,6 +148,20 @@ async def check_quota_or_raise(
         )
 
     cfg = PLAN_LIMITS.get(plan, PLAN_LIMITS["starter"])
+
+    # Per-file duration cap for paid plans
+    max_file = cfg.get("max_file_minutes")
+    if max_file and expected_minutes > max_file:
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "error": "file_too_long",
+                "plan": plan,
+                "max_minutes": max_file,
+                "message": f"Your {plan.capitalize()} plan supports files up to {max_file} minutes. Upgrade to a higher plan for longer files.",
+            },
+        )
+
     cap_minutes = cfg["limit_minutes"]
     used = await monthly_minutes_used(user.id, db)
 

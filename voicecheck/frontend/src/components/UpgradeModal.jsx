@@ -31,8 +31,8 @@ export const UpgradeModal = ({ onClose }) => (
           <p className="font-bold text-gray-900 text-base">Starter</p>
           <p className="text-blue-600 font-bold text-lg">$29<span className="text-gray-400 text-xs font-normal">/mo</span></p>
           <ul className="mt-2 space-y-1 text-gray-600 text-xs">
-            <li>✓ 5 hours / month</li>
-            <li>✓ Full history</li>
+            <li>✓ 3 hours / month</li>
+            <li>✓ Files up to 10 min</li>
             <li>✓ Unlimited analyses</li>
           </ul>
         </div>
@@ -40,8 +40,8 @@ export const UpgradeModal = ({ onClose }) => (
           <p className="font-bold text-gray-900 text-base">Pro</p>
           <p className="text-blue-600 font-bold text-lg">$49<span className="text-gray-400 text-xs font-normal">/mo</span></p>
           <ul className="mt-2 space-y-1 text-gray-600 text-xs">
-            <li>✓ 25 hours / month</li>
-            <li>✓ Multiple takes</li>
+            <li>✓ 10 hours / month</li>
+            <li>✓ Files up to 15 min</li>
             <li>✓ PDF export</li>
           </ul>
         </div>

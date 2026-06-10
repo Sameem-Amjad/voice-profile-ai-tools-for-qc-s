@@ -216,7 +216,7 @@ export const LandingPage = () => {
               <div className="mb-5" style={{ animation: 'fade-in-up 0.65s cubic-bezier(0.22,1,0.36,1) both' }}>
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-medium">
                   <Sparkles size={12} />
-                  AI voiceover QC · Built for audiobook studios
+                  Audio QC tool · Checks recordings, not a writer or AI generator
                 </span>
               </div>
 
@@ -246,7 +246,7 @@ export const LandingPage = () => {
                 className="text-lg md:text-xl text-gray-400 max-w-xl lg:mx-0 mx-auto mb-8 leading-relaxed"
                 style={{ animation: 'fade-in-up 0.65s cubic-bezier(0.22,1,0.36,1) 0.2s both' }}
               >
-                Upload your take and the script. In under 30 seconds, see every dropped word, every substitution, every extra breath — with the exact timestamp. Click an error to jump to that moment.
+                Upload your take and your script. SoundProof checks what you said against what you wrote — it does not generate, edit, or replace anything. See every dropped word and substitution with exact timestamps.
               </p>
 
               {/* CTAs */}

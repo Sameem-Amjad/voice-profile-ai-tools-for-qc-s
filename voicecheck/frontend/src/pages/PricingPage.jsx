@@ -13,7 +13,7 @@ const PLANS = [
     badge: null,
     features: [
       '3 analyses per month',
-      'Files up to 30 minutes',
+      'Files up to 5 minutes',
       'Word-level error detection',
       'Click-to-seek audio review',
     ],
@@ -28,7 +28,8 @@ const PLANS = [
     blurb: 'For solo voiceover artists',
     badge: null,
     features: [
-      '5 hours / month',
+      '3 hours / month',
+      'Files up to 10 minutes',
       'Unlimited analyses',
       'Full analysis history',
       'Word-level error detection',
@@ -46,7 +47,8 @@ const PLANS = [
     blurb: 'For working studios',
     badge: 'Most popular',
     features: [
-      '25 hours / month',
+      '10 hours / month',
+      'Files up to 15 minutes',
       'Everything in Starter',
       'Multiple takes comparison',
       'PDF / CSV export',
@@ -63,7 +65,7 @@ const PLANS = [
     blurb: 'For agencies & e-learning studios',
     badge: null,
     features: [
-      '50 hours / month',
+      '40 hours / month',
       'Everything in Pro',
       'Up to 5 team seats',
       'Shared analysis history',
@@ -89,7 +91,7 @@ export const PricingPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-white">
       <SEO
         title="Pricing"
-        description="Start free with 3 analyses per month. Upgrade to Starter ($29), Pro ($49), or Team ($99) for more hours, exports, and priority support. No credit card required."
+        description="Start free with 3 analyses per month. Upgrade to Starter ($29), Pro ($49), or Team ($99) for more hours, longer files, exports, and priority support. No credit card required."
         canonical="/pricing"
       />
       {/* Header */}
