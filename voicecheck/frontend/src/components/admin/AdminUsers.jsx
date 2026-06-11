@@ -147,8 +147,8 @@ const SendLinkModal = ({ user, onClose }) => {
               onChange={e => setPlan(e.target.value)}
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="starter">Starter — PKR 5,571</option>
-              <option value="pro">Pro — PKR 11,142</option>
+              <option value="starter">Starter — $19.99</option>
+              <option value="pro">Pro — $29.99</option>
             </select>
             <input
               type="url"
