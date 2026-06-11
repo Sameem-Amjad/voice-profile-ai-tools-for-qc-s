@@ -6,7 +6,7 @@ import { Celebration } from './Celebration';
 import { PickupList } from './PickupList';
 import { AudioPlayer } from '../player/AudioPlayer';
 import { useResolution, isError } from '../../hooks/useResolution';
-import { CheckCheck, Share2, Download, Search, X, ClipboardList, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCheck, Share2, Download, Search, X, ClipboardList, ChevronDown, ChevronUp, Music2 } from 'lucide-react';
 import clsx from 'clsx';
 
 const FILTERS = [
@@ -52,6 +52,78 @@ export const ResultsView = ({
     const a = document.createElement('a');
     a.href = url;
     a.download = 'soundproof-analysis.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExportReaper = () => {
+    // Reaper color integers: (1 << 24) | (R << 16) | (G << 8) | B
+    const COLORS = {
+      incorrect: 33506618,  // red
+      missing:   33529610,  // amber
+      extra:     28267230,  // purple
+      close:     17466623,  // blue
+    };
+
+    const fmtTime = (secs) => {
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      const s = (secs % 60).toFixed(3).padStart(6, '0');
+      return `${h}:${String(m).padStart(2, '0')}:${s}`;
+    };
+
+    const markerName = (w) => {
+      const word = (w.word || '').trim();
+      const exp  = (w.expected || '').trim();
+      if (w.status === 'incorrect') return `INCORRECT: said "${word}" / expected "${exp}"`;
+      if (w.status === 'missing')   return `MISSING: "${word}"`;
+      if (w.status === 'extra')     return `EXTRA: "${word}"`;
+      if (w.status === 'close')     return exp ? `CLOSE: "${word}" ~ "${exp}"` : `CLOSE: "${word}"`;
+      return word;
+    };
+
+    const estimateMissingPos = (words, idx) => {
+      let lastEnd = null;
+      for (let i = idx - 1; i >= 0; i--) {
+        if (words[i].end != null) { lastEnd = words[i].end; break; }
+      }
+      let nextStart = null;
+      for (let i = idx + 1; i < words.length; i++) {
+        if (words[i].start != null) { nextStart = words[i].start; break; }
+      }
+      if (lastEnd != null && nextStart != null) return (lastEnd + nextStart) / 2;
+      if (lastEnd != null)  return lastEnd + 0.1;
+      if (nextStart != null) return Math.max(0, nextStart - 0.1);
+      return null;
+    };
+
+    const lines = ['#\tName\tStart\tEnd\tLength\tColor'];
+
+    aligned_words.forEach((w, i) => {
+      if (w.status === 'correct') return;
+
+      const name  = markerName(w);
+      const color = COLORS[w.status] ?? 0;
+
+      if (w.start != null && w.end != null) {
+        const start  = fmtTime(w.start);
+        const end    = fmtTime(w.end);
+        const length = fmtTime(Math.max(0, w.end - w.start));
+        lines.push(`R\t${name}\t${start}\t${end}\t${length}\t${color}`);
+      } else if (w.status === 'missing') {
+        const pos = estimateMissingPos(aligned_words, i);
+        if (pos != null) {
+          const t = fmtTime(pos);
+          lines.push(`M\t${name}\t${t}\t${t}\t0:00:00.000\t${color}`);
+        }
+      }
+    });
+
+    const content = lines.join('\n') + '\n';
+    const url = URL.createObjectURL(new Blob([content], { type: 'text/plain' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'voicecheck-markers.txt';
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -153,6 +225,14 @@ export const ResultsView = ({
         >
           <Download size={14} />
           Export CSV
+        </button>
+        <button
+          onClick={handleExportReaper}
+          title="Export as Reaper marker regions — import via File > Import > Project Markers/Regions"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:border-purple-500 hover:text-purple-700 transition-colors"
+        >
+          <Music2 size={14} />
+          Export Reaper
         </button>
         <button
           onClick={handlePrintPdf}
