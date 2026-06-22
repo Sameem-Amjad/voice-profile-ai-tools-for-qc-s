@@ -273,6 +273,7 @@ export const TermsOfService = () => {
         <div className="max-w-3xl mx-auto px-6 py-6 flex flex-wrap gap-4 text-xs text-gray-600">
           <Link to="/" className="hover:text-white transition-colors">Home</Link>
           <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+          <Link to="/refunds" className="hover:text-white transition-colors">Refund Policy</Link>
           <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
         </div>
       </footer>

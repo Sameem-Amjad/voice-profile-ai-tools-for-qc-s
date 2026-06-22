@@ -336,6 +336,7 @@ export const AppWorkflow = () => {
         <span>SoundProof · Built with faster-whisper + Needleman-Wunsch alignment</span>
         <Link to="/privacy" className="hover:text-gray-400 transition-colors">Privacy</Link>
         <Link to="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
+        <Link to="/refunds" className="hover:text-gray-400 transition-colors">Refunds</Link>
       </footer>
     </div>
   );

@@ -333,6 +333,7 @@ export const LandingPage = () => {
             <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
             <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link to="/terms"   className="hover:text-white transition-colors">Terms</Link>
+            <Link to="/refunds" className="hover:text-white transition-colors">Refunds</Link>
             <FooterAuthLinks />
           </div>
         </div>

@@ -21,6 +21,7 @@ const BlogIndex = lazy(() => import('./components/blog/BlogIndex').then(m => ({ 
 const BlogPost = lazy(() => import('./components/blog/BlogPost').then(m => ({ default: m.BlogPost })));
 const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
 const TermsOfService = lazy(() => import('./components/legal/TermsOfService').then(m => ({ default: m.TermsOfService })));
+const RefundPolicy = lazy(() => import('./components/legal/RefundPolicy').then(m => ({ default: m.RefundPolicy })));
 
 /**
  * Gate: requires the user to be signed in. In dev mode (no Clerk key),
@@ -100,6 +101,7 @@ export default function App() {
       <Route path="/blog/:slug" element={<BlogPost />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsOfService />} />
+      <Route path="/refunds" element={<RefundPolicy />} />
 
       {/* Fallback */}
       <Route path="*" element={<NotFoundPage />} />

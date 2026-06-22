@@ -210,6 +210,7 @@ export const PrivacyPolicy = () => {
         <div className="max-w-3xl mx-auto px-6 py-6 flex flex-wrap gap-4 text-xs text-gray-600">
           <Link to="/" className="hover:text-white transition-colors">Home</Link>
           <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+          <Link to="/refunds" className="hover:text-white transition-colors">Refund Policy</Link>
           <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
         </div>
       </footer>
