@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { SignIn } from '@clerk/clerk-react';
 import { Mic2 } from 'lucide-react';
+import { DemoSignIn } from './DemoSignIn';
 
 const clerkAppearance = {
   variables: {
@@ -38,6 +39,7 @@ export const SignInPage = () => (
     </header>
     <main className="flex-1 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
+        <DemoSignIn />
         <SignIn
           path="/sign-in"
           routing="path"

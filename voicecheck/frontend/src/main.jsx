@@ -8,6 +8,11 @@ import './index.css'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
+// The portfolio demo shares a Clerk development app whose name is still the placeholder.
+const CLERK_LOCALIZATION = import.meta.env.VITE_DEMO_MODE === 'true'
+  ? { signIn: { start: { title: 'Sign in to SoundProof' } } }
+  : undefined;
+
 const DevModeBanner = () => (
   <div
     style={{
@@ -33,7 +38,7 @@ if (PUBLISHABLE_KEY) {
   root.render(
     <React.StrictMode>
       <HelmetProvider>
-        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY} localization={CLERK_LOCALIZATION}>
           <BrowserRouter>
             <App />
           </BrowserRouter>

@@ -12,7 +12,7 @@ export const DemoBadge = () => {
       {open && (
         <div className="mb-2 w-72 rounded-xl border border-white/10 bg-[#0d1829]/95 p-4 text-xs leading-relaxed text-slate-300 shadow-2xl backdrop-blur">
           <p className="mb-1 font-semibold text-white">This is a demo</p>
-          <p>Sample projects are ready in the dashboard. Uploads are limited to 2 minutes and a daily allowance, payments are switched off, and the data resets regularly.</p>
+          <p>Sample projects are ready in the dashboard, and the app has sample recordings to try. Uploads are limited to 2 minutes and a daily allowance, payments are switched off, and the data resets regularly.</p>
         </div>
       )}
       <button

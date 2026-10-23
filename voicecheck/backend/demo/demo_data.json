@@ -1,0 +1,4792 @@
+{
+ "note": "Portfolio demo data, rebuilt on every start when DEMO_MODE=true (services/demo.py). Analyses are real SoundProof results for the sample voiceovers in demo/samples/.",
+ "users": [
+  {
+   "id": "3a9f65ab-8849-4d79-ac0a-d51216c004d5",
+   "clerk_user_id": "user_3L5nDd3A1lTM9OmA2saqCCU1pUR",
+   "email": "demo.admin@demo.soundproof.app",
+   "plan": "pro",
+   "is_admin": true,
+   "shared_login": true,
+   "joined_days_ago": 142,
+   "usage": []
+  },
+  {
+   "id": "bf68bb51-f887-4cae-ac89-bef259428c34",
+   "clerk_user_id": "user_3L5nDgfvj70ydj4QD6gpm2Q0RGi",
+   "email": "olivia.bennett@demo.soundproof.app",
+   "plan": "pro",
+   "shared_login": true,
+   "joined_days_ago": 61,
+   "usage": [
+    {
+     "days_ago": 12,
+     "seconds": 1860
+    },
+    {
+     "days_ago": 19,
+     "seconds": 2410
+    },
+    {
+     "days_ago": 27,
+     "seconds": 1320
+    }
+   ]
+  },
+  {
+   "id": "0188c24a-96d0-4594-a297-4477bb7680a2",
+   "clerk_user_id": "demo_seed_harbourlight_audio",
+   "email": "harbourlight.audio@example.com",
+   "plan": "pro",
+   "joined_days_ago": 118,
+   "usage": [
+    {
+     "days_ago": 3,
+     "seconds": 5400
+    },
+    {
+     "days_ago": 14,
+     "seconds": 3900
+    }
+   ]
+  },
+  {
+   "id": "2e231927-aa23-4f10-a306-1e807ecb0129",
+   "clerk_user_id": "demo_seed_mara_quinn",
+   "email": "mara.quinn@example.com",
+   "plan": "starter",
+   "joined_days_ago": 96,
+   "usage": [
+    {
+     "days_ago": 4,
+     "seconds": 1890
+    },
+    {
+     "days_ago": 15,
+     "seconds": 1200
+    }
+   ]
+  },
+  {
+   "id": "f118e3e8-42b1-4143-ac69-8557a8a507ce",
+   "clerk_user_id": "demo_seed_tobias_reid",
+   "email": "tobias.reid@example.com",
+   "plan": "starter",
+   "joined_days_ago": 88,
+   "usage": [
+    {
+     "days_ago": 5,
+     "seconds": 1980
+    },
+    {
+     "days_ago": 16,
+     "seconds": 1200
+    }
+   ]
+  },
+  {
+   "id": "32a5b2a9-f415-4cff-a17b-12fba1b485ef",
+   "clerk_user_id": "demo_seed_northgate_learning",
+   "email": "northgate.learning@example.com",
+   "plan": "pro",
+   "joined_days_ago": 74,
+   "usage": [
+    {
+     "days_ago": 6,
+     "seconds": 5760
+    },
+    {
+     "days_ago": 17,
+     "seconds": 3900
+    }
+   ]
+  },
+  {
+   "id": "6c9fd66a-cdf7-4b52-afa1-2ece100cc2c5",
+   "clerk_user_id": "demo_seed_aisha_khan",
+   "email": "aisha.khan@example.com",
+   "plan": "free_trial",
+   "joined_days_ago": 41,
+   "usage": [
+    {
+     "days_ago": 40,
+     "seconds": 360
+    }
+   ]
+  },
+  {
+   "id": "e1762d20-30c0-40ef-a1b6-2507c44f270a",
+   "clerk_user_id": "demo_seed_leo_martins",
+   "email": "leo.martins@example.com",
+   "plan": "free_trial",
+   "joined_days_ago": 33,
+   "usage": [
+    {
+     "days_ago": 32,
+     "seconds": 390
+    }
+   ]
+  },
+  {
+   "id": "248452db-5c7c-43b1-aed5-676f1fe38ea7",
+   "clerk_user_id": "demo_seed_blueprint_studios",
+   "email": "blueprint.studios@example.com",
+   "plan": "starter",
+   "joined_days_ago": 29,
+   "usage": [
+    {
+     "days_ago": 9,
+     "seconds": 2340
+    },
+    {
+     "days_ago": 20,
+     "seconds": 1200
+    }
+   ]
+  },
+  {
+   "id": "3029f666-4f61-4e01-ad97-fd02bda9b889",
+   "clerk_user_id": "demo_seed_hana_sato",
+   "email": "hana.sato@example.com",
+   "plan": "cancelled",
+   "joined_days_ago": 57,
+   "usage": [
+    {
+     "days_ago": 47,
+     "seconds": 900
+    }
+   ]
+  },
+  {
+   "id": "5c668ead-8545-4dd4-a50d-f33c50b9f935",
+   "clerk_user_id": "demo_seed_daniel_osei",
+   "email": "daniel.osei@example.com",
+   "plan": "free_trial",
+   "joined_days_ago": 12,
+   "usage": [
+    {
+     "days_ago": 11,
+     "seconds": 480
+    }
+   ]
+  },
+  {
+   "id": "578716ce-d020-464b-a593-f875740f3547",
+   "clerk_user_id": "demo_seed_clara_webb",
+   "email": "clara.webb@example.com",
+   "plan": "starter",
+   "joined_days_ago": 8,
+   "usage": [
+    {
+     "days_ago": 12,
+     "seconds": 2610
+    },
+    {
+     "days_ago": 23,
+     "seconds": 1200
+    }
+   ]
+  },
+  {
+   "id": "b92da875-5471-47b0-a037-f82eb3e8da0f",
+   "clerk_user_id": "demo_seed_ravi_patel",
+   "email": "ravi.patel@example.com",
+   "plan": "free_trial",
+   "joined_days_ago": 5,
+   "usage": [
+    {
+     "days_ago": 4,
+     "seconds": 540
+    }
+   ]
+  },
+  {
+   "id": "016b7af3-59df-4ba4-afd3-555e40ef387f",
+   "clerk_user_id": "demo_seed_sofia_marin",
+   "email": "sofia.marin@example.com",
+   "plan": "free_trial",
+   "joined_days_ago": 2,
+   "usage": [
+    {
+     "days_ago": 1,
+     "seconds": 570
+    }
+   ]
+  }
+ ],
+ "analyses": [
+  {
+   "user_id": "bf68bb51-f887-4cae-ac89-bef259428c34",
+   "job_id": "demo-lighthouse-ch3-take1",
+   "accuracy_percentage": 92.03,
+   "total_words": 138,
+   "correct_words": 127,
+   "script_snippet": "The Lighthouse Keeper, Chapter 3 (take 1): Chapter Three. The storm arrived an hour before midnight, exactly as the old almanac had promised. Margaret climbed the ninety-two steps of the lighthouse wi",
+   "audio_duration": 44.3,
+   "days_ago": 3,
+   "hour": 9,
+   "result": {
+    "job_id": "demo-lighthouse-ch3-take1",
+    "aligned_words": [
+     {
+      "word": "chapter",
+      "status": "correct",
+      "expected": null,
+      "start": 0,
+      "end": 0.6,
+      "confidence": 0.718,
+      "similarity_score": 1
+     },
+     {
+      "word": "three",
+      "status": "correct",
+      "expected": null,
+      "start": 0.6,
+      "end": 0.96,
+      "confidence": 0.5363,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 0.96,
+      "end": 1.84,
+      "confidence": 0.2764,
+      "similarity_score": 1
+     },
+     {
+      "word": "storm",
+      "status": "correct",
+      "expected": null,
+      "start": 1.84,
+      "end": 2.22,
+      "confidence": 0.7065,
+      "similarity_score": 1
+     },
+     {
+      "word": "arrived",
+      "status": "correct",
+      "expected": null,
+      "start": 2.22,
+      "end": 2.66,
+      "confidence": 0.741,
+      "similarity_score": 1
+     },
+     {
+      "word": "an",
+      "status": "correct",
+      "expected": null,
+      "start": 2.66,
+      "end": 2.86,
+      "confidence": 0.9015,
+      "similarity_score": 1
+     },
+     {
+      "word": "hour",
+      "status": "correct",
+      "expected": null,
+      "start": 2.86,
+      "end": 3.1,
+      "confidence": 0.857,
+      "similarity_score": 1
+     },
+     {
+      "word": "before",
+      "status": "correct",
+      "expected": null,
+      "start": 3.1,
+      "end": 3.42,
+      "confidence": 0.7886,
+      "similarity_score": 1
+     },
+     {
+      "word": "midnight",
+      "status": "correct",
+      "expected": null,
+      "start": 3.42,
+      "end": 3.84,
+      "confidence": 0.9193,
+      "similarity_score": 1
+     },
+     {
+      "word": "exactly",
+      "status": "correct",
+      "expected": null,
+      "start": 4.18,
+      "end": 4.56,
+      "confidence": 0.7792,
+      "similarity_score": 1
+     },
+     {
+      "word": "as",
+      "status": "correct",
+      "expected": null,
+      "start": 4.56,
+      "end": 4.82,
+      "confidence": 0.893,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 4.82,
+      "end": 4.96,
+      "confidence": 0.8146,
+      "similarity_score": 1
+     },
+     {
+      "word": "old",
+      "status": "correct",
+      "expected": null,
+      "start": 4.96,
+      "end": 5.22,
+      "confidence": 0.8299,
+      "similarity_score": 1
+     },
+     {
+      "word": "almanac",
+      "status": "correct",
+      "expected": null,
+      "start": 5.22,
+      "end": 5.68,
+      "confidence": 0.8657,
+      "similarity_score": 1
+     },
+     {
+      "word": "had",
+      "status": "correct",
+      "expected": null,
+      "start": 5.68,
+      "end": 5.88,
+      "confidence": 0.8418,
+      "similarity_score": 1
+     },
+     {
+      "word": "promised",
+      "status": "correct",
+      "expected": null,
+      "start": 5.88,
+      "end": 6.26,
+      "confidence": 0.8258,
+      "similarity_score": 1
+     },
+     {
+      "word": "margaret",
+      "status": "correct",
+      "expected": null,
+      "start": 6.98,
+      "end": 7.42,
+      "confidence": 0.7241,
+      "similarity_score": 1
+     },
+     {
+      "word": "climbed",
+      "status": "correct",
+      "expected": null,
+      "start": 7.42,
+      "end": 7.8,
+      "confidence": 0.9375,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 7.8,
+      "end": 7.96,
+      "confidence": 0.8137,
+      "similarity_score": 1
+     },
+     {
+      "word": "ninety",
+      "status": "correct",
+      "expected": null,
+      "start": 7.96,
+      "end": 8.2,
+      "confidence": 0.8213,
+      "similarity_score": 1
+     },
+     {
+      "word": "two",
+      "status": "missing",
+      "expected": "two",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "steps",
+      "status": "correct",
+      "expected": null,
+      "start": 8.2,
+      "end": 8.56,
+      "confidence": 0.6841,
+      "similarity_score": 1
+     },
+     {
+      "word": "of",
+      "status": "correct",
+      "expected": null,
+      "start": 8.56,
+      "end": 8.72,
+      "confidence": 0.897,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 8.72,
+      "end": 8.86,
+      "confidence": 0.8184,
+      "similarity_score": 1
+     },
+     {
+      "word": "lighthouse",
+      "status": "correct",
+      "expected": null,
+      "start": 8.86,
+      "end": 9.18,
+      "confidence": 0.6271,
+      "similarity_score": 1
+     },
+     {
+      "word": "with",
+      "status": "correct",
+      "expected": null,
+      "start": 9.18,
+      "end": 9.5,
+      "confidence": 0.7941,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 9.5,
+      "end": 9.66,
+      "confidence": 0.993,
+      "similarity_score": 1
+     },
+     {
+      "word": "lantern",
+      "status": "correct",
+      "expected": null,
+      "start": 9.66,
+      "end": 9.98,
+      "confidence": 0.8014,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 9.98,
+      "end": 10.2,
+      "confidence": 0.9017,
+      "similarity_score": 1
+     },
+     {
+      "word": "one",
+      "status": "correct",
+      "expected": null,
+      "start": 10.2,
+      "end": 10.42,
+      "confidence": 0.8086,
+      "similarity_score": 1
+     },
+     {
+      "word": "hand",
+      "status": "correct",
+      "expected": null,
+      "start": 10.42,
+      "end": 10.74,
+      "confidence": 0.8149,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 10.74,
+      "end": 11.2,
+      "confidence": 0.792,
+      "similarity_score": 1
+     },
+     {
+      "word": "her",
+      "status": "correct",
+      "expected": null,
+      "start": 11.2,
+      "end": 11.34,
+      "confidence": 0.8896,
+      "similarity_score": 1
+     },
+     {
+      "word": "fathers",
+      "status": "correct",
+      "expected": null,
+      "start": 11.34,
+      "end": 11.82,
+      "confidence": 0.9078,
+      "similarity_score": 1
+     },
+     {
+      "word": "brass",
+      "status": "correct",
+      "expected": null,
+      "start": 11.82,
+      "end": 12.14,
+      "confidence": 0.8288,
+      "similarity_score": 1
+     },
+     {
+      "word": "key",
+      "status": "correct",
+      "expected": null,
+      "start": 12.14,
+      "end": 12.42,
+      "confidence": 0.8139,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 12.42,
+      "end": 12.58,
+      "confidence": 0.9051,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 12.58,
+      "end": 12.72,
+      "confidence": 0.8159,
+      "similarity_score": 1
+     },
+     {
+      "word": "other",
+      "status": "correct",
+      "expected": null,
+      "start": 12.72,
+      "end": 12.94,
+      "confidence": 0.7718,
+      "similarity_score": 1
+     },
+     {
+      "word": "at",
+      "status": "correct",
+      "expected": null,
+      "start": 13.52,
+      "end": 13.76,
+      "confidence": 0.8974,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 13.76,
+      "end": 13.92,
+      "confidence": 0.8066,
+      "similarity_score": 1
+     },
+     {
+      "word": "top",
+      "status": "correct",
+      "expected": null,
+      "start": 13.92,
+      "end": 14.24,
+      "confidence": 0.8178,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 14.24,
+      "end": 14.62,
+      "confidence": 0.4267,
+      "similarity_score": 1
+     },
+     {
+      "word": "great",
+      "status": "correct",
+      "expected": null,
+      "start": 14.62,
+      "end": 14.88,
+      "confidence": 0.775,
+      "similarity_score": 1
+     },
+     {
+      "word": "lens",
+      "status": "correct",
+      "expected": null,
+      "start": 14.88,
+      "end": 15.2,
+      "confidence": 0.8958,
+      "similarity_score": 1
+     },
+     {
+      "word": "was",
+      "status": "correct",
+      "expected": null,
+      "start": 15.2,
+      "end": 15.38,
+      "confidence": 0.8907,
+      "similarity_score": 1
+     },
+     {
+      "word": "already",
+      "status": "correct",
+      "expected": null,
+      "start": 15.38,
+      "end": 15.72,
+      "confidence": 0.8371,
+      "similarity_score": 1
+     },
+     {
+      "word": "turning",
+      "status": "correct",
+      "expected": null,
+      "start": 15.72,
+      "end": 16.12,
+      "confidence": 0.7807,
+      "similarity_score": 1
+     },
+     {
+      "word": "throwing",
+      "status": "correct",
+      "expected": null,
+      "start": 16.7,
+      "end": 16.96,
+      "confidence": 0.7448,
+      "similarity_score": 1
+     },
+     {
+      "word": "its",
+      "status": "correct",
+      "expected": null,
+      "start": 16.96,
+      "end": 17.24,
+      "confidence": 0.805,
+      "similarity_score": 1
+     },
+     {
+      "word": "pale",
+      "status": "correct",
+      "expected": null,
+      "start": 17.24,
+      "end": 17.56,
+      "confidence": 0.7936,
+      "similarity_score": 1
+     },
+     {
+      "word": "white",
+      "status": "extra",
+      "expected": null,
+      "start": 17.56,
+      "end": 17.86,
+      "confidence": 0.8122,
+      "similarity_score": null
+     },
+     {
+      "word": "beam",
+      "status": "correct",
+      "expected": null,
+      "start": 17.86,
+      "end": 18.18,
+      "confidence": 0.9205,
+      "similarity_score": 1
+     },
+     {
+      "word": "across",
+      "status": "correct",
+      "expected": null,
+      "start": 18.18,
+      "end": 18.56,
+      "confidence": 0.6985,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 18.56,
+      "end": 18.8,
+      "confidence": 0.9201,
+      "similarity_score": 1
+     },
+     {
+      "word": "sea",
+      "status": "correct",
+      "expected": null,
+      "start": 18.8,
+      "end": 18.98,
+      "confidence": 0.8379,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 18.98,
+      "end": 19.2,
+      "confidence": 0.8006,
+      "similarity_score": 1
+     },
+     {
+      "word": "color",
+      "status": "correct",
+      "expected": null,
+      "start": 19.2,
+      "end": 19.48,
+      "confidence": 0.5782,
+      "similarity_score": 1
+     },
+     {
+      "word": "of",
+      "status": "correct",
+      "expected": null,
+      "start": 19.48,
+      "end": 19.72,
+      "confidence": 0.8964,
+      "similarity_score": 1
+     },
+     {
+      "word": "slate",
+      "status": "correct",
+      "expected": null,
+      "start": 19.72,
+      "end": 20.04,
+      "confidence": 0.8425,
+      "similarity_score": 1
+     },
+     {
+      "word": "she",
+      "status": "correct",
+      "expected": null,
+      "start": 20.68,
+      "end": 20.96,
+      "confidence": 0.8866,
+      "similarity_score": 1
+     },
+     {
+      "word": "checked",
+      "status": "correct",
+      "expected": null,
+      "start": 20.96,
+      "end": 21.28,
+      "confidence": 0.7286,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 21.28,
+      "end": 21.48,
+      "confidence": 0.8107,
+      "similarity_score": 1
+     },
+     {
+      "word": "oil",
+      "status": "correct",
+      "expected": null,
+      "start": 21.48,
+      "end": 21.76,
+      "confidence": 0.9013,
+      "similarity_score": 1
+     },
+     {
+      "word": "wound",
+      "status": "missing",
+      "expected": "wound",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "the",
+      "status": "missing",
+      "expected": "the",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "clockwork",
+      "status": "missing",
+      "expected": "clockwork",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 21.76,
+      "end": 22,
+      "confidence": 0.8759,
+      "similarity_score": 1
+     },
+     {
+      "word": "wrote",
+      "status": "correct",
+      "expected": null,
+      "start": 22,
+      "end": 22.2,
+      "confidence": 0.8448,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 22.2,
+      "end": 22.38,
+      "confidence": 0.8032,
+      "similarity_score": 1
+     },
+     {
+      "word": "time",
+      "status": "correct",
+      "expected": null,
+      "start": 22.38,
+      "end": 22.62,
+      "confidence": 0.805,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 22.62,
+      "end": 22.76,
+      "confidence": 0.904,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 22.76,
+      "end": 22.88,
+      "confidence": 0.8006,
+      "similarity_score": 1
+     },
+     {
+      "word": "logbook",
+      "status": "correct",
+      "expected": null,
+      "start": 22.88,
+      "end": 23.3,
+      "confidence": 0.9164,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 23.3,
+      "end": 23.48,
+      "confidence": 0.9029,
+      "similarity_score": 1
+     },
+     {
+      "word": "small",
+      "status": "correct",
+      "expected": null,
+      "start": 23.48,
+      "end": 23.88,
+      "confidence": 0.8486,
+      "similarity_score": 1
+     },
+     {
+      "word": "careful",
+      "status": "correct",
+      "expected": null,
+      "start": 24.06,
+      "end": 24.34,
+      "confidence": 0.9094,
+      "similarity_score": 1
+     },
+     {
+      "word": "letters",
+      "status": "correct",
+      "expected": null,
+      "start": 24.34,
+      "end": 24.78,
+      "confidence": 0.8053,
+      "similarity_score": 1
+     },
+     {
+      "word": "far",
+      "status": "correct",
+      "expected": null,
+      "start": 25.52,
+      "end": 25.82,
+      "confidence": 0.9445,
+      "similarity_score": 1
+     },
+     {
+      "word": "below",
+      "status": "correct",
+      "expected": null,
+      "start": 25.82,
+      "end": 26.18,
+      "confidence": 0.8248,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 26.18,
+      "end": 26.4,
+      "confidence": 0.7111,
+      "similarity_score": 1
+     },
+     {
+      "word": "fishing",
+      "status": "correct",
+      "expected": null,
+      "start": 26.4,
+      "end": 26.7,
+      "confidence": 0.7514,
+      "similarity_score": 1
+     },
+     {
+      "word": "boats",
+      "status": "correct",
+      "expected": null,
+      "start": 26.7,
+      "end": 27.04,
+      "confidence": 0.7407,
+      "similarity_score": 1
+     },
+     {
+      "word": "were",
+      "status": "correct",
+      "expected": null,
+      "start": 27.04,
+      "end": 27.22,
+      "confidence": 0.8781,
+      "similarity_score": 1
+     },
+     {
+      "word": "running",
+      "status": "correct",
+      "expected": null,
+      "start": 27.22,
+      "end": 27.5,
+      "confidence": 0.8612,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 27.5,
+      "end": 27.72,
+      "confidence": 0.8959,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "missing",
+      "expected": "the",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "home",
+      "status": "incorrect",
+      "expected": "harbor",
+      "start": 27.72,
+      "end": 28.02,
+      "confidence": 0.801,
+      "similarity_score": 0.167
+     },
+     {
+      "word": "their",
+      "status": "correct",
+      "expected": null,
+      "start": 28.02,
+      "end": 28.46,
+      "confidence": 0.0765,
+      "similarity_score": 1
+     },
+     {
+      "word": "lights",
+      "status": "correct",
+      "expected": null,
+      "start": 28.46,
+      "end": 28.8,
+      "confidence": 0.7338,
+      "similarity_score": 1
+     },
+     {
+      "word": "rising",
+      "status": "correct",
+      "expected": null,
+      "start": 28.8,
+      "end": 29.24,
+      "confidence": 0.8163,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 29.24,
+      "end": 29.46,
+      "confidence": 0.8948,
+      "similarity_score": 1
+     },
+     {
+      "word": "falling",
+      "status": "correct",
+      "expected": null,
+      "start": 29.46,
+      "end": 29.72,
+      "confidence": 0.7454,
+      "similarity_score": 1
+     },
+     {
+      "word": "like",
+      "status": "correct",
+      "expected": null,
+      "start": 29.72,
+      "end": 30,
+      "confidence": 0.8561,
+      "similarity_score": 1
+     },
+     {
+      "word": "sparks",
+      "status": "correct",
+      "expected": null,
+      "start": 30,
+      "end": 30.4,
+      "confidence": 0.7796,
+      "similarity_score": 1
+     },
+     {
+      "word": "above",
+      "status": "correct",
+      "expected": null,
+      "start": 30.4,
+      "end": 30.7,
+      "confidence": 0.8798,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 30.7,
+      "end": 30.86,
+      "confidence": 0.9971,
+      "similarity_score": 1
+     },
+     {
+      "word": "fire",
+      "status": "correct",
+      "expected": null,
+      "start": 30.86,
+      "end": 31.18,
+      "confidence": 0.8527,
+      "similarity_score": 1
+     },
+     {
+      "word": "one",
+      "status": "correct",
+      "expected": null,
+      "start": 31.82,
+      "end": 32.1,
+      "confidence": 0.8867,
+      "similarity_score": 1
+     },
+     {
+      "word": "of",
+      "status": "correct",
+      "expected": null,
+      "start": 32.1,
+      "end": 32.24,
+      "confidence": 0.8994,
+      "similarity_score": 1
+     },
+     {
+      "word": "them",
+      "status": "correct",
+      "expected": null,
+      "start": 32.24,
+      "end": 32.38,
+      "confidence": 0.7106,
+      "similarity_score": 1
+     },
+     {
+      "word": "was",
+      "status": "correct",
+      "expected": null,
+      "start": 32.38,
+      "end": 32.58,
+      "confidence": 0.8998,
+      "similarity_score": 1
+     },
+     {
+      "word": "late",
+      "status": "correct",
+      "expected": null,
+      "start": 32.58,
+      "end": 32.92,
+      "confidence": 0.8476,
+      "similarity_score": 1
+     },
+     {
+      "word": "margaret",
+      "status": "correct",
+      "expected": null,
+      "start": 33.58,
+      "end": 33.88,
+      "confidence": 0.6438,
+      "similarity_score": 1
+     },
+     {
+      "word": "counted",
+      "status": "correct",
+      "expected": null,
+      "start": 33.88,
+      "end": 34.3,
+      "confidence": 0.8021,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 34.3,
+      "end": 34.5,
+      "confidence": 0.8108,
+      "similarity_score": 1
+     },
+     {
+      "word": "boats",
+      "status": "correct",
+      "expected": null,
+      "start": 34.5,
+      "end": 34.72,
+      "confidence": 0.9107,
+      "similarity_score": 1
+     },
+     {
+      "word": "twice",
+      "status": "correct",
+      "expected": null,
+      "start": 34.72,
+      "end": 35.2,
+      "confidence": 0.8783,
+      "similarity_score": 1
+     },
+     {
+      "word": "then",
+      "status": "missing",
+      "expected": "then",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "a",
+      "status": "missing",
+      "expected": "a",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "third",
+      "status": "missing",
+      "expected": "third",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "time",
+      "status": "missing",
+      "expected": "time",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 35.52,
+      "end": 35.7,
+      "confidence": 0.8822,
+      "similarity_score": 1
+     },
+     {
+      "word": "each",
+      "status": "correct",
+      "expected": null,
+      "start": 35.7,
+      "end": 35.98,
+      "confidence": 0.8794,
+      "similarity_score": 1
+     },
+     {
+      "word": "time",
+      "status": "correct",
+      "expected": null,
+      "start": 35.98,
+      "end": 36.28,
+      "confidence": 0.8129,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 36.28,
+      "end": 36.44,
+      "confidence": 0.807,
+      "similarity_score": 1
+     },
+     {
+      "word": "answer",
+      "status": "correct",
+      "expected": null,
+      "start": 36.44,
+      "end": 36.72,
+      "confidence": 0.8859,
+      "similarity_score": 1
+     },
+     {
+      "word": "was",
+      "status": "correct",
+      "expected": null,
+      "start": 36.72,
+      "end": 36.96,
+      "confidence": 0.8998,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 36.96,
+      "end": 37.14,
+      "confidence": 0.802,
+      "similarity_score": 1
+     },
+     {
+      "word": "same",
+      "status": "correct",
+      "expected": null,
+      "start": 37.14,
+      "end": 37.77,
+      "confidence": 0.6746,
+      "similarity_score": 1
+     },
+     {
+      "word": "eleven",
+      "status": "correct",
+      "expected": null,
+      "start": 37.77,
+      "end": 38.4,
+      "confidence": 0.6746,
+      "similarity_score": 1
+     },
+     {
+      "word": "not",
+      "status": "correct",
+      "expected": null,
+      "start": 38.72,
+      "end": 38.92,
+      "confidence": 0.892,
+      "similarity_score": 1
+     },
+     {
+      "word": "twelve",
+      "status": "correct",
+      "expected": null,
+      "start": 38.92,
+      "end": 39.34,
+      "confidence": 0.8663,
+      "similarity_score": 1
+     },
+     {
+      "word": "she",
+      "status": "correct",
+      "expected": null,
+      "start": 39.94,
+      "end": 40.22,
+      "confidence": 0.8878,
+      "similarity_score": 1
+     },
+     {
+      "word": "pressed",
+      "status": "correct",
+      "expected": null,
+      "start": 40.22,
+      "end": 40.54,
+      "confidence": 0.6359,
+      "similarity_score": 1
+     },
+     {
+      "word": "her",
+      "status": "correct",
+      "expected": null,
+      "start": 40.54,
+      "end": 40.72,
+      "confidence": 0.8947,
+      "similarity_score": 1
+     },
+     {
+      "word": "hand",
+      "status": "correct",
+      "expected": null,
+      "start": 40.72,
+      "end": 41,
+      "confidence": 0.8112,
+      "similarity_score": 1
+     },
+     {
+      "word": "against",
+      "status": "correct",
+      "expected": null,
+      "start": 41,
+      "end": 41.26,
+      "confidence": 0.8822,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 41.26,
+      "end": 41.46,
+      "confidence": 0.8104,
+      "similarity_score": 1
+     },
+     {
+      "word": "cold",
+      "status": "correct",
+      "expected": null,
+      "start": 41.46,
+      "end": 41.72,
+      "confidence": 0.8053,
+      "similarity_score": 1
+     },
+     {
+      "word": "window",
+      "status": "incorrect",
+      "expected": "glass",
+      "start": 41.72,
+      "end": 42.06,
+      "confidence": 0.8102,
+      "similarity_score": 0
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 42.06,
+      "end": 42.36,
+      "confidence": 0.8566,
+      "similarity_score": 1
+     },
+     {
+      "word": "waited",
+      "status": "correct",
+      "expected": null,
+      "start": 42.36,
+      "end": 42.6,
+      "confidence": 0.7419,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 42.6,
+      "end": 42.82,
+      "confidence": 0.8969,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 42.82,
+      "end": 42.96,
+      "confidence": 0.8139,
+      "similarity_score": 1
+     },
+     {
+      "word": "twelfth",
+      "status": "correct",
+      "expected": null,
+      "start": 42.96,
+      "end": 43.32,
+      "confidence": 0.9677,
+      "similarity_score": 1
+     },
+     {
+      "word": "light",
+      "status": "correct",
+      "expected": null,
+      "start": 43.32,
+      "end": 43.52,
+      "confidence": 0.8315,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 43.52,
+      "end": 43.7,
+      "confidence": 0.8956,
+      "similarity_score": 1
+     },
+     {
+      "word": "appear",
+      "status": "correct",
+      "expected": null,
+      "start": 43.7,
+      "end": 44.06,
+      "confidence": 0.7317,
+      "similarity_score": 1
+     }
+    ],
+    "stats": {
+     "total_script_words": 138,
+     "correct_words": 127,
+     "incorrect_words": 2,
+     "missing_words": 9,
+     "extra_words": 1,
+     "close_matches": 0,
+     "accuracy_percentage": 92.03
+    },
+    "audio_duration": 44.3,
+    "script_word_count": 138
+   }
+  },
+  {
+   "user_id": "bf68bb51-f887-4cae-ac89-bef259428c34",
+   "job_id": "demo-lighthouse-ch3-take2",
+   "accuracy_percentage": 100,
+   "total_words": 138,
+   "correct_words": 138,
+   "script_snippet": "The Lighthouse Keeper, Chapter 3 (take 2): Chapter Three. The storm arrived an hour before midnight, exactly as the old almanac had promised. Margaret climbed the ninety-two steps of the lighthouse wi",
+   "audio_duration": 45.41,
+   "days_ago": 3,
+   "hour": 11,
+   "result": {
+    "job_id": "demo-lighthouse-ch3-take2",
+    "aligned_words": [
+     {
+      "word": "chapter",
+      "status": "correct",
+      "expected": null,
+      "start": 0,
+      "end": 0.56,
+      "confidence": 0.7157,
+      "similarity_score": 1
+     },
+     {
+      "word": "three",
+      "status": "correct",
+      "expected": null,
+      "start": 0.56,
+      "end": 0.94,
+      "confidence": 0.4832,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 1.43,
+      "end": 1.7,
+      "confidence": 0.2338,
+      "similarity_score": 1
+     },
+     {
+      "word": "storm",
+      "status": "correct",
+      "expected": null,
+      "start": 1.7,
+      "end": 2.06,
+      "confidence": 0.7057,
+      "similarity_score": 1
+     },
+     {
+      "word": "arrived",
+      "status": "correct",
+      "expected": null,
+      "start": 2.06,
+      "end": 2.52,
+      "confidence": 0.721,
+      "similarity_score": 1
+     },
+     {
+      "word": "an",
+      "status": "correct",
+      "expected": null,
+      "start": 2.52,
+      "end": 2.7,
+      "confidence": 0.9112,
+      "similarity_score": 1
+     },
+     {
+      "word": "hour",
+      "status": "correct",
+      "expected": null,
+      "start": 2.7,
+      "end": 2.9,
+      "confidence": 0.8606,
+      "similarity_score": 1
+     },
+     {
+      "word": "before",
+      "status": "correct",
+      "expected": null,
+      "start": 2.9,
+      "end": 3.22,
+      "confidence": 0.7863,
+      "similarity_score": 1
+     },
+     {
+      "word": "midnight",
+      "status": "correct",
+      "expected": null,
+      "start": 3.22,
+      "end": 3.62,
+      "confidence": 0.8912,
+      "similarity_score": 1
+     },
+     {
+      "word": "exactly",
+      "status": "correct",
+      "expected": null,
+      "start": 3.9,
+      "end": 4.16,
+      "confidence": 0.7862,
+      "similarity_score": 1
+     },
+     {
+      "word": "as",
+      "status": "correct",
+      "expected": null,
+      "start": 4.16,
+      "end": 4.38,
+      "confidence": 0.8923,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 4.38,
+      "end": 4.52,
+      "confidence": 0.8061,
+      "similarity_score": 1
+     },
+     {
+      "word": "old",
+      "status": "correct",
+      "expected": null,
+      "start": 4.52,
+      "end": 4.82,
+      "confidence": 0.8313,
+      "similarity_score": 1
+     },
+     {
+      "word": "almanac",
+      "status": "correct",
+      "expected": null,
+      "start": 4.82,
+      "end": 5.32,
+      "confidence": 0.8752,
+      "similarity_score": 1
+     },
+     {
+      "word": "had",
+      "status": "correct",
+      "expected": null,
+      "start": 5.32,
+      "end": 5.5,
+      "confidence": 0.8268,
+      "similarity_score": 1
+     },
+     {
+      "word": "promised",
+      "status": "correct",
+      "expected": null,
+      "start": 5.5,
+      "end": 5.94,
+      "confidence": 0.8321,
+      "similarity_score": 1
+     },
+     {
+      "word": "margaret",
+      "status": "correct",
+      "expected": null,
+      "start": 6.72,
+      "end": 7.2,
+      "confidence": 0.7434,
+      "similarity_score": 1
+     },
+     {
+      "word": "climbed",
+      "status": "correct",
+      "expected": null,
+      "start": 7.2,
+      "end": 7.56,
+      "confidence": 0.9267,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 7.56,
+      "end": 7.72,
+      "confidence": 0.8183,
+      "similarity_score": 1
+     },
+     {
+      "word": "ninety",
+      "status": "correct",
+      "expected": null,
+      "start": 7.72,
+      "end": 7.92,
+      "confidence": 0.8673,
+      "similarity_score": 1
+     },
+     {
+      "word": "two",
+      "status": "correct",
+      "expected": null,
+      "start": 7.92,
+      "end": 8.14,
+      "confidence": 0.9529,
+      "similarity_score": 1
+     },
+     {
+      "word": "steps",
+      "status": "correct",
+      "expected": null,
+      "start": 8.14,
+      "end": 8.44,
+      "confidence": 0.7257,
+      "similarity_score": 1
+     },
+     {
+      "word": "of",
+      "status": "correct",
+      "expected": null,
+      "start": 8.44,
+      "end": 8.6,
+      "confidence": 0.8877,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 8.6,
+      "end": 8.74,
+      "confidence": 0.8251,
+      "similarity_score": 1
+     },
+     {
+      "word": "lighthouse",
+      "status": "correct",
+      "expected": null,
+      "start": 8.74,
+      "end": 9.12,
+      "confidence": 0.6279,
+      "similarity_score": 1
+     },
+     {
+      "word": "with",
+      "status": "correct",
+      "expected": null,
+      "start": 9.12,
+      "end": 9.34,
+      "confidence": 0.7305,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 9.34,
+      "end": 9.5,
+      "confidence": 0.9872,
+      "similarity_score": 1
+     },
+     {
+      "word": "lantern",
+      "status": "correct",
+      "expected": null,
+      "start": 9.5,
+      "end": 9.82,
+      "confidence": 0.8237,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 9.82,
+      "end": 10,
+      "confidence": 0.9052,
+      "similarity_score": 1
+     },
+     {
+      "word": "one",
+      "status": "correct",
+      "expected": null,
+      "start": 10,
+      "end": 10.2,
+      "confidence": 0.8201,
+      "similarity_score": 1
+     },
+     {
+      "word": "hand",
+      "status": "correct",
+      "expected": null,
+      "start": 10.2,
+      "end": 10.58,
+      "confidence": 0.7994,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 10.58,
+      "end": 11.02,
+      "confidence": 0.5793,
+      "similarity_score": 1
+     },
+     {
+      "word": "her",
+      "status": "correct",
+      "expected": null,
+      "start": 11.02,
+      "end": 11.18,
+      "confidence": 0.8914,
+      "similarity_score": 1
+     },
+     {
+      "word": "fathers",
+      "status": "correct",
+      "expected": null,
+      "start": 11.18,
+      "end": 11.66,
+      "confidence": 0.9003,
+      "similarity_score": 1
+     },
+     {
+      "word": "brass",
+      "status": "correct",
+      "expected": null,
+      "start": 11.66,
+      "end": 11.96,
+      "confidence": 0.8478,
+      "similarity_score": 1
+     },
+     {
+      "word": "key",
+      "status": "correct",
+      "expected": null,
+      "start": 11.96,
+      "end": 12.2,
+      "confidence": 0.8013,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 12.2,
+      "end": 12.34,
+      "confidence": 0.9114,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 12.34,
+      "end": 12.46,
+      "confidence": 0.8072,
+      "similarity_score": 1
+     },
+     {
+      "word": "other",
+      "status": "correct",
+      "expected": null,
+      "start": 12.46,
+      "end": 12.68,
+      "confidence": 0.7701,
+      "similarity_score": 1
+     },
+     {
+      "word": "at",
+      "status": "correct",
+      "expected": null,
+      "start": 13.32,
+      "end": 13.66,
+      "confidence": 0.8918,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 13.66,
+      "end": 13.8,
+      "confidence": 0.8091,
+      "similarity_score": 1
+     },
+     {
+      "word": "top",
+      "status": "correct",
+      "expected": null,
+      "start": 13.8,
+      "end": 14.12,
+      "confidence": 0.8175,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 14.12,
+      "end": 14.5,
+      "confidence": 0.5466,
+      "similarity_score": 1
+     },
+     {
+      "word": "great",
+      "status": "correct",
+      "expected": null,
+      "start": 14.5,
+      "end": 14.74,
+      "confidence": 0.8152,
+      "similarity_score": 1
+     },
+     {
+      "word": "lens",
+      "status": "correct",
+      "expected": null,
+      "start": 14.74,
+      "end": 15,
+      "confidence": 0.9311,
+      "similarity_score": 1
+     },
+     {
+      "word": "was",
+      "status": "correct",
+      "expected": null,
+      "start": 15,
+      "end": 15.16,
+      "confidence": 0.8869,
+      "similarity_score": 1
+     },
+     {
+      "word": "already",
+      "status": "correct",
+      "expected": null,
+      "start": 15.16,
+      "end": 15.5,
+      "confidence": 0.8343,
+      "similarity_score": 1
+     },
+     {
+      "word": "turning",
+      "status": "correct",
+      "expected": null,
+      "start": 15.5,
+      "end": 15.88,
+      "confidence": 0.7971,
+      "similarity_score": 1
+     },
+     {
+      "word": "throwing",
+      "status": "correct",
+      "expected": null,
+      "start": 16.26,
+      "end": 16.52,
+      "confidence": 0.7408,
+      "similarity_score": 1
+     },
+     {
+      "word": "its",
+      "status": "correct",
+      "expected": null,
+      "start": 16.52,
+      "end": 16.76,
+      "confidence": 0.7803,
+      "similarity_score": 1
+     },
+     {
+      "word": "pale",
+      "status": "correct",
+      "expected": null,
+      "start": 16.76,
+      "end": 17.06,
+      "confidence": 0.7661,
+      "similarity_score": 1
+     },
+     {
+      "word": "beam",
+      "status": "correct",
+      "expected": null,
+      "start": 17.06,
+      "end": 17.38,
+      "confidence": 0.923,
+      "similarity_score": 1
+     },
+     {
+      "word": "across",
+      "status": "correct",
+      "expected": null,
+      "start": 17.38,
+      "end": 17.76,
+      "confidence": 0.6953,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 17.76,
+      "end": 17.96,
+      "confidence": 0.7755,
+      "similarity_score": 1
+     },
+     {
+      "word": "sea",
+      "status": "correct",
+      "expected": null,
+      "start": 17.96,
+      "end": 18.12,
+      "confidence": 0.8652,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 18.12,
+      "end": 18.32,
+      "confidence": 0.8086,
+      "similarity_score": 1
+     },
+     {
+      "word": "color",
+      "status": "correct",
+      "expected": null,
+      "start": 18.32,
+      "end": 18.54,
+      "confidence": 0.566,
+      "similarity_score": 1
+     },
+     {
+      "word": "of",
+      "status": "correct",
+      "expected": null,
+      "start": 18.54,
+      "end": 18.76,
+      "confidence": 0.9044,
+      "similarity_score": 1
+     },
+     {
+      "word": "slate",
+      "status": "correct",
+      "expected": null,
+      "start": 18.76,
+      "end": 19.06,
+      "confidence": 0.8344,
+      "similarity_score": 1
+     },
+     {
+      "word": "she",
+      "status": "correct",
+      "expected": null,
+      "start": 19.7,
+      "end": 19.98,
+      "confidence": 0.8852,
+      "similarity_score": 1
+     },
+     {
+      "word": "checked",
+      "status": "correct",
+      "expected": null,
+      "start": 19.98,
+      "end": 20.28,
+      "confidence": 0.7362,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 20.28,
+      "end": 20.46,
+      "confidence": 0.8063,
+      "similarity_score": 1
+     },
+     {
+      "word": "oil",
+      "status": "correct",
+      "expected": null,
+      "start": 20.46,
+      "end": 20.78,
+      "confidence": 0.9213,
+      "similarity_score": 1
+     },
+     {
+      "word": "wound",
+      "status": "correct",
+      "expected": null,
+      "start": 21.22,
+      "end": 21.42,
+      "confidence": 0.5743,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 21.42,
+      "end": 21.62,
+      "confidence": 0.8189,
+      "similarity_score": 1
+     },
+     {
+      "word": "clockwork",
+      "status": "correct",
+      "expected": null,
+      "start": 21.62,
+      "end": 22.12,
+      "confidence": 0.9085,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 22.38,
+      "end": 22.58,
+      "confidence": 0.8903,
+      "similarity_score": 1
+     },
+     {
+      "word": "wrote",
+      "status": "correct",
+      "expected": null,
+      "start": 22.58,
+      "end": 22.74,
+      "confidence": 0.8309,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 22.74,
+      "end": 22.92,
+      "confidence": 0.8018,
+      "similarity_score": 1
+     },
+     {
+      "word": "time",
+      "status": "correct",
+      "expected": null,
+      "start": 22.92,
+      "end": 23.18,
+      "confidence": 0.8221,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 23.18,
+      "end": 23.3,
+      "confidence": 0.907,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 23.3,
+      "end": 23.44,
+      "confidence": 0.8087,
+      "similarity_score": 1
+     },
+     {
+      "word": "logbook",
+      "status": "correct",
+      "expected": null,
+      "start": 23.44,
+      "end": 23.84,
+      "confidence": 0.6278,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 23.84,
+      "end": 24.04,
+      "confidence": 0.9104,
+      "similarity_score": 1
+     },
+     {
+      "word": "small",
+      "status": "correct",
+      "expected": null,
+      "start": 24.04,
+      "end": 24.42,
+      "confidence": 0.8517,
+      "similarity_score": 1
+     },
+     {
+      "word": "careful",
+      "status": "correct",
+      "expected": null,
+      "start": 24.6,
+      "end": 24.86,
+      "confidence": 0.9095,
+      "similarity_score": 1
+     },
+     {
+      "word": "letters",
+      "status": "correct",
+      "expected": null,
+      "start": 24.86,
+      "end": 25.34,
+      "confidence": 0.8476,
+      "similarity_score": 1
+     },
+     {
+      "word": "far",
+      "status": "correct",
+      "expected": null,
+      "start": 25.96,
+      "end": 26.3,
+      "confidence": 0.9417,
+      "similarity_score": 1
+     },
+     {
+      "word": "below",
+      "status": "correct",
+      "expected": null,
+      "start": 26.3,
+      "end": 26.6,
+      "confidence": 0.8193,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 26.6,
+      "end": 26.8,
+      "confidence": 0.6879,
+      "similarity_score": 1
+     },
+     {
+      "word": "fishing",
+      "status": "correct",
+      "expected": null,
+      "start": 26.8,
+      "end": 27.08,
+      "confidence": 0.7576,
+      "similarity_score": 1
+     },
+     {
+      "word": "boats",
+      "status": "correct",
+      "expected": null,
+      "start": 27.08,
+      "end": 27.38,
+      "confidence": 0.8191,
+      "similarity_score": 1
+     },
+     {
+      "word": "were",
+      "status": "correct",
+      "expected": null,
+      "start": 27.38,
+      "end": 27.54,
+      "confidence": 0.8749,
+      "similarity_score": 1
+     },
+     {
+      "word": "running",
+      "status": "correct",
+      "expected": null,
+      "start": 27.54,
+      "end": 27.82,
+      "confidence": 0.7645,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 27.82,
+      "end": 28,
+      "confidence": 0.8895,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 28,
+      "end": 28.16,
+      "confidence": 0.8109,
+      "similarity_score": 1
+     },
+     {
+      "word": "harbor",
+      "status": "correct",
+      "expected": null,
+      "start": 28.16,
+      "end": 28.42,
+      "confidence": 0.4445,
+      "similarity_score": 1
+     },
+     {
+      "word": "their",
+      "status": "correct",
+      "expected": null,
+      "start": 28.9,
+      "end": 29.02,
+      "confidence": 0.8908,
+      "similarity_score": 1
+     },
+     {
+      "word": "lights",
+      "status": "correct",
+      "expected": null,
+      "start": 29.02,
+      "end": 29.34,
+      "confidence": 0.7478,
+      "similarity_score": 1
+     },
+     {
+      "word": "rising",
+      "status": "correct",
+      "expected": null,
+      "start": 29.34,
+      "end": 29.76,
+      "confidence": 0.815,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 29.76,
+      "end": 30,
+      "confidence": 0.8983,
+      "similarity_score": 1
+     },
+     {
+      "word": "falling",
+      "status": "correct",
+      "expected": null,
+      "start": 30,
+      "end": 30.28,
+      "confidence": 0.7538,
+      "similarity_score": 1
+     },
+     {
+      "word": "like",
+      "status": "correct",
+      "expected": null,
+      "start": 30.28,
+      "end": 30.5,
+      "confidence": 0.8662,
+      "similarity_score": 1
+     },
+     {
+      "word": "sparks",
+      "status": "correct",
+      "expected": null,
+      "start": 30.5,
+      "end": 30.9,
+      "confidence": 0.7389,
+      "similarity_score": 1
+     },
+     {
+      "word": "above",
+      "status": "correct",
+      "expected": null,
+      "start": 30.9,
+      "end": 31.14,
+      "confidence": 0.8737,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 31.14,
+      "end": 31.32,
+      "confidence": 0.9963,
+      "similarity_score": 1
+     },
+     {
+      "word": "fire",
+      "status": "correct",
+      "expected": null,
+      "start": 31.32,
+      "end": 31.62,
+      "confidence": 0.8527,
+      "similarity_score": 1
+     },
+     {
+      "word": "one",
+      "status": "correct",
+      "expected": null,
+      "start": 32.22,
+      "end": 32.58,
+      "confidence": 0.8857,
+      "similarity_score": 1
+     },
+     {
+      "word": "of",
+      "status": "correct",
+      "expected": null,
+      "start": 32.58,
+      "end": 32.72,
+      "confidence": 0.9024,
+      "similarity_score": 1
+     },
+     {
+      "word": "them",
+      "status": "correct",
+      "expected": null,
+      "start": 32.72,
+      "end": 32.84,
+      "confidence": 0.7307,
+      "similarity_score": 1
+     },
+     {
+      "word": "was",
+      "status": "correct",
+      "expected": null,
+      "start": 32.84,
+      "end": 33.02,
+      "confidence": 0.8927,
+      "similarity_score": 1
+     },
+     {
+      "word": "late",
+      "status": "correct",
+      "expected": null,
+      "start": 33.02,
+      "end": 33.36,
+      "confidence": 0.8538,
+      "similarity_score": 1
+     },
+     {
+      "word": "margaret",
+      "status": "correct",
+      "expected": null,
+      "start": 34.02,
+      "end": 34.3,
+      "confidence": 0.6514,
+      "similarity_score": 1
+     },
+     {
+      "word": "counted",
+      "status": "correct",
+      "expected": null,
+      "start": 34.3,
+      "end": 34.68,
+      "confidence": 0.7898,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 34.68,
+      "end": 34.88,
+      "confidence": 0.8121,
+      "similarity_score": 1
+     },
+     {
+      "word": "boats",
+      "status": "correct",
+      "expected": null,
+      "start": 34.88,
+      "end": 35.08,
+      "confidence": 0.893,
+      "similarity_score": 1
+     },
+     {
+      "word": "twice",
+      "status": "correct",
+      "expected": null,
+      "start": 35.08,
+      "end": 35.54,
+      "confidence": 0.8776,
+      "similarity_score": 1
+     },
+     {
+      "word": "then",
+      "status": "correct",
+      "expected": null,
+      "start": 35.92,
+      "end": 36.08,
+      "confidence": 0.7226,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 36.08,
+      "end": 36.24,
+      "confidence": 0.9985,
+      "similarity_score": 1
+     },
+     {
+      "word": "third",
+      "status": "correct",
+      "expected": null,
+      "start": 36.24,
+      "end": 36.42,
+      "confidence": 0.8565,
+      "similarity_score": 1
+     },
+     {
+      "word": "time",
+      "status": "correct",
+      "expected": null,
+      "start": 36.42,
+      "end": 36.8,
+      "confidence": 0.8089,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 36.94,
+      "end": 37.04,
+      "confidence": 0.8867,
+      "similarity_score": 1
+     },
+     {
+      "word": "each",
+      "status": "correct",
+      "expected": null,
+      "start": 37.04,
+      "end": 37.3,
+      "confidence": 0.863,
+      "similarity_score": 1
+     },
+     {
+      "word": "time",
+      "status": "correct",
+      "expected": null,
+      "start": 37.3,
+      "end": 37.58,
+      "confidence": 0.8071,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 37.58,
+      "end": 37.74,
+      "confidence": 0.8056,
+      "similarity_score": 1
+     },
+     {
+      "word": "answer",
+      "status": "correct",
+      "expected": null,
+      "start": 37.74,
+      "end": 38,
+      "confidence": 0.8955,
+      "similarity_score": 1
+     },
+     {
+      "word": "was",
+      "status": "correct",
+      "expected": null,
+      "start": 38,
+      "end": 38.2,
+      "confidence": 0.8911,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 38.2,
+      "end": 38.38,
+      "confidence": 0.8004,
+      "similarity_score": 1
+     },
+     {
+      "word": "same",
+      "status": "correct",
+      "expected": null,
+      "start": 38.38,
+      "end": 38.68,
+      "confidence": 0.8155,
+      "similarity_score": 1
+     },
+     {
+      "word": "eleven",
+      "status": "correct",
+      "expected": null,
+      "start": 39.18,
+      "end": 39.56,
+      "confidence": 0.5314,
+      "similarity_score": 1
+     },
+     {
+      "word": "not",
+      "status": "correct",
+      "expected": null,
+      "start": 39.96,
+      "end": 40.14,
+      "confidence": 0.8944,
+      "similarity_score": 1
+     },
+     {
+      "word": "twelve",
+      "status": "correct",
+      "expected": null,
+      "start": 40.14,
+      "end": 40.56,
+      "confidence": 0.8514,
+      "similarity_score": 1
+     },
+     {
+      "word": "she",
+      "status": "correct",
+      "expected": null,
+      "start": 41.2,
+      "end": 41.46,
+      "confidence": 0.9034,
+      "similarity_score": 1
+     },
+     {
+      "word": "pressed",
+      "status": "correct",
+      "expected": null,
+      "start": 41.46,
+      "end": 41.78,
+      "confidence": 0.6455,
+      "similarity_score": 1
+     },
+     {
+      "word": "her",
+      "status": "correct",
+      "expected": null,
+      "start": 41.78,
+      "end": 41.94,
+      "confidence": 0.8976,
+      "similarity_score": 1
+     },
+     {
+      "word": "hand",
+      "status": "correct",
+      "expected": null,
+      "start": 41.94,
+      "end": 42.18,
+      "confidence": 0.8207,
+      "similarity_score": 1
+     },
+     {
+      "word": "against",
+      "status": "correct",
+      "expected": null,
+      "start": 42.18,
+      "end": 42.44,
+      "confidence": 0.8683,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 42.44,
+      "end": 42.64,
+      "confidence": 0.8179,
+      "similarity_score": 1
+     },
+     {
+      "word": "cold",
+      "status": "correct",
+      "expected": null,
+      "start": 42.64,
+      "end": 42.88,
+      "confidence": 0.7905,
+      "similarity_score": 1
+     },
+     {
+      "word": "glass",
+      "status": "correct",
+      "expected": null,
+      "start": 42.88,
+      "end": 43.28,
+      "confidence": 0.7828,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 43.28,
+      "end": 43.5,
+      "confidence": 0.8645,
+      "similarity_score": 1
+     },
+     {
+      "word": "waited",
+      "status": "correct",
+      "expected": null,
+      "start": 43.5,
+      "end": 43.72,
+      "confidence": 0.7504,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 43.72,
+      "end": 43.92,
+      "confidence": 0.9001,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 43.92,
+      "end": 44.06,
+      "confidence": 0.8013,
+      "similarity_score": 1
+     },
+     {
+      "word": "twelfth",
+      "status": "correct",
+      "expected": null,
+      "start": 44.06,
+      "end": 44.44,
+      "confidence": 0.964,
+      "similarity_score": 1
+     },
+     {
+      "word": "light",
+      "status": "correct",
+      "expected": null,
+      "start": 44.44,
+      "end": 44.64,
+      "confidence": 0.8345,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 44.64,
+      "end": 44.82,
+      "confidence": 0.9043,
+      "similarity_score": 1
+     },
+     {
+      "word": "appear",
+      "status": "correct",
+      "expected": null,
+      "start": 44.82,
+      "end": 45.16,
+      "confidence": 0.7319,
+      "similarity_score": 1
+     }
+    ],
+    "stats": {
+     "total_script_words": 138,
+     "correct_words": 138,
+     "incorrect_words": 0,
+     "missing_words": 0,
+     "extra_words": 0,
+     "close_matches": 0,
+     "accuracy_percentage": 100
+    },
+    "audio_duration": 45.41,
+    "script_word_count": 138
+   }
+  },
+  {
+   "user_id": "bf68bb51-f887-4cae-ac89-bef259428c34",
+   "job_id": "demo-q3-product-update",
+   "accuracy_percentage": 91.58,
+   "total_words": 95,
+   "correct_words": 87,
+   "script_snippet": "Q3 product update video: Welcome to the third-quarter product update. This quarter we shipped the three features customers asked for most. First, offline mode now syncs automatically when you reconnec",
+   "audio_duration": 39.46,
+   "days_ago": 5,
+   "hour": 14,
+   "result": {
+    "job_id": "demo-q3-product-update",
+    "aligned_words": [
+     {
+      "word": "welcome",
+      "status": "correct",
+      "expected": null,
+      "start": 0,
+      "end": 0.46,
+      "confidence": 0.643,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 0.46,
+      "end": 0.7,
+      "confidence": 0.891,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 0.7,
+      "end": 0.88,
+      "confidence": 0.8215,
+      "similarity_score": 1
+     },
+     {
+      "word": "third",
+      "status": "correct",
+      "expected": null,
+      "start": 0.88,
+      "end": 1.14,
+      "confidence": 0.6726,
+      "similarity_score": 1
+     },
+     {
+      "word": "quarter",
+      "status": "correct",
+      "expected": null,
+      "start": 1.14,
+      "end": 1.5,
+      "confidence": 0.6578,
+      "similarity_score": 1
+     },
+     {
+      "word": "product",
+      "status": "correct",
+      "expected": null,
+      "start": 1.5,
+      "end": 1.96,
+      "confidence": 0.7952,
+      "similarity_score": 1
+     },
+     {
+      "word": "update",
+      "status": "correct",
+      "expected": null,
+      "start": 1.96,
+      "end": 2.38,
+      "confidence": 0.7985,
+      "similarity_score": 1
+     },
+     {
+      "word": "this",
+      "status": "correct",
+      "expected": null,
+      "start": 2.94,
+      "end": 3.12,
+      "confidence": 0.7855,
+      "similarity_score": 1
+     },
+     {
+      "word": "quarter",
+      "status": "correct",
+      "expected": null,
+      "start": 3.12,
+      "end": 3.44,
+      "confidence": 0.7638,
+      "similarity_score": 1
+     },
+     {
+      "word": "we",
+      "status": "correct",
+      "expected": null,
+      "start": 3.44,
+      "end": 3.66,
+      "confidence": 0.6797,
+      "similarity_score": 1
+     },
+     {
+      "word": "shipped",
+      "status": "correct",
+      "expected": null,
+      "start": 3.66,
+      "end": 3.92,
+      "confidence": 0.5838,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 3.92,
+      "end": 4.14,
+      "confidence": 0.7942,
+      "similarity_score": 1
+     },
+     {
+      "word": "three",
+      "status": "correct",
+      "expected": null,
+      "start": 4.14,
+      "end": 4.44,
+      "confidence": 0.8057,
+      "similarity_score": 1
+     },
+     {
+      "word": "features",
+      "status": "correct",
+      "expected": null,
+      "start": 4.44,
+      "end": 4.9,
+      "confidence": 0.7322,
+      "similarity_score": 1
+     },
+     {
+      "word": "customers",
+      "status": "correct",
+      "expected": null,
+      "start": 4.9,
+      "end": 5.4,
+      "confidence": 0.7595,
+      "similarity_score": 1
+     },
+     {
+      "word": "asked",
+      "status": "correct",
+      "expected": null,
+      "start": 5.4,
+      "end": 5.96,
+      "confidence": 0.727,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 5.96,
+      "end": 6.18,
+      "confidence": 0.8803,
+      "similarity_score": 1
+     },
+     {
+      "word": "most",
+      "status": "correct",
+      "expected": null,
+      "start": 6.18,
+      "end": 6.56,
+      "confidence": 0.8272,
+      "similarity_score": 1
+     },
+     {
+      "word": "first",
+      "status": "correct",
+      "expected": null,
+      "start": 6.92,
+      "end": 7.34,
+      "confidence": 0.8795,
+      "similarity_score": 1
+     },
+     {
+      "word": "offline",
+      "status": "correct",
+      "expected": null,
+      "start": 7.66,
+      "end": 8.16,
+      "confidence": 0.7729,
+      "similarity_score": 1
+     },
+     {
+      "word": "mode",
+      "status": "correct",
+      "expected": null,
+      "start": 8.16,
+      "end": 8.62,
+      "confidence": 0.8195,
+      "similarity_score": 1
+     },
+     {
+      "word": "now",
+      "status": "correct",
+      "expected": null,
+      "start": 8.62,
+      "end": 9.08,
+      "confidence": 0.8843,
+      "similarity_score": 1
+     },
+     {
+      "word": "syncs",
+      "status": "correct",
+      "expected": null,
+      "start": 9.08,
+      "end": 9.58,
+      "confidence": 0.8603,
+      "similarity_score": 1
+     },
+     {
+      "word": "automatically",
+      "status": "correct",
+      "expected": null,
+      "start": 9.58,
+      "end": 10.26,
+      "confidence": 0.8792,
+      "similarity_score": 1
+     },
+     {
+      "word": "when",
+      "status": "correct",
+      "expected": null,
+      "start": 10.26,
+      "end": 10.72,
+      "confidence": 0.8652,
+      "similarity_score": 1
+     },
+     {
+      "word": "you",
+      "status": "correct",
+      "expected": null,
+      "start": 10.72,
+      "end": 10.88,
+      "confidence": 0.8734,
+      "similarity_score": 1
+     },
+     {
+      "word": "reconnect",
+      "status": "correct",
+      "expected": null,
+      "start": 10.88,
+      "end": 11.28,
+      "confidence": 0.7779,
+      "similarity_score": 1
+     },
+     {
+      "word": "with",
+      "status": "missing",
+      "expected": "with",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "no",
+      "status": "missing",
+      "expected": "no",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "manual",
+      "status": "missing",
+      "expected": "manual",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "export",
+      "status": "missing",
+      "expected": "export",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "second",
+      "status": "correct",
+      "expected": null,
+      "start": 12,
+      "end": 12.4,
+      "confidence": 0.7361,
+      "similarity_score": 1
+     },
+     {
+      "word": "shared",
+      "status": "correct",
+      "expected": null,
+      "start": 12.86,
+      "end": 13.16,
+      "confidence": 0.6805,
+      "similarity_score": 1
+     },
+     {
+      "word": "workspaces",
+      "status": "correct",
+      "expected": null,
+      "start": 13.16,
+      "end": 13.88,
+      "confidence": 0.8972,
+      "similarity_score": 1
+     },
+     {
+      "word": "support",
+      "status": "correct",
+      "expected": null,
+      "start": 13.88,
+      "end": 14.34,
+      "confidence": 0.9143,
+      "similarity_score": 1
+     },
+     {
+      "word": "up",
+      "status": "correct",
+      "expected": null,
+      "start": 14.34,
+      "end": 14.58,
+      "confidence": 0.8998,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 14.58,
+      "end": 14.74,
+      "confidence": 0.8982,
+      "similarity_score": 1
+     },
+     {
+      "word": "fifteen",
+      "status": "incorrect",
+      "expected": "fifty",
+      "start": 14.74,
+      "end": 15.36,
+      "confidence": 0.8324,
+      "similarity_score": 0.571
+     },
+     {
+      "word": "collaborators",
+      "status": "correct",
+      "expected": null,
+      "start": 15.36,
+      "end": 16.12,
+      "confidence": 0.7791,
+      "similarity_score": 1
+     },
+     {
+      "word": "up",
+      "status": "correct",
+      "expected": null,
+      "start": 16.56,
+      "end": 16.9,
+      "confidence": 0.8909,
+      "similarity_score": 1
+     },
+     {
+      "word": "from",
+      "status": "correct",
+      "expected": null,
+      "start": 16.9,
+      "end": 17.18,
+      "confidence": 0.83,
+      "similarity_score": 1
+     },
+     {
+      "word": "twenty",
+      "status": "correct",
+      "expected": null,
+      "start": 17.18,
+      "end": 17.66,
+      "confidence": 0.8878,
+      "similarity_score": 1
+     },
+     {
+      "word": "third",
+      "status": "correct",
+      "expected": null,
+      "start": 18.2,
+      "end": 18.64,
+      "confidence": 0.8734,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 18.92,
+      "end": 19.12,
+      "confidence": 0.8132,
+      "similarity_score": 1
+     },
+     {
+      "word": "new",
+      "status": "correct",
+      "expected": null,
+      "start": 19.12,
+      "end": 19.34,
+      "confidence": 0.7911,
+      "similarity_score": 1
+     },
+     {
+      "word": "reporting",
+      "status": "correct",
+      "expected": null,
+      "start": 19.34,
+      "end": 19.82,
+      "confidence": 0.7499,
+      "similarity_score": 1
+     },
+     {
+      "word": "dashboard",
+      "status": "correct",
+      "expected": null,
+      "start": 19.82,
+      "end": 20.38,
+      "confidence": 0.847,
+      "similarity_score": 1
+     },
+     {
+      "word": "loads",
+      "status": "correct",
+      "expected": null,
+      "start": 20.38,
+      "end": 20.96,
+      "confidence": 0.7883,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 20.96,
+      "end": 21.24,
+      "confidence": 0.9068,
+      "similarity_score": 1
+     },
+     {
+      "word": "under",
+      "status": "correct",
+      "expected": null,
+      "start": 21.24,
+      "end": 21.52,
+      "confidence": 0.8153,
+      "similarity_score": 1
+     },
+     {
+      "word": "two",
+      "status": "correct",
+      "expected": null,
+      "start": 21.52,
+      "end": 21.92,
+      "confidence": 0.345,
+      "similarity_score": 1
+     },
+     {
+      "word": "seconds",
+      "status": "correct",
+      "expected": null,
+      "start": 21.92,
+      "end": 22.42,
+      "confidence": 0.7593,
+      "similarity_score": 1
+     },
+     {
+      "word": "even",
+      "status": "correct",
+      "expected": null,
+      "start": 22.8,
+      "end": 23.06,
+      "confidence": 0.7894,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 23.06,
+      "end": 23.3,
+      "confidence": 0.893,
+      "similarity_score": 1
+     },
+     {
+      "word": "accounts",
+      "status": "correct",
+      "expected": null,
+      "start": 23.3,
+      "end": 23.72,
+      "confidence": 0.7268,
+      "similarity_score": 1
+     },
+     {
+      "word": "with",
+      "status": "correct",
+      "expected": null,
+      "start": 23.72,
+      "end": 23.94,
+      "confidence": 0.8136,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 23.94,
+      "end": 24.12,
+      "confidence": 0.9568,
+      "similarity_score": 1
+     },
+     {
+      "word": "million",
+      "status": "correct",
+      "expected": null,
+      "start": 24.12,
+      "end": 24.42,
+      "confidence": 0.7957,
+      "similarity_score": 1
+     },
+     {
+      "word": "records",
+      "status": "correct",
+      "expected": null,
+      "start": 24.42,
+      "end": 25,
+      "confidence": 0.781,
+      "similarity_score": 1
+     },
+     {
+      "word": "support",
+      "status": "correct",
+      "expected": null,
+      "start": 25,
+      "end": 25.82,
+      "confidence": 0.4282,
+      "similarity_score": 1
+     },
+     {
+      "word": "tickets",
+      "status": "correct",
+      "expected": null,
+      "start": 25.82,
+      "end": 26.4,
+      "confidence": 0.7256,
+      "similarity_score": 1
+     },
+     {
+      "word": "about",
+      "status": "correct",
+      "expected": null,
+      "start": 26.4,
+      "end": 26.76,
+      "confidence": 0.8013,
+      "similarity_score": 1
+     },
+     {
+      "word": "slow",
+      "status": "correct",
+      "expected": null,
+      "start": 26.76,
+      "end": 27.18,
+      "confidence": 0.6239,
+      "similarity_score": 1
+     },
+     {
+      "word": "reports",
+      "status": "correct",
+      "expected": null,
+      "start": 27.18,
+      "end": 27.74,
+      "confidence": 0.7664,
+      "similarity_score": 1
+     },
+     {
+      "word": "fell",
+      "status": "correct",
+      "expected": null,
+      "start": 27.74,
+      "end": 28.06,
+      "confidence": 0.7857,
+      "similarity_score": 1
+     },
+     {
+      "word": "by",
+      "status": "correct",
+      "expected": null,
+      "start": 28.06,
+      "end": 28.28,
+      "confidence": 0.89,
+      "similarity_score": 1
+     },
+     {
+      "word": "forty",
+      "status": "missing",
+      "expected": "forty",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "fourteen",
+      "status": "incorrect",
+      "expected": "one",
+      "start": 28.28,
+      "end": 28.92,
+      "confidence": 0.902,
+      "similarity_score": 0.25
+     },
+     {
+      "word": "percent",
+      "status": "correct",
+      "expected": null,
+      "start": 28.92,
+      "end": 29.42,
+      "confidence": 0.7745,
+      "similarity_score": 1
+     },
+     {
+      "word": "in",
+      "status": "correct",
+      "expected": null,
+      "start": 29.42,
+      "end": 29.76,
+      "confidence": 0.9106,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 29.76,
+      "end": 29.92,
+      "confidence": 0.8162,
+      "similarity_score": 1
+     },
+     {
+      "word": "first",
+      "status": "correct",
+      "expected": null,
+      "start": 29.92,
+      "end": 30.28,
+      "confidence": 0.8025,
+      "similarity_score": 1
+     },
+     {
+      "word": "month",
+      "status": "correct",
+      "expected": null,
+      "start": 30.28,
+      "end": 30.74,
+      "confidence": 0.8224,
+      "similarity_score": 1
+     },
+     {
+      "word": "next",
+      "status": "correct",
+      "expected": null,
+      "start": 31.24,
+      "end": 31.58,
+      "confidence": 0.8818,
+      "similarity_score": 1
+     },
+     {
+      "word": "quarter",
+      "status": "correct",
+      "expected": null,
+      "start": 31.58,
+      "end": 31.96,
+      "confidence": 0.7766,
+      "similarity_score": 1
+     },
+     {
+      "word": "we",
+      "status": "correct",
+      "expected": null,
+      "start": 32.28,
+      "end": 32.42,
+      "confidence": 0.9109,
+      "similarity_score": 1
+     },
+     {
+      "word": "will",
+      "status": "correct",
+      "expected": null,
+      "start": 32.42,
+      "end": 32.6,
+      "confidence": 0.8205,
+      "similarity_score": 1
+     },
+     {
+      "word": "focus",
+      "status": "correct",
+      "expected": null,
+      "start": 32.6,
+      "end": 33.04,
+      "confidence": 0.8219,
+      "similarity_score": 1
+     },
+     {
+      "word": "on",
+      "status": "correct",
+      "expected": null,
+      "start": 33.04,
+      "end": 33.32,
+      "confidence": 0.9056,
+      "similarity_score": 1
+     },
+     {
+      "word": "single",
+      "status": "correct",
+      "expected": null,
+      "start": 33.32,
+      "end": 33.8,
+      "confidence": 0.8076,
+      "similarity_score": 1
+     },
+     {
+      "word": "sign",
+      "status": "correct",
+      "expected": null,
+      "start": 33.8,
+      "end": 34.26,
+      "confidence": 0.7352,
+      "similarity_score": 1
+     },
+     {
+      "word": "on",
+      "status": "correct",
+      "expected": null,
+      "start": 34.26,
+      "end": 34.54,
+      "confidence": 0.9408,
+      "similarity_score": 1
+     },
+     {
+      "word": "audit",
+      "status": "correct",
+      "expected": null,
+      "start": 34.54,
+      "end": 34.94,
+      "confidence": 0.8424,
+      "similarity_score": 1
+     },
+     {
+      "word": "reports",
+      "status": "incorrect",
+      "expected": "logs",
+      "start": 34.94,
+      "end": 35.54,
+      "confidence": 0.7978,
+      "similarity_score": 0.286
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 35.54,
+      "end": 35.86,
+      "confidence": 0.8759,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 35.86,
+      "end": 36.02,
+      "confidence": 0.9905,
+      "similarity_score": 1
+     },
+     {
+      "word": "redesigned",
+      "status": "correct",
+      "expected": null,
+      "start": 36.02,
+      "end": 36.72,
+      "confidence": 0.9012,
+      "similarity_score": 1
+     },
+     {
+      "word": "mobile",
+      "status": "correct",
+      "expected": null,
+      "start": 36.72,
+      "end": 37.16,
+      "confidence": 0.8444,
+      "similarity_score": 1
+     },
+     {
+      "word": "app",
+      "status": "correct",
+      "expected": null,
+      "start": 37.16,
+      "end": 37.56,
+      "confidence": 0.8957,
+      "similarity_score": 1
+     },
+     {
+      "word": "thank",
+      "status": "correct",
+      "expected": null,
+      "start": 38,
+      "end": 38.24,
+      "confidence": 0.8891,
+      "similarity_score": 1
+     },
+     {
+      "word": "you",
+      "status": "correct",
+      "expected": null,
+      "start": 38.24,
+      "end": 38.4,
+      "confidence": 0.8961,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 38.4,
+      "end": 38.6,
+      "confidence": 0.9014,
+      "similarity_score": 1
+     },
+     {
+      "word": "building",
+      "status": "correct",
+      "expected": null,
+      "start": 38.6,
+      "end": 38.88,
+      "confidence": 0.7757,
+      "similarity_score": 1
+     },
+     {
+      "word": "with",
+      "status": "correct",
+      "expected": null,
+      "start": 38.88,
+      "end": 39.14,
+      "confidence": 0.8273,
+      "similarity_score": 1
+     },
+     {
+      "word": "us",
+      "status": "correct",
+      "expected": null,
+      "start": 39.14,
+      "end": 39.36,
+      "confidence": 0.8984,
+      "similarity_score": 1
+     }
+    ],
+    "stats": {
+     "total_script_words": 95,
+     "correct_words": 87,
+     "incorrect_words": 3,
+     "missing_words": 5,
+     "extra_words": 0,
+     "close_matches": 0,
+     "accuracy_percentage": 91.58
+    },
+    "audio_duration": 39.46,
+    "script_word_count": 95
+   }
+  },
+  {
+   "user_id": "bf68bb51-f887-4cae-ac89-bef259428c34",
+   "job_id": "demo-safety-module-2",
+   "accuracy_percentage": 91.51,
+   "total_words": 106,
+   "correct_words": 97,
+   "script_snippet": "Warehouse safety briefing, Module 2: Module two: safe lifting. Before you lift any load, check its weight on the label and test it by tipping one corner. Never lift more than twenty-five kilograms on ",
+   "audio_duration": 31.97,
+   "days_ago": 8,
+   "hour": 16,
+   "result": {
+    "job_id": "demo-safety-module-2",
+    "aligned_words": [
+     {
+      "word": "module",
+      "status": "missing",
+      "expected": "module",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "two",
+      "status": "missing",
+      "expected": "two",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "safe",
+      "status": "correct",
+      "expected": null,
+      "start": 0.21,
+      "end": 0.89,
+      "confidence": 0.4298,
+      "similarity_score": 1
+     },
+     {
+      "word": "lifting",
+      "status": "correct",
+      "expected": null,
+      "start": 0.89,
+      "end": 1.23,
+      "confidence": 0.4659,
+      "similarity_score": 1
+     },
+     {
+      "word": "before",
+      "status": "correct",
+      "expected": null,
+      "start": 1.77,
+      "end": 2.01,
+      "confidence": 0.8009,
+      "similarity_score": 1
+     },
+     {
+      "word": "you",
+      "status": "correct",
+      "expected": null,
+      "start": 2.01,
+      "end": 2.31,
+      "confidence": 0.8809,
+      "similarity_score": 1
+     },
+     {
+      "word": "lift",
+      "status": "correct",
+      "expected": null,
+      "start": 2.31,
+      "end": 2.61,
+      "confidence": 0.8086,
+      "similarity_score": 1
+     },
+     {
+      "word": "any",
+      "status": "correct",
+      "expected": null,
+      "start": 2.61,
+      "end": 2.97,
+      "confidence": 0.7949,
+      "similarity_score": 1
+     },
+     {
+      "word": "load",
+      "status": "correct",
+      "expected": null,
+      "start": 2.97,
+      "end": 3.25,
+      "confidence": 0.9453,
+      "similarity_score": 1
+     },
+     {
+      "word": "check",
+      "status": "correct",
+      "expected": null,
+      "start": 3.43,
+      "end": 3.71,
+      "confidence": 0.8154,
+      "similarity_score": 1
+     },
+     {
+      "word": "its",
+      "status": "correct",
+      "expected": null,
+      "start": 3.71,
+      "end": 3.91,
+      "confidence": 0.7239,
+      "similarity_score": 1
+     },
+     {
+      "word": "weight",
+      "status": "correct",
+      "expected": null,
+      "start": 3.91,
+      "end": 4.09,
+      "confidence": 0.8503,
+      "similarity_score": 1
+     },
+     {
+      "word": "on",
+      "status": "correct",
+      "expected": null,
+      "start": 4.09,
+      "end": 4.23,
+      "confidence": 0.9087,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 4.23,
+      "end": 4.37,
+      "confidence": 0.8048,
+      "similarity_score": 1
+     },
+     {
+      "word": "label",
+      "status": "correct",
+      "expected": null,
+      "start": 4.37,
+      "end": 4.65,
+      "confidence": 0.8066,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 4.65,
+      "end": 4.95,
+      "confidence": 0.8106,
+      "similarity_score": 1
+     },
+     {
+      "word": "test",
+      "status": "correct",
+      "expected": null,
+      "start": 4.95,
+      "end": 5.25,
+      "confidence": 0.8262,
+      "similarity_score": 1
+     },
+     {
+      "word": "it",
+      "status": "correct",
+      "expected": null,
+      "start": 5.25,
+      "end": 5.41,
+      "confidence": 0.8995,
+      "similarity_score": 1
+     },
+     {
+      "word": "by",
+      "status": "correct",
+      "expected": null,
+      "start": 5.41,
+      "end": 5.59,
+      "confidence": 0.9169,
+      "similarity_score": 1
+     },
+     {
+      "word": "tipping",
+      "status": "correct",
+      "expected": null,
+      "start": 5.59,
+      "end": 5.89,
+      "confidence": 0.8553,
+      "similarity_score": 1
+     },
+     {
+      "word": "one",
+      "status": "correct",
+      "expected": null,
+      "start": 5.89,
+      "end": 6.25,
+      "confidence": 0.5559,
+      "similarity_score": 1
+     },
+     {
+      "word": "quarter",
+      "status": "incorrect",
+      "expected": "corner",
+      "start": 6.25,
+      "end": 6.59,
+      "confidence": 0.4751,
+      "similarity_score": 0.429
+     },
+     {
+      "word": "never",
+      "status": "correct",
+      "expected": null,
+      "start": 7.13,
+      "end": 7.43,
+      "confidence": 0.821,
+      "similarity_score": 1
+     },
+     {
+      "word": "lift",
+      "status": "correct",
+      "expected": null,
+      "start": 7.43,
+      "end": 7.79,
+      "confidence": 0.7069,
+      "similarity_score": 1
+     },
+     {
+      "word": "more",
+      "status": "correct",
+      "expected": null,
+      "start": 7.79,
+      "end": 8.01,
+      "confidence": 0.8758,
+      "similarity_score": 1
+     },
+     {
+      "word": "than",
+      "status": "correct",
+      "expected": null,
+      "start": 8.01,
+      "end": 8.19,
+      "confidence": 0.8806,
+      "similarity_score": 1
+     },
+     {
+      "word": "thirty",
+      "status": "incorrect",
+      "expected": "twenty",
+      "start": 8.19,
+      "end": 8.49,
+      "confidence": 0.8295,
+      "similarity_score": 0.5
+     },
+     {
+      "word": "five",
+      "status": "correct",
+      "expected": null,
+      "start": 8.49,
+      "end": 8.79,
+      "confidence": 0.8295,
+      "similarity_score": 1
+     },
+     {
+      "word": "kilograms",
+      "status": "correct",
+      "expected": null,
+      "start": 8.79,
+      "end": 9.27,
+      "confidence": 0.5355,
+      "similarity_score": 1
+     },
+     {
+      "word": "on",
+      "status": "correct",
+      "expected": null,
+      "start": 9.27,
+      "end": 9.63,
+      "confidence": 0.9104,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 9.63,
+      "end": 9.79,
+      "confidence": 0.8019,
+      "similarity_score": 1
+     },
+     {
+      "word": "own",
+      "status": "correct",
+      "expected": null,
+      "start": 9.79,
+      "end": 10.09,
+      "confidence": 0.7987,
+      "similarity_score": 1
+     },
+     {
+      "word": "stand",
+      "status": "correct",
+      "expected": null,
+      "start": 10.63,
+      "end": 10.89,
+      "confidence": 0.8766,
+      "similarity_score": 1
+     },
+     {
+      "word": "close",
+      "status": "correct",
+      "expected": null,
+      "start": 10.89,
+      "end": 11.27,
+      "confidence": 0.8673,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 11.27,
+      "end": 11.43,
+      "confidence": 0.9075,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 11.43,
+      "end": 11.59,
+      "confidence": 0.8036,
+      "similarity_score": 1
+     },
+     {
+      "word": "load",
+      "status": "correct",
+      "expected": null,
+      "start": 11.59,
+      "end": 11.81,
+      "confidence": 0.9264,
+      "similarity_score": 1
+     },
+     {
+      "word": "with",
+      "status": "correct",
+      "expected": null,
+      "start": 11.81,
+      "end": 12.03,
+      "confidence": 0.7982,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 12.03,
+      "end": 12.19,
+      "confidence": 0.792,
+      "similarity_score": 1
+     },
+     {
+      "word": "feet",
+      "status": "correct",
+      "expected": null,
+      "start": 12.19,
+      "end": 12.43,
+      "confidence": 0.9275,
+      "similarity_score": 1
+     },
+     {
+      "word": "shoulder",
+      "status": "correct",
+      "expected": null,
+      "start": 12.43,
+      "end": 12.75,
+      "confidence": 0.8038,
+      "similarity_score": 1
+     },
+     {
+      "word": "width",
+      "status": "correct",
+      "expected": null,
+      "start": 12.75,
+      "end": 13.03,
+      "confidence": 0.8,
+      "similarity_score": 1
+     },
+     {
+      "word": "apart",
+      "status": "correct",
+      "expected": null,
+      "start": 13.03,
+      "end": 13.45,
+      "confidence": 0.8663,
+      "similarity_score": 1
+     },
+     {
+      "word": "bend",
+      "status": "correct",
+      "expected": null,
+      "start": 13.73,
+      "end": 13.91,
+      "confidence": 0.857,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 13.91,
+      "end": 14.13,
+      "confidence": 0.8022,
+      "similarity_score": 1
+     },
+     {
+      "word": "knees",
+      "status": "correct",
+      "expected": null,
+      "start": 14.13,
+      "end": 14.49,
+      "confidence": 0.7675,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 14.73,
+      "end": 14.95,
+      "confidence": 0.8857,
+      "similarity_score": 1
+     },
+     {
+      "word": "keep",
+      "status": "correct",
+      "expected": null,
+      "start": 14.95,
+      "end": 15.19,
+      "confidence": 0.797,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 15.19,
+      "end": 15.33,
+      "confidence": 0.7956,
+      "similarity_score": 1
+     },
+     {
+      "word": "back",
+      "status": "correct",
+      "expected": null,
+      "start": 15.33,
+      "end": 15.59,
+      "confidence": 0.7789,
+      "similarity_score": 1
+     },
+     {
+      "word": "straight",
+      "status": "correct",
+      "expected": null,
+      "start": 15.59,
+      "end": 16.01,
+      "confidence": 0.8377,
+      "similarity_score": 1
+     },
+     {
+      "word": "hold",
+      "status": "correct",
+      "expected": null,
+      "start": 16.39,
+      "end": 16.67,
+      "confidence": 0.8902,
+      "similarity_score": 1
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 16.67,
+      "end": 16.85,
+      "confidence": 0.8111,
+      "similarity_score": 1
+     },
+     {
+      "word": "load",
+      "status": "correct",
+      "expected": null,
+      "start": 16.85,
+      "end": 17.03,
+      "confidence": 0.9271,
+      "similarity_score": 1
+     },
+     {
+      "word": "close",
+      "status": "correct",
+      "expected": null,
+      "start": 17.03,
+      "end": 17.39,
+      "confidence": 0.8479,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 17.39,
+      "end": 17.57,
+      "confidence": 0.8814,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 17.57,
+      "end": 17.73,
+      "confidence": 0.8128,
+      "similarity_score": 1
+     },
+     {
+      "word": "waist",
+      "status": "correct",
+      "expected": null,
+      "start": 17.73,
+      "end": 18.07,
+      "confidence": 0.7665,
+      "similarity_score": 1
+     },
+     {
+      "word": "and",
+      "status": "correct",
+      "expected": null,
+      "start": 18.07,
+      "end": 18.37,
+      "confidence": 0.7502,
+      "similarity_score": 1
+     },
+     {
+      "word": "lift",
+      "status": "correct",
+      "expected": null,
+      "start": 18.37,
+      "end": 18.57,
+      "confidence": 0.7879,
+      "similarity_score": 1
+     },
+     {
+      "word": "smoothly",
+      "status": "correct",
+      "expected": null,
+      "start": 18.57,
+      "end": 19.01,
+      "confidence": 0.6942,
+      "similarity_score": 1
+     },
+     {
+      "word": "without",
+      "status": "correct",
+      "expected": null,
+      "start": 19.01,
+      "end": 19.47,
+      "confidence": 0.7337,
+      "similarity_score": 1
+     },
+     {
+      "word": "jerking",
+      "status": "correct",
+      "expected": null,
+      "start": 19.47,
+      "end": 19.95,
+      "confidence": 0.921,
+      "similarity_score": 1
+     },
+     {
+      "word": "or",
+      "status": "missing",
+      "expected": "or",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "twisting",
+      "status": "missing",
+      "expected": "twisting",
+      "start": null,
+      "end": null,
+      "confidence": null,
+      "similarity_score": null
+     },
+     {
+      "word": "if",
+      "status": "correct",
+      "expected": null,
+      "start": 20.39,
+      "end": 20.59,
+      "confidence": 0.8958,
+      "similarity_score": 1
+     },
+     {
+      "word": "you",
+      "status": "correct",
+      "expected": null,
+      "start": 20.59,
+      "end": 20.73,
+      "confidence": 0.897,
+      "similarity_score": 1
+     },
+     {
+      "word": "need",
+      "status": "correct",
+      "expected": null,
+      "start": 20.73,
+      "end": 20.91,
+      "confidence": 0.8069,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 20.91,
+      "end": 21.09,
+      "confidence": 0.9041,
+      "similarity_score": 1
+     },
+     {
+      "word": "turn",
+      "status": "correct",
+      "expected": null,
+      "start": 21.09,
+      "end": 21.37,
+      "confidence": 0.8201,
+      "similarity_score": 1
+     },
+     {
+      "word": "move",
+      "status": "correct",
+      "expected": null,
+      "start": 21.53,
+      "end": 21.73,
+      "confidence": 0.8918,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 21.73,
+      "end": 21.89,
+      "confidence": 0.7912,
+      "similarity_score": 1
+     },
+     {
+      "word": "feet",
+      "status": "correct",
+      "expected": null,
+      "start": 21.89,
+      "end": 22.13,
+      "confidence": 0.938,
+      "similarity_score": 1
+     },
+     {
+      "word": "instead",
+      "status": "correct",
+      "expected": null,
+      "start": 22.13,
+      "end": 22.47,
+      "confidence": 0.8516,
+      "similarity_score": 1
+     },
+     {
+      "word": "of",
+      "status": "correct",
+      "expected": null,
+      "start": 22.47,
+      "end": 22.61,
+      "confidence": 0.8994,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 22.61,
+      "end": 22.75,
+      "confidence": 0.8028,
+      "similarity_score": 1
+     },
+     {
+      "word": "body",
+      "status": "correct",
+      "expected": null,
+      "start": 22.75,
+      "end": 23.07,
+      "confidence": 0.7994,
+      "similarity_score": 1
+     },
+     {
+      "word": "when",
+      "status": "correct",
+      "expected": null,
+      "start": 23.43,
+      "end": 23.59,
+      "confidence": 0.8071,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 23.59,
+      "end": 23.73,
+      "confidence": 0.985,
+      "similarity_score": 1
+     },
+     {
+      "word": "load",
+      "status": "correct",
+      "expected": null,
+      "start": 23.73,
+      "end": 23.89,
+      "confidence": 0.9318,
+      "similarity_score": 1
+     },
+     {
+      "word": "is",
+      "status": "correct",
+      "expected": null,
+      "start": 23.89,
+      "end": 24.07,
+      "confidence": 0.9096,
+      "similarity_score": 1
+     },
+     {
+      "word": "too",
+      "status": "correct",
+      "expected": null,
+      "start": 24.07,
+      "end": 24.25,
+      "confidence": 0.8117,
+      "similarity_score": 1
+     },
+     {
+      "word": "heavy",
+      "status": "correct",
+      "expected": null,
+      "start": 24.25,
+      "end": 24.49,
+      "confidence": 0.7212,
+      "similarity_score": 1
+     },
+     {
+      "word": "or",
+      "status": "correct",
+      "expected": null,
+      "start": 24.49,
+      "end": 24.69,
+      "confidence": 0.9097,
+      "similarity_score": 1
+     },
+     {
+      "word": "awkward",
+      "status": "correct",
+      "expected": null,
+      "start": 24.69,
+      "end": 25.05,
+      "confidence": 0.8631,
+      "similarity_score": 1
+     },
+     {
+      "word": "use",
+      "status": "correct",
+      "expected": null,
+      "start": 25.33,
+      "end": 25.53,
+      "confidence": 0.8265,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 25.53,
+      "end": 25.67,
+      "confidence": 0.9989,
+      "similarity_score": 1
+     },
+     {
+      "word": "trolley",
+      "status": "correct",
+      "expected": null,
+      "start": 25.67,
+      "end": 26.05,
+      "confidence": 0.8232,
+      "similarity_score": 1
+     },
+     {
+      "word": "or",
+      "status": "correct",
+      "expected": null,
+      "start": 26.05,
+      "end": 26.25,
+      "confidence": 0.8969,
+      "similarity_score": 1
+     },
+     {
+      "word": "ask",
+      "status": "correct",
+      "expected": null,
+      "start": 26.25,
+      "end": 26.57,
+      "confidence": 0.7934,
+      "similarity_score": 1
+     },
+     {
+      "word": "a",
+      "status": "correct",
+      "expected": null,
+      "start": 26.57,
+      "end": 26.75,
+      "confidence": 0.998,
+      "similarity_score": 1
+     },
+     {
+      "word": "colleague",
+      "status": "correct",
+      "expected": null,
+      "start": 26.75,
+      "end": 26.97,
+      "confidence": 0.7707,
+      "similarity_score": 1
+     },
+     {
+      "word": "for",
+      "status": "correct",
+      "expected": null,
+      "start": 26.97,
+      "end": 27.23,
+      "confidence": 0.896,
+      "similarity_score": 1
+     },
+     {
+      "word": "help",
+      "status": "correct",
+      "expected": null,
+      "start": 27.23,
+      "end": 27.55,
+      "confidence": 0.8045,
+      "similarity_score": 1
+     },
+     {
+      "word": "report",
+      "status": "correct",
+      "expected": null,
+      "start": 27.55,
+      "end": 28.35,
+      "confidence": 0.7944,
+      "similarity_score": 1
+     },
+     {
+      "word": "any",
+      "status": "correct",
+      "expected": null,
+      "start": 28.35,
+      "end": 28.65,
+      "confidence": 0.8394,
+      "similarity_score": 1
+     },
+     {
+      "word": "strain",
+      "status": "correct",
+      "expected": null,
+      "start": 28.65,
+      "end": 29.09,
+      "confidence": 0.6932,
+      "similarity_score": 1
+     },
+     {
+      "word": "or",
+      "status": "correct",
+      "expected": null,
+      "start": 29.09,
+      "end": 29.31,
+      "confidence": 0.9081,
+      "similarity_score": 1
+     },
+     {
+      "word": "injury",
+      "status": "correct",
+      "expected": null,
+      "start": 29.31,
+      "end": 29.71,
+      "confidence": 0.8584,
+      "similarity_score": 1
+     },
+     {
+      "word": "to",
+      "status": "correct",
+      "expected": null,
+      "start": 29.71,
+      "end": 29.93,
+      "confidence": 0.9023,
+      "similarity_score": 1
+     },
+     {
+      "word": "your",
+      "status": "correct",
+      "expected": null,
+      "start": 29.93,
+      "end": 30.07,
+      "confidence": 0.8017,
+      "similarity_score": 1
+     },
+     {
+      "word": "supervisor",
+      "status": "correct",
+      "expected": null,
+      "start": 30.07,
+      "end": 30.65,
+      "confidence": 0.7649,
+      "similarity_score": 1
+     },
+     {
+      "word": "by",
+      "status": "incorrect",
+      "expected": "on",
+      "start": 30.65,
+      "end": 30.91,
+      "confidence": 0.8921,
+      "similarity_score": 0
+     },
+     {
+      "word": "the",
+      "status": "correct",
+      "expected": null,
+      "start": 30.91,
+      "end": 31.11,
+      "confidence": 0.7964,
+      "similarity_score": 1
+     },
+     {
+      "word": "end",
+      "status": "extra",
+      "expected": null,
+      "start": 31.11,
+      "end": 31.29,
+      "confidence": 0.8159,
+      "similarity_score": null
+     },
+     {
+      "word": "of",
+      "status": "extra",
+      "expected": null,
+      "start": 31.29,
+      "end": 31.43,
+      "confidence": 0.8974,
+      "similarity_score": null
+     },
+     {
+      "word": "the",
+      "status": "incorrect",
+      "expected": "same",
+      "start": 31.43,
+      "end": 31.55,
+      "confidence": 0.8123,
+      "similarity_score": 0.25
+     },
+     {
+      "word": "week",
+      "status": "incorrect",
+      "expected": "day",
+      "start": 31.55,
+      "end": 31.83,
+      "confidence": 0.8258,
+      "similarity_score": 0
+     }
+    ],
+    "stats": {
+     "total_script_words": 106,
+     "correct_words": 97,
+     "incorrect_words": 5,
+     "missing_words": 4,
+     "extra_words": 2,
+     "close_matches": 0,
+     "accuracy_percentage": 91.51
+    },
+    "audio_duration": 31.97,
+    "script_word_count": 106
+   }
+  }
+ ],
+ "messages": [
+  {
+   "user_id": "32a5b2a9-f415-4cff-a17b-12fba1b485ef",
+   "name": "Priya Shah",
+   "email": "priya@northgate-learning.example",
+   "subject": "Team seats for 6 narrators",
+   "message": "We record e-learning modules with six freelance narrators. Can we share one Pro plan, or do we need a plan each? We'd also like the exported error reports in our LMS.",
+   "status": "pending",
+   "days_ago": 1
+  },
+  {
+   "user_id": "2e231927-aa23-4f10-a306-1e807ecb0129",
+   "name": "Mara Quinn",
+   "email": "mara.quinn@example.com",
+   "subject": "Accents and regional spellings",
+   "message": "I narrate in British English. Does SoundProof flag 'colour' vs 'color' as an error when the script uses British spelling?",
+   "status": "replied",
+   "admin_reply": "No: British and American spellings count as the same word, so 'colour' read from a script that says 'color' is marked correct.",
+   "days_ago": 6
+  },
+  {
+   "user_id": "f118e3e8-42b1-4143-ac69-8557a8a507ce",
+   "name": "Tobias Reid",
+   "email": "tobias.reid@example.com",
+   "subject": "Numbers in scripts",
+   "message": "My scripts write numbers as digits (12, 2026) and I read them as words. Will that count against my accuracy?",
+   "status": "replied",
+   "admin_reply": "Numbers are compared the way they are read aloud, so '12' in the script and 'twelve' in the recording match. A wrong number still shows up as an error.",
+   "days_ago": 11
+  },
+  {
+   "user_id": "3029f666-4f61-4e01-ad97-fd02bda9b889",
+   "name": "Hana Sato",
+   "email": "hana.sato@example.com",
+   "subject": "Pausing my subscription",
+   "message": "I'm between audiobook contracts for two months. Can I pause rather than cancel and keep my history?",
+   "status": "pending",
+   "days_ago": 3
+  }
+ ],
+ "feedback": [
+  {
+   "user_id": "0188c24a-96d0-4594-a297-4477bb7680a2",
+   "rating": 5,
+   "text": "We used to proof every chapter twice by ear. Now the first pass takes minutes and the proofer only checks what SoundProof flags.",
+   "display_name": "Harbourlight Audio",
+   "role": "Audiobook studio",
+   "is_approved": true,
+   "days_ago": 20
+  },
+  {
+   "user_id": "32a5b2a9-f415-4cff-a17b-12fba1b485ef",
+   "rating": 5,
+   "text": "It caught a wrong weight limit in a safety module before it went to 400 warehouse staff. That alone paid for the year.",
+   "display_name": "Priya S.",
+   "role": "E-learning producer",
+   "is_approved": true,
+   "days_ago": 15
+  },
+  {
+   "user_id": "2e231927-aa23-4f10-a306-1e807ecb0129",
+   "rating": 4,
+   "text": "Click-to-seek on every flagged word is the feature I didn't know I needed. Pickups are so much faster.",
+   "display_name": "Mara Q.",
+   "role": "Narrator",
+   "is_approved": true,
+   "days_ago": 9
+  },
+  {
+   "user_id": "578716ce-d020-464b-a593-f875740f3547",
+   "rating": 5,
+   "text": "Comparing two takes side by side made choosing the keeper easy.",
+   "display_name": "Clara W.",
+   "role": "Voice actor",
+   "is_approved": false,
+   "days_ago": 2
+  },
+  {
+   "user_id": "b92da875-5471-47b0-a037-f82eb3e8da0f",
+   "rating": 3,
+   "text": "Works well, but I'd love support for scripts with stage directions in brackets.",
+   "display_name": "Ravi P.",
+   "role": "Podcast editor",
+   "is_approved": false,
+   "days_ago": 1
+  }
+ ],
+ "samples": [
+  {
+   "slug": "lighthouse-ch3-take1",
+   "title": "The Lighthouse Keeper, Chapter 3 (take 1)",
+   "kind": "Audiobook",
+   "voice": "aura-2-thalia-en",
+   "script": "Chapter Three. The storm arrived an hour before midnight, exactly as the old almanac had promised. Margaret climbed the ninety-two steps of the lighthouse with a lantern in one hand and her father's brass key in the other. At the top, the great lens was already turning, throwing its pale beam across a sea the colour of slate. She checked the oil, wound the clockwork, and wrote the time in the logbook in small, careful letters. Far below, the fishing boats were running for the harbour, their lights rising and falling like sparks above a fire. One of them was late. Margaret counted the boats twice, then a third time, and each time the answer was the same: eleven, not twelve. She pressed her hand against the cold glass and waited for the twelfth light to appear.",
+   "slips": [
+    "ninety-two → ninety",
+    "added 'white'",
+    "skipped 'wound the clockwork'",
+    "harbour → home",
+    "skipped 'then a third time'",
+    "glass → window"
+   ],
+   "duration": 44,
+   "file": "samples/lighthouse-ch3-take1.mp3"
+  },
+  {
+   "slug": "lighthouse-ch3-take2",
+   "title": "The Lighthouse Keeper, Chapter 3 (take 2)",
+   "kind": "Audiobook",
+   "voice": "aura-2-thalia-en",
+   "script": "Chapter Three. The storm arrived an hour before midnight, exactly as the old almanac had promised. Margaret climbed the ninety-two steps of the lighthouse with a lantern in one hand and her father's brass key in the other. At the top, the great lens was already turning, throwing its pale beam across a sea the colour of slate. She checked the oil, wound the clockwork, and wrote the time in the logbook in small, careful letters. Far below, the fishing boats were running for the harbour, their lights rising and falling like sparks above a fire. One of them was late. Margaret counted the boats twice, then a third time, and each time the answer was the same: eleven, not twelve. She pressed her hand against the cold glass and waited for the twelfth light to appear.",
+   "slips": [],
+   "duration": 45,
+   "file": "samples/lighthouse-ch3-take2.mp3"
+  },
+  {
+   "slug": "q3-product-update",
+   "title": "Q3 product update video",
+   "kind": "Corporate explainer",
+   "voice": "aura-2-orion-en",
+   "script": "Welcome to the third-quarter product update. This quarter we shipped the three features customers asked for most. First, offline mode now syncs automatically when you reconnect, with no manual export. Second, shared workspaces support up to fifty collaborators, up from twenty. Third, the new reporting dashboard loads in under two seconds, even for accounts with a million records. Support tickets about slow reports fell by forty-one percent in the first month. Next quarter, we will focus on single sign-on, audit logs and a redesigned mobile app. Thank you for building with us.",
+   "slips": [
+    "skipped 'with no manual export'",
+    "fifty → fifteen",
+    "forty-one → fourteen",
+    "audit logs → audit reports"
+   ],
+   "duration": 39,
+   "file": "samples/q3-product-update.mp3"
+  },
+  {
+   "slug": "safety-module-2",
+   "title": "Warehouse safety briefing, Module 2",
+   "kind": "E-learning",
+   "voice": "aura-2-andromeda-en",
+   "script": "Module two: safe lifting. Before you lift any load, check its weight on the label and test it by tipping one corner. Never lift more than twenty-five kilograms on your own. Stand close to the load with your feet shoulder-width apart, bend your knees, and keep your back straight. Hold the load close to your waist and lift smoothly, without jerking or twisting. If you need to turn, move your feet instead of your body. When a load is too heavy or awkward, use a trolley or ask a colleague for help. Report any strain or injury to your supervisor on the same day.",
+   "slips": [
+    "twenty-five → thirty-five (safety-critical)",
+    "skipped 'or twisting'",
+    "'on the same day' → 'by the end of the week'"
+   ],
+   "duration": 32,
+   "file": "samples/safety-module-2.mp3"
+  }
+ ]
+}

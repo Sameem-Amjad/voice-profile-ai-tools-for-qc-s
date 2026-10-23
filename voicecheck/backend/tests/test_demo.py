@@ -81,6 +81,42 @@ def test_payments_are_off_and_shared_accounts_keep_their_plan(demo_on):
     demo.refuse_plan_change(_user("demo_seed_other"))  # other seeded users can be changed
 
 
+def test_samples_offer_the_script_but_not_the_planted_slips(demo_on, tmp_path):
+    data = {**DATA, "samples": [{"slug": "take-one", "title": "Take one", "kind": "Audiobook", "duration": 21, "script": "Hello there.", "slips": ["hello → hi"], "file": "samples/take-one.mp3"}]}
+    (tmp_path / "demo_data.json").write_text(json.dumps(data))
+    assert demo.samples() == [{"slug": "take-one", "title": "Take one", "kind": "Audiobook", "duration": 21, "script": "Hello there."}]
+    assert demo.sample_file("take-one") is None  # listed, but the file is missing
+    (tmp_path / "samples").mkdir()
+    (tmp_path / "samples" / "take-one.mp3").write_bytes(b"ID3")
+    assert demo.sample_file("take-one") == tmp_path / "samples" / "take-one.mp3"
+    assert demo.sample_file("../demo_data") is None
+
+
+def test_one_click_sign_in_only_issues_tickets_for_the_shared_accounts(demo_on, monkeypatch):
+    sent = []
+
+    class FakeClerk:
+        def __init__(self, **_): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *_): pass
+        async def post(self, url, headers, json):
+            sent.append((url, json))
+            return type("R", (), {"status_code": 200, "json": lambda self: {"token": "ticket-1"}, "text": ""})()
+
+    monkeypatch.setattr(demo.httpx, "AsyncClient", FakeClerk)
+    monkeypatch.setattr(settings, "CLERK_SECRET_KEY", "sk_test_x")
+    loop = asyncio.get_event_loop()
+    assert loop.run_until_complete(demo.sign_in_ticket("narrator")) == "ticket-1"
+    assert sent == [("https://api.clerk.com/v1/sign_in_tokens", {"user_id": SHARED, "expires_in_seconds": 120})]
+    with pytest.raises(HTTPException) as e:  # the test data has no shared admin
+        loop.run_until_complete(demo.sign_in_ticket("admin"))
+    assert e.value.status_code == 404
+    monkeypatch.setattr(settings, "DEMO_MODE", False)
+    with pytest.raises(HTTPException):
+        loop.run_until_complete(demo.sign_in_ticket("narrator"))
+    assert len(sent) == 1
+
+
 def test_seed_builds_the_demo_data_and_can_run_twice(demo_on):
     from db.session import AsyncSessionLocal
 

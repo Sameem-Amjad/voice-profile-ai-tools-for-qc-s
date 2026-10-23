@@ -12,6 +12,7 @@ from api.routes import upload, transcribe, compare, health, billing
 from api.routes import history, stats, contact, feedback, chatbot, admin as admin_routes, me
 from api.routes import share as share_routes
 from api.routes import badge as badge_routes
+from api.routes import demo as demo_routes
 from services.job_service import job_service
 from services.background_jobs import start_background_jobs
 from db.init import init_db
@@ -148,6 +149,8 @@ app.include_router(admin_routes.router, prefix="/api", tags=["Admin"])
 app.include_router(me.router, prefix="/api", tags=["Me"])
 app.include_router(share_routes.router, prefix="/api", tags=["Share"])
 app.include_router(badge_routes.router, prefix="/api", tags=["Badge"])
+if settings.DEMO_MODE:  # portfolio demo only: sample recordings to try
+    app.include_router(demo_routes.router, prefix="/api", tags=["Demo"])
 
 
 if __name__ == "__main__":

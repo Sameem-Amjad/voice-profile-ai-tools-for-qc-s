@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AudioUploader } from '../upload/AudioUploader';
 import { VoiceRecorder } from '../upload/VoiceRecorder';
 import { ScriptInput } from '../upload/ScriptInput';
+import { DemoSamples } from '../upload/DemoSamples';
 import { ResultsView } from '../results/ResultsView';
 import { FeedbackModal } from '../feedback/FeedbackModal';
 import { UpgradeModal } from '../UpgradeModal';
@@ -60,6 +61,13 @@ export const AppWorkflow = () => {
     } catch (e) {
       // Error handled in hook
     }
+  };
+
+  // ── Demo sample picked (portfolio demo only) ──────────────────────────
+  const handleSamplePick = async (file, sampleScript) => {
+    setInputMode('upload');
+    setScript(sampleScript);
+    await handleFileSelect(file);
   };
 
   // ── Analyze button ────────────────────────────────────────────────────
@@ -203,6 +211,9 @@ export const AppWorkflow = () => {
                     onFileReady={handleFileSelect}
                     disabled={upload.uploading || step === 'transcribe'}
                   />
+                )}
+                {!upload.fileMeta && (
+                  <DemoSamples onPick={handleSamplePick} disabled={upload.uploading || step === 'transcribe'} />
                 )}
               </div>
 
