@@ -176,3 +176,62 @@ def test_alignment_engine_incorrect_substitution():
     # The 'world' slot must not be marked correct
     assert result.stats.correct_words <= 1
     assert result.stats.accuracy_percentage < 100.0
+
+
+# ─── Read-aloud forms: numbers, hyphens, Roman numerals, spelling ───────────
+
+
+def test_normalizer_spells_out_numbers_like_they_are_read():
+    n = TextNormalizer()
+    assert n.normalize_text("11. Not 12. the 12th light") == ["eleven", "not", "twelve", "the", "twelfth", "light"]
+    assert n.normalize_text("fell by 41% in 2026") == ["fell", "by", "forty", "one", "percent", "in", "twenty", "twenty", "six"]
+    assert n.normalize_text("$5 and 1,000 and 2.5") == ["five", "dollars", "and", "one", "thousand", "and", "two", "point", "five"]
+
+
+def test_normalizer_splits_hyphenated_words_on_both_sides():
+    n = TextNormalizer()
+    assert n.normalize_text("ninety-two steps") == ["ninety", "two", "steps"]
+    assert n.normalize_text("92 steps") == ["ninety", "two", "steps"]
+
+
+def test_normalizer_reads_roman_numerals_only_after_chapter_words():
+    n = TextNormalizer()
+    assert n.normalize_text("CHAPTER III.") == ["chapter", "three"]
+    # "I" on its own is a pronoun, not a numeral
+    assert n.normalize_text("I said Chapter I") == ["i", "said", "chapter", "one"]
+
+
+def test_normalizer_unifies_british_and_american_spelling_without_touching_four_or_your():
+    n = TextNormalizer()
+    assert n.normalize_text("colour coloured favourites organised harbour") == ["color", "colored", "favorites", "organized", "harbor"]
+    assert n.normalize_text("four your hour") == ["four", "your", "hour"]
+
+
+def test_alignment_engine_perfect_read_with_digits_hyphens_and_british_spelling():
+    """
+    Whisper writes "CHAPTER III", "92", "color" and "12th"; the script says
+    "Chapter Three", "ninety-two", "colour" and "twelfth". A word-perfect read
+    must still score 100%.
+    """
+    transcription = _make_transcription([
+        ("CHAPTER", 0.0, 0.4), ("III.", 0.4, 0.8), ("the", 0.8, 0.9), ("92", 0.9, 1.4),
+        ("steps,", 1.4, 1.8), ("the", 1.8, 1.9), ("color", 1.9, 2.3), ("of", 2.3, 2.4),
+        ("slate.", 2.4, 2.8), ("11.", 2.8, 3.2), ("Not", 3.2, 3.4), ("12.", 3.4, 3.8),
+        ("the", 3.8, 3.9), ("12th", 3.9, 4.3), ("light.", 4.3, 4.7),
+    ])
+    script = "Chapter Three. The ninety-two steps, the colour of slate: eleven, not twelve. The twelfth light."
+
+    result = AlignmentEngine().compare(transcription=transcription, script_text=script)
+
+    assert result.stats.incorrect_words == 0
+    assert result.stats.missing_words == 0
+    assert result.stats.extra_words == 0
+    assert result.stats.accuracy_percentage == pytest.approx(100.0)
+
+
+def test_alignment_engine_still_catches_a_wrong_number():
+    """Spelling numbers out must not hide a real slip: fifty in the script, fifteen read."""
+    transcription = _make_transcription([("up", 0.0, 0.2), ("to", 0.2, 0.3), ("15", 0.3, 0.8), ("collaborators", 0.8, 1.6)])
+    result = AlignmentEngine().compare(transcription=transcription, script_text="up to fifty collaborators")
+    assert result.stats.correct_words == 3
+    assert result.stats.accuracy_percentage < 100.0
