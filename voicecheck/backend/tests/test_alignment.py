@@ -229,6 +229,28 @@ def test_alignment_engine_perfect_read_with_digits_hyphens_and_british_spelling(
     assert result.stats.accuracy_percentage == pytest.approx(100.0)
 
 
+def test_alignment_engine_reads_a_separate_percent_sign_and_compound_words():
+    """Whisper times "14" and "%" separately and writes "log-book" for "logbook"; both are correct reads."""
+    transcription = _make_transcription([
+        ("fell", 0.0, 0.3), ("by", 0.3, 0.5), ("14", 0.5, 0.9), ("%", 0.9, 1.2),
+        ("in", 1.2, 1.3), ("the", 1.3, 1.4), ("log", 1.4, 1.6), ("-book,", 1.6, 1.9),
+        ("the", 1.9, 2.0), ("voiceover", 2.0, 2.6),
+    ])
+    script = "fell by fourteen per cent in the logbook, the voice over"
+
+    result = AlignmentEngine().compare(transcription=transcription, script_text=script)
+
+    assert result.stats.accuracy_percentage == pytest.approx(100.0)
+    assert next(w for w in result.aligned_words if w.word == "logbook").end == pytest.approx(1.9)
+
+
+def test_compounds_are_left_alone_where_the_script_uses_both_forms():
+    """The script says "a part" and "apart": a transcript's "a part" must not be merged."""
+    transcription = _make_transcription([("a", 0.0, 0.1), ("part", 0.1, 0.4), ("of", 0.4, 0.5), ("it", 0.5, 0.6), ("apart", 0.6, 1.0)])
+    result = AlignmentEngine().compare(transcription=transcription, script_text="a part of it apart")
+    assert result.stats.accuracy_percentage == pytest.approx(100.0)
+
+
 def test_alignment_engine_still_catches_a_wrong_number():
     """Spelling numbers out must not hide a real slip: fifty in the script, fifteen read."""
     transcription = _make_transcription([("up", 0.0, 0.2), ("to", 0.2, 0.3), ("15", 0.3, 0.8), ("collaborators", 0.8, 1.6)])

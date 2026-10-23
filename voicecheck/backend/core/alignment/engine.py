@@ -2,7 +2,7 @@ from models.schemas import (
     AlignedWord, WordStatus, AccuracyStats,
     ComparisonResult, TranscriptionResult
 )
-from core.alignment.normalizer import TextNormalizer
+from core.alignment.normalizer import TextNormalizer, match_compounds
 from core.alignment.needleman_wunsch import NeedlemanWunsch
 from core.alignment.levenshtein import word_similarity
 from config import settings
@@ -73,8 +73,9 @@ class AlignmentEngine:
             }
             for w in transcription.words
         ]
-        transcript_normalized_dicts = self.normalizer.normalize_words_with_mapping(
-            transcript_word_dicts
+        transcript_normalized_dicts = match_compounds(
+            script_words_normalized,
+            self.normalizer.normalize_words_with_mapping(transcript_word_dicts),
         )
         transcript_words_normalized = [d["word"] for d in transcript_normalized_dicts]
 

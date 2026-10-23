@@ -183,6 +183,36 @@ def roman_value(token: str) -> int | None:
     return total if 0 < total <= 100 else None
 
 
+def match_compounds(script_words: list[str], transcript: list[dict]) -> list[dict]:
+    """
+    Write compound words the way the script does. "log book" or "log-book" heard
+    for the script's "logbook" becomes one word; "logbook" heard for the script's
+    "log book" becomes two. Only where the script has that form and never the other,
+    so a script that says "a part" somewhere keeps "a part" there.
+    """
+    vocab = set(script_words)
+    pairs = set(zip(script_words, script_words[1:]))
+    splits = {a + b: (a, b) for a, b in pairs}
+
+    out: list[dict] = []
+    i = 0
+    while i < len(transcript):
+        w = transcript[i]
+        nxt = transcript[i + 1] if i + 1 < len(transcript) else None
+        if nxt and w["word"] + nxt["word"] in vocab and (w["word"], nxt["word"]) not in pairs:
+            out.append({**w, "word": w["word"] + nxt["word"], "end": nxt.get("end", w.get("end"))})
+            i += 2
+            continue
+        split = splits.get(w["word"])
+        if split and w["word"] not in vocab:
+            mid = round((w.get("start", 0) + w.get("end", 0)) / 2, 3)
+            out += [{**w, "word": split[0], "end": mid}, {**w, "word": split[1], "start": mid}]
+        else:
+            out.append(w)
+        i += 1
+    return out
+
+
 class TextNormalizer:
     """
     Normalize text for fair comparison between script and transcript.
@@ -240,6 +270,10 @@ class TextNormalizer:
 
         # Step 2: Lowercase
         word = word.lower().strip()
+
+        # Whisper can time "%" as its own token after the number ("14", "%")
+        if word == "%":
+            return "percent"
 
         # Step 3: Remove punctuation (keep apostrophes for contractions)
         # Remove leading/trailing punctuation only — preserve "don't"
