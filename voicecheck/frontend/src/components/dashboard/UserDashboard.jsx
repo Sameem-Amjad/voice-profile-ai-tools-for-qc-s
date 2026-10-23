@@ -184,7 +184,8 @@ export const UserDashboard = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto relative">
+                  {/* relative: keeps the sr-only (absolute) header cell inside the scroller on phones */}
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-left text-xs text-gray-500 uppercase tracking-wide bg-gray-50">
