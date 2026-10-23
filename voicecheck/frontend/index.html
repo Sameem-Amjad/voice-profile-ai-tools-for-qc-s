@@ -52,6 +52,8 @@
          Replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID. -->
     <script>
       (function () {
+        // The portfolio demo (VITE_DEMO_MODE=true) loads no ad scripts.
+        if ('%VITE_DEMO_MODE%' === 'true') return;
         function loadAdSense() {
           var s = document.createElement('script');
           s.async = true;

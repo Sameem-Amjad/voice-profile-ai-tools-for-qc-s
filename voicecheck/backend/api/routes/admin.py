@@ -7,6 +7,7 @@ from datetime import datetime, timezone, timedelta
 import uuid
 
 from auth.dependencies import admin_user
+from services import demo
 from services.email_service import send_admin_reply, send_subscription_confirmed, send_payment_link
 from db.models import User, AnalysisResult, ContactMessage, Feedback, UsageMinute, Subscription
 from db.session import get_db
@@ -111,6 +112,7 @@ async def admin_set_plan(
     user = q.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    demo.refuse_plan_change(user)
 
     valid = ("starter", "pro", "free_trial", "cancelled")
     if body.plan not in valid:
@@ -157,6 +159,7 @@ async def admin_send_payment_link(
     _: User = Depends(admin_user),
     db: AsyncSession = Depends(get_db),
 ):
+    demo.refuse_payments()
     q = await db.execute(select(User).where(User.id == user_id))
     user = q.scalar_one_or_none()
     if not user:

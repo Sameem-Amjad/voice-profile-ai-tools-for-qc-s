@@ -1,37 +1,45 @@
+# SoundProof portfolio demo (branch: demo). Production deploys to EC2 from main; this
+# Blueprint never touches it. The demo rebuilds its sample data on every start
+# (DEMO_MODE, backend/services/demo.py) on a throwaway SQLite database.
 services:
   - type: web
-    name: voice-profile
+    name: soundproof-demo-api
     runtime: docker
     dockerfilePath: ./voicecheck/backend/Dockerfile
     dockerContext: ./voicecheck/backend
     plan: free
-    region: oregon
+    region: frankfurt
+    branch: demo
+    healthCheckPath: /api/health
     envVars:
+      - key: DEMO_MODE
+        value: "true"
+      - key: DEMO_MAX_AUDIO_SECONDS
+        value: "120"
+      - key: DEMO_DAILY_TRANSCRIPTIONS
+        value: "25"
+      - key: DEMO_DAILY_CHAT_MESSAGES
+        value: "150"
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:///./demo.db
+      - key: STORAGE_BACKEND
+        value: local
       - key: TRANSCRIPTION_BACKEND
         value: openai_api
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: CLERK_ISSUER
-        sync: false
-      - key: CLERK_JWKS_URL
-        sync: false
       - key: AUTH_REQUIRED
-        value: "false"
-      - key: STRIPE_SECRET_KEY
-        sync: false
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
-      - key: STRIPE_PRICE_STARTER
-        value: price_1TTMqSGESmAb2SAXMLFFBP1s
-      - key: STRIPE_PRICE_PRO
-        value: price_1TTMqiGESmAb2SAX4MFYcL91
+        value: "true"
+      - key: CLERK_ISSUER
+        value: https://together-dane-52.clerk.accounts.dev
+      - key: CLERK_JWKS_URL
+        value: https://together-dane-52.clerk.accounts.dev/.well-known/jwks.json
       - key: CORS_ORIGINS
-        sync: false
+        value: https://soundproof-demo.vercel.app
       - key: LOG_LEVEL
         value: INFO
       - key: LOG_FORMAT
         value: json
       - key: PORT
         value: "8000"
+      # Secrets: paste in the Render dashboard (Environment). Use an OpenAI key with a spending cap.
+      - { key: OPENAI_API_KEY, sync: false }
+      - { key: CLERK_SECRET_KEY, sync: false }

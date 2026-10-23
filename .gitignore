@@ -1,1 +1,4 @@
 voicecheck-mobile
+# Never commit keys or credentials (this repo is public)
+*.pem
+*accessKeys*.csv

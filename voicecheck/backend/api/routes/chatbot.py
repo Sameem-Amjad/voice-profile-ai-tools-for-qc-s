@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from openai import AsyncOpenAI
 from config import settings
+from services import demo
 
 router = APIRouter()
 client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
@@ -28,6 +29,7 @@ class ChatResponse(BaseModel):
 async def chatbot(body: ChatRequest):
     if not settings.OPENAI_API_KEY:
         raise HTTPException(status_code=503, detail="Chatbot not configured")
+    demo.consume_daily("chat", settings.DEMO_DAILY_CHAT_MESSAGES)
 
     response = await client.chat.completions.create(
         model="gpt-4o-mini",

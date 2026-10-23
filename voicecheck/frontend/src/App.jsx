@@ -4,6 +4,7 @@ import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
 import { useDevMode } from './hooks/useDevMode';
 import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+import { DemoBadge } from './components/DemoBadge';
 
 const LandingPage = lazy(() => import('./components/landing/LandingPage').then(m => ({ default: m.LandingPage })));
 const AppWorkflow = lazy(() => import('./components/app/AppWorkflow').then(m => ({ default: m.AppWorkflow })));
@@ -111,6 +112,7 @@ export default function App() {
     <Suspense fallback={null}>
       <ChatbotWidget />
     </Suspense>
+    <DemoBadge />
     </ErrorBoundary>
   );
 }

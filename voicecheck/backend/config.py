@@ -102,6 +102,12 @@ class Settings(BaseSettings):
     ADMIN_EMAILS: str = ""      # comma-separated admin email addresses
     ADMIN_CLERK_IDS: str = ""  # comma-separated Clerk user IDs (user_xxx) — more reliable than email
 
+    # ── Portfolio demo (services/demo.py) — never set in production ───────
+    DEMO_MODE: bool = False
+    DEMO_MAX_AUDIO_SECONDS: int = 120       # per upload
+    DEMO_DAILY_TRANSCRIPTIONS: int = 25     # across all visitors, per UTC day
+    DEMO_DAILY_CHAT_MESSAGES: int = 150     # chatbot replies, across all visitors
+
     # ── Email (Resend) ────────────────────────────────────────────────────
     RESEND_API_KEY: str = ""
     FROM_EMAIL: str = "SoundProof <noreply@voicecheck.app>"

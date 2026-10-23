@@ -33,6 +33,7 @@ from services.email_service import (
     send_subscription_confirmed,
     send_subscription_cancelled,
 )
+from services import demo
 from utils.logger import get_logger
 
 router = APIRouter()
@@ -72,6 +73,7 @@ async def request_subscription(
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    demo.refuse_payments()
     if body.plan not in VALID_PLANS:
         raise HTTPException(status_code=400, detail=f"Unknown plan: {body.plan}")
     if user.plan in VALID_PLANS:
@@ -118,6 +120,7 @@ async def cancel_subscription(
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    demo.refuse_plan_change(user)
     if user.plan not in VALID_PLANS:
         raise HTTPException(status_code=400, detail="No active subscription to cancel.")
 

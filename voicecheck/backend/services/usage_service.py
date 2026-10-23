@@ -19,6 +19,7 @@ from fastapi import HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config import settings
 from db.models import AnalysisResult, UsageMinute, User
 from utils.logger import get_logger
 
@@ -96,6 +97,9 @@ async def monthly_transcription_count(user_id: str, db: AsyncSession) -> int:
 
 
 async def check_transcription_quota_or_raise(user: User, db: AsyncSession) -> None:
+    from services import demo
+    demo.consume_daily("transcription", settings.DEMO_DAILY_TRANSCRIPTIONS)
+
     """Gate for free_trial: max FREE_TRIAL_MAX_TRANSCRIPTIONS per month."""
     plan = (user.plan or "free_trial").lower()
     if plan != "free_trial":
@@ -120,6 +124,9 @@ async def check_quota_or_raise(
     db: AsyncSession,
     expected_seconds: float,
 ) -> None:
+    from services import demo
+    demo.check_upload_duration(expected_seconds)
+
     plan = (user.plan or "free_trial").lower()
     expected_minutes = max(0.0, float(expected_seconds or 0.0) / 60.0)
 

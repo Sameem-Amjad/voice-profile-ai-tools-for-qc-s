@@ -44,6 +44,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error("db_init_failed", error=str(e))
 
+    # ── Portfolio demo: rebuild the sample data (no-op unless DEMO_MODE) ──
+    if settings.DEMO_MODE:
+        from services import demo
+        try:
+            await demo.seed()
+        except Exception as e:
+            logger.error("demo_seed_failed", error=str(e))
+
     # Pre-warm the Whisper model on startup to avoid cold start on first request
     if settings.TRANSCRIPTION_BACKEND == "faster_whisper":
         logger.info("prewarm_whisper_model_start")
